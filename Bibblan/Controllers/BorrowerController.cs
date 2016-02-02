@@ -11,8 +11,13 @@ namespace Bibblan.Controllers
    {
       //
       // GET: /Borrower/
-      public ActionResult Mypage(int ISBN = 0)
+      public ActionResult Mypage()
       {
+         string ISBN = Request.QueryString.Get("ISBN");
+         if(ISBN != null)
+         {
+            // Renew book
+         }
          return View();
       }
    }
