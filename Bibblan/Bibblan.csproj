@@ -161,6 +161,7 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\BookController.cs" />
+    <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -210,7 +211,7 @@
     <Content Include="Views\Account\Manage.cshtml" />
     <Content Include="Views\Account\Register.cshtml" />
     <Content Include="Views\Book\Details.cshtml" />
-    <Content Include="Views\Home\Search.cshtml" />
+    <Content Include="Views\Search\Results.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
