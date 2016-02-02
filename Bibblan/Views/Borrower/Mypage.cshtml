@@ -13,7 +13,7 @@
       <tr>
          <td>Titel</td>
          <td align="right">@(i*2) dagar kvar</td>
-         <td align="right">@Html.ActionLink("Förnya lån", "Mypage", )</td>
+         <td align="right">@Html.ActionLink("Förnya lån", "Mypage", new Bibblan.Models.BookModel { Title = "Title", ISBN=i.ToString() })</td>
       </tr>
    }
 </table>

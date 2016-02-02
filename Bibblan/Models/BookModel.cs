@@ -9,6 +9,6 @@ namespace Bibblan.Models
     {
         // TODO: Correct Model
         public string Title { get; set; }
-        
+        public string ISBN { get; set; }
     }
 }
