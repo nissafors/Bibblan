@@ -6,11 +6,13 @@ using System.Web.Mvc;
 
 namespace Bibblan.Controllers
 {
-    public class HomeController : Controller
+    public class SearchController : Controller
     {
-        public ActionResult Index()
+        //
+        // GET: /Search/
+        public ActionResult Results()
         {
             return View();
         }
-    }
+	}
 }
