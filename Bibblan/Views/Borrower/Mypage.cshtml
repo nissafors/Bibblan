@@ -1,0 +1,19 @@
+﻿@model Bibblan.Models.BorrowerModels
+
+@{
+   ViewBag.Title = "Mina lån";
+}
+
+<h2>Mina lån</h2>
+
+<table class="table table-striped">
+   
+   @for (int i = 0; i < 100; ++i)
+   {
+      <tr>
+         <td>Titel</td>
+         <td align="right">@(i*2) dagar kvar</td>
+         <td align="right">@Html.ActionLink("Förnya lån", "Mypage", )</td>
+      </tr>
+   }
+</table>
