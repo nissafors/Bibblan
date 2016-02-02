@@ -1,0 +1,32 @@
+﻿
+@{
+    ViewBag.Title = "Title";
+}
+
+@using (Html.BeginForm("Author", "Browse"))
+{
+    <input type="submit" class="btn btn-default" value="Visa alla författare" />
+}
+<div class="page-header">
+    <h1>Alla titlar</h1>
+</div>
+
+<table class="table table-striped" >
+    <tr>
+        <th>Titel</th>
+        <th>Författare</th>
+        <th>ISBN</th>
+        <th>Klassifikation</th>
+        <th>Publiserad år</th>
+    </tr>
+    @for (int i = 0; i < 200; i++)
+    {
+        <tr>
+            <td>@Html.ActionLink("ABC för dummies", "Details", "Book")</td>
+            <td>@Html.ActionLink("Rob Bore", "Results", "Search")</td>
+            <td>12-34567-8</td>
+            <td>Hce</td>
+            <td>@(i + 1900)</td>
+        </tr>
+    }
+</table>
