@@ -13,5 +13,10 @@ namespace Bibblan.Controllers
         {
             return View();
         }
+
+        public ActionResult Author()
+        {
+            return View();
+        }
     }
 }
