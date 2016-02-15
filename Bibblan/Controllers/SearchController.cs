@@ -26,7 +26,6 @@ namespace Bibblan.Controllers
         {
             return View();
         }
-
         //
         // GET: /Search/
         public ActionResult Author(Common.Models.Author authorSearch = null)
@@ -35,7 +34,7 @@ namespace Bibblan.Controllers
 
             if (authorSearch.LastName != null || authorSearch.FirstName != null)
             {
-                authorSearch.LastName = authorSearch.LastName == null ? "": authorSearch.LastName;
+                authorSearch.LastName = authorSearch.LastName == null ? "" : authorSearch.LastName;
                 authorSearch.FirstName = authorSearch.FirstName == null ? "" : authorSearch.FirstName;
 
                 foreach(BookAuthor bookAuthor in Services.Mockup.Mockup.bookAuthors)
@@ -52,7 +51,6 @@ namespace Bibblan.Controllers
             
             return View(authorSearch);
         }
-
         public ActionResult Book()
         {
             //ViewData["cList"] = Services.Mockup.Mockup.classifications;

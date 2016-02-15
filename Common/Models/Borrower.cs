@@ -13,7 +13,7 @@ namespace Common.Models
         public string LastName { get; set; }
         public string Adress { get; set; }
         public string TelephoneNumber { get; set; }
-        public int CategoryId { get; set; }
+        public Category Category { get; set; }
         public List<Loan> Loans { get; set; }
     }
 }

@@ -77,14 +77,14 @@ namespace Services.Mockup
 
         static public List<Loan> loans = new List<Loan>
         {
-            new Loan { BarCode = "34567", BorrowDate = new DateTime(2016, 1, 15), ReturnDate = null, ToBeReturnedDate = new DateTime(2016, 3, 15) },
-            new Loan { BarCode = "45678", BorrowDate = new DateTime(2016, 2, 1), ReturnDate = null, ToBeReturnedDate = new DateTime(2016, 4, 1) }
+            new Loan {Copy = copies.ElementAt(2), BorrowDate = new DateTime(2016, 1, 15), ReturnDate = null, ToBeReturnedDate = new DateTime(2016, 3, 15) },
+            new Loan {Copy = copies.ElementAt(0), BorrowDate = new DateTime(2016, 2, 1), ReturnDate = null, ToBeReturnedDate = new DateTime(2016, 4, 1) }
         };
 
         static public List<Borrower> borrowers = new List<Borrower>
         {
-            new Borrower{PersonId="19111111-1111",LastName="Elvansson", FirstName="Elvan", Adress="Älvv.11 11111 Älvstad", TelephoneNumber="0111-111111", CategoryId=1, Loans=null},
-            new Borrower{PersonId="19121212-1212",LastName="Tolvansson", FirstName="Tolvan", Adress="Tolvv.12 12121 Tolvstad", TelephoneNumber="0121-121212", CategoryId=2, Loans = new List<Loan> { loans.ElementAt(0), loans.ElementAt(1) } }
+            new Borrower{PersonId="19111111-1111",LastName="Elvansson", FirstName="Elvan", Adress="Älvv.11 11111 Älvstad", TelephoneNumber="0111-111111", Category = categories.ElementAt(0), Loans=null},
+            new Borrower{PersonId="19121212-1212",LastName="Tolvansson", FirstName="Tolvan", Adress="Tolvv.12 12121 Tolvstad", TelephoneNumber="0121-121212", Category = categories.ElementAt(1), Loans = new List<Loan> { loans.ElementAt(0), loans.ElementAt(1) } }
         };
 
     }
