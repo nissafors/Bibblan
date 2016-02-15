@@ -26,7 +26,6 @@ namespace Bibblan.Controllers
         {
             return View();
         }
-
         //
         // GET: /Search/
         public ActionResult Author(Common.Models.Author authorSearch = null)
@@ -51,7 +50,6 @@ namespace Bibblan.Controllers
             
             return View(authorSearch);
         }
-
         public ActionResult Book()
         {
             //ViewData["cList"] = Services.Mockup.Mockup.classifications;

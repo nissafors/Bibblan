@@ -8,7 +8,7 @@ namespace Common.Models
 {
     public class Loan
     {
-        public string BarCode { get; set; }
+        public Copy Copy { get; set; }
         public DateTime BorrowDate { get; set; }
         public DateTime ToBeReturnedDate { get; set; }
         public DateTime? ReturnDate { get; set; }
