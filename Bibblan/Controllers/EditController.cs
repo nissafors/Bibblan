@@ -17,15 +17,8 @@ namespace Bibblan.Controllers
 
         public ActionResult Book()
         {
-            List<string> authors = new List<string>();
-            authors.Add("Pelle Person");
-            authors.Add("Sten Sture d.y.");
-            ViewData["author"] = new SelectList(authors);
-
-            List<string> classifications = new List<string>();
-            classifications.Add("Hce");
-            classifications.Add("Que");
-            ViewData["classification"] = new SelectList(classifications);
+            ViewData["author"] = new SelectList(Services.Mockup.Mockup.authors);
+            ViewData["classification"] = new SelectList(Services.Mockup.Mockup.classifications);
 
             return View();
         }
@@ -37,7 +30,8 @@ namespace Bibblan.Controllers
 
         public ActionResult Author()
         {
-            return View();
+            Common.Models.Author author = Services.Mockup.Mockup.authors[0];
+            return View(author);
         }
     }
 }

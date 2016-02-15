@@ -1,4 +1,6 @@
-﻿@{
+﻿@model Common.Models.Author
+
+@{
     ViewBag.Title = "Author";
 }
 
@@ -6,19 +8,19 @@
     <h1>Redigera författare</h1>
 </div>
 
-@using (Html.BeginForm("Book", "Edit"))
+@using (Html.BeginForm("Author", "Edit"))
 {
     <div class="form-group">
-        <label for="firstname">Förnamn</label>
-        @Html.TextBox("firstname", null, new { @class = "form-control", @id = "firstname" })
+        <label for="FirstName">Förnamn</label>
+        @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control"})
     </div>
     <div class="form-group">
-        <label for="lastname">Efternamn</label>
-        @Html.TextBox("author", null, new { @class = "form-control", @id = "lastname" })
+        <label for="LastName">Efternamn</label>
+        @Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
     </div>
     <div class="form-group">
-        <label for="birthyear">Födelseår</label>
-        @Html.TextBox("birthyear", null, new { @class = "form-control", @id = "birthyear" })
+        <label for="BirthYear">Födelseår</label>
+        @Html.TextBoxFor(model => model.BirthYear, new { @class = "form-control" })
     </div>
     <div class="text-center">
         <input type="submit" class="btn btn-lg btn-primary" value="Bekräfta" style="width: 40%" />
