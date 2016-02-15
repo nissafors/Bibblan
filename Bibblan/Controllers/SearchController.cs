@@ -17,6 +17,11 @@ namespace Bibblan.Controllers
             return View();
         }
 
+        public ActionResult Borrower()
+        {
+            return View();
+        }
+
         //
         // GET: /Search/
         public ActionResult Author()

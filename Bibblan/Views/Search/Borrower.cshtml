@@ -1,0 +1,85 @@
+﻿
+@{
+    ViewBag.Title = "Borrower";
+}
+
+<div class="page-header">
+    <h1>Sök efter Låntagare</h1>
+</div>
+
+
+@using (Html.BeginForm("Search", "Borrower", "ISBNNR"))
+{
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="fname">Förnamn</label>
+                @Html.TextBox("fname", null, new { @class = "form-control", @id = "fname" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="lname">Efternamn</label>
+                @Html.TextBox("lname", null, new { @class = "form-control", @id = "lname" })
+            </div>
+        </div>
+    </div>
+    
+   <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="pnumber">Personnummer</label>
+                @Html.TextBox("pnumber", null, new { @class = "form-control", @id = "pnumber" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="adress">Adress</label>
+                @Html.TextBox("adress", null, new { @class = "form-control", @id = "adress" })
+            </div>
+        </div>
+    </div>
+    
+     <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="phonenumber">Telefonnummer</label>
+                @Html.TextBox("phonenumber", null, new { @class = "form-control", @id = "phonenumber" })
+            </div>
+        </div>
+         <div class="col-md-6">
+             <div class="form-group">
+                 <label for="category">
+                     DROPDOWN LIST GOES HERE
+                 </label>
+             </div>
+         </div>
+    </div>
+    <input type="submit" class="btn btn-block btn-primary" value="Sök" />
+}
+
+<h2>Resultat</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Förnamn</th>
+            <th>Efternamn</th>
+            <th>Personnummer</th>
+            <th>Adress</th>
+            <th>Telefonnummer</th>
+            <th>Kategori</th>
+            <th class="col-md-1"></th>
+        </tr>
+    </thead>
+    <tbody>
+           <tr>
+                <td>Elias</td>
+                <td>Johnsson</td>
+               <td>930801XXXX</td>
+               <td>Jönköping</td>
+               <td>072XXXXXXX</td>
+               <td>Kund</td>
+               <td><a href="edit/Book/35326523623236" class="btn btn-xs btn-warning">Redigera</a></td>
+           </tr>
+    </tbody>
+</table>
