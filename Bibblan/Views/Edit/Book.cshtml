@@ -1,20 +1,80 @@
-﻿
-@{
-    ViewBag.Title = "Edit Book";
+﻿@{
+    ViewBag.Title = "Redigera bok";
 }
 
 <div class="page-header">
-    <h1>Edit Book</h1>
+    <h1>Redigera Bok</h1>
 </div>
 
 @using (Html.BeginForm("Book", "Edit"))
 {
-    <div class="form-group">
-        <label for="title">Titel</label>
-        @Html.TextBox("title", null, new { @class = "form-control", @id = "title"})
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="title">Titel</label>
+                @Html.TextBox("title", null, new { @class = "form-control", @id = "title" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="author">Författare</label>
+                @Html.DropDownList("author", null, new { @class = "form-control", @id = "author" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="isbn">ISBN</label>
+                @Html.TextBox("isbn", null, new { @class = "form-control", @id = "isbn" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="classification">Klassifikation</label>
+                @Html.DropDownList("classification", null, new { @class = "form-control", @id = "classification" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="year">Publikationsår</label>
+                @Html.TextBox("year", null, new { @class = "form-control", @id = "year" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="pages">Antal sidor</label>
+                @Html.TextBox("pages", null, new { @class = "form-control", @id = "pages" })
+            </div>
+        </div>
     </div>
     <div class="form-group">
-        <label for="author">Författare</label>
-        @Html.DropDownList("author", null, new { @class = "form-control", @id = "author" })
+        <label for="pages">Publikationsinfo</label>
+        @Html.TextBox("info", null, new { @class = "form-control", @id = "info" })
     </div>
+    <div class="text-center">
+        <input type="submit" class="btn btn-lg btn-primary" value="Spara" style="width: 40%" />
+    </div>
+    <h2>Exemplar</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Streckkod</th>
+                <th>Plats</th>
+                <th>Bibliotek</th>
+                <th class="col-md-1"></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>12345</td>
+                <td>Hce</td>
+                <td>Stora</td>
+                <td><a href="edit/copy/1" class="btn btn-xs btn-warning">Redigera</a></td>
+            </tr>
+        </tbody>
+    </table>
+    <input type="submit" class="btn btn-success" value="Lägg till exemplar" />
 }
