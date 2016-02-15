@@ -1,0 +1,53 @@
+﻿
+@{
+    ViewBag.Title = "Book";
+}
+
+@using (Html.BeginForm("Results", "Search"))
+{
+    <div class="row">
+        <div class="col-sm-4">
+            <div class="form-group">
+                @Html.TextBox("search-ISBN", null, new { @class = "form-control", @id = "search-ISBN", @style = "margin: 0px", @placeholder = "ISBN" })
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                @Html.TextBox("search-title", null, new { @class = "form-control", @id = "search-title", @placeholder = "Titel" })
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                @Html.TextBox("search-year", null, new { @class = "form-control", @id = "search-year", @placeholder = "Publikationsår" })
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                @Html.DropDownList("search-classification", new SelectList((System.Collections.IEnumerable)ViewData["cList"], "Id", "Signum"), new { @class = "form-control", @id = "search-classification" })
+                
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <input type="submit" class="btn btn-primary" value="Sök" />
+        </div>
+    </div>
+}
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>@Html.ActionLink("Titel", "Action")</th>
+            <th>@Html.ActionLink("Författare", "Action")</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>Test Bok @Html.ActionLink("Redigera", "EDIT")</td>
+            <td>Herr Test @Html.ActionLink("Redigera", "EDIT")</td>
+        </tr>
+        <tr>
+            <td>En bättre bok</td>
+            <td>En sämre författare</td>
+        </tr>
+    </tbody>
+</table>
