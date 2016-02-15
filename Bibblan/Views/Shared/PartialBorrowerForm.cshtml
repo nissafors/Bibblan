@@ -1,10 +1,13 @@
-﻿@using (Html.BeginForm("Search", "Borrower", "ISBNNR"))
+﻿@model Common.Models.Borrower
+
+@using (Html.BeginForm("Search", "Borrower", "ISBNNR"))
 {
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
                 <label for="fname">Förnamn</label>
-                @Html.TextBox("fname", null, new { @class = "form-control", @id = "fname" })
+               @*@Html.TextBox("fname", null, new { @class = "form-control", @id = "fname" })*@
+               @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", @id = "fname"})
             </div>
         </div>
         <div class="col-md-6">

@@ -1,4 +1,4 @@
-﻿
+﻿@model Common.Models.Book
 @{
     ViewBag.Title = "Book";
 }
@@ -8,17 +8,43 @@
     <div class="row">
         <div class="col-sm-4">
             <div class="form-group">
+                @*
                 @Html.TextBox("search-ISBN", null, new { @class = "form-control", @id = "search-ISBN", @style = "margin: 0px", @placeholder = "ISBN" })
+                *@
+                @Html.TextBoxFor(model => model.ISBN, 
+                new { 
+                    @class = "form-control", 
+                    @id = "search-ISBN", @style = "margin: 0px", 
+                    @placeholder = "ISBN" 
+                })
             </div>
         </div>
         <div class="col-sm-4">
             <div class="form-group">
+                @*
                 @Html.TextBox("search-title", null, new { @class = "form-control", @id = "search-title", @placeholder = "Titel" })
+                *@
+                @Html.TextBoxFor(model => model.Title, 
+                new { 
+                    @class = "form-control", 
+                    @id = "search-title", @style = "margin: 0px", 
+                    @placeholder = "Titel" 
+                })
             </div>
         </div>
         <div class="col-sm-4">
             <div class="form-group">
+                @*
                 @Html.TextBox("search-year", null, new { @class = "form-control", @id = "search-year", @placeholder = "Publikationsår" })
+                *@
+                @Html.TextBoxFor(model => model.PublicationYear,
+                new
+                {
+                    @class = "form-control",
+                    @id = "search-year",
+                    @style = "margin: 0px",
+                    @placeholder = "Publikationsår"
+                })
             </div>
         </div>
         <div class="col-sm-4">
@@ -35,8 +61,8 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>@Html.ActionLink("Titel", "Action")</th>
-            <th>@Html.ActionLink("Författare", "Action")</th>
+            <th>Titel</th>
+            <th>Författare</th>
         </tr>
     </thead>
     <tbody>
