@@ -9,7 +9,7 @@ namespace Common.Models
     public class Category
     {
         public int Id { get; set; }
-        public string Category { get; set; }
+        public string CategoryName { get; set; }
         public int Period { get; set; }
         public int PenaltyPerDay { get; set; }
     }
