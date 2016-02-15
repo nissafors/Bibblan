@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Common.Models
 {
-    class Borrower
+    public class Borrower
     {
         public string PersonId { get; set; }
         public string FirstName { get; set; }

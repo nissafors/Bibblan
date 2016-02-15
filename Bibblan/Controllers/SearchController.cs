@@ -10,8 +10,6 @@ namespace Bibblan.Controllers
 {
     public class SearchController : Controller
     {
-
-
         //
         // GET: /Search/
         public ActionResult Results()
