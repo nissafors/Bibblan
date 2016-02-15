@@ -10,6 +10,11 @@ namespace Bibblan.Controllers
 {
     public class SearchController : Controller
     {
+        public SearchController()
+        {
+            IEnumerable<SelectListItem> classification = new SelectList(Mockup.classifications, "Id", "Signum");
+            ViewData["classifications-list"] = classification;
+        }
         //
         // GET: /Search/
         public ActionResult Results()
@@ -52,9 +57,18 @@ namespace Bibblan.Controllers
 
         public ActionResult Book()
         {
-            ViewData["cList"] = Services.Mockup.Mockup.classifications;
+            //ViewData["cList"] = Services.Mockup.Mockup.classifications;
             Book book = Services.Mockup.Mockup.books[0];
-            return View(book);
+            //return View(book);
+            return View();
+        }
+
+        [HttpPost]
+        public ActionResult Book(Book b)
+        {
+            List<Book> books = Services.Mockup.Mockup.books;
+            ViewBag.books = books;
+            return View(b);
         }
     }
 }

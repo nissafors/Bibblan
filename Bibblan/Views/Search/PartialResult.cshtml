@@ -1,0 +1,21 @@
+﻿@model List<Common.Models.Book>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Titel</th>
+            <th>Författare</th>
+        </tr>
+    </thead>
+    <tbody>
+        @{
+            foreach(Common.Models.Book b in Model)
+            {
+                <tr>
+                    <td>@(b.Title)</td>
+                    <td>FEL FEL FEL</td>
+                </tr>
+            }
+        }
+    </tbody>
+</table>

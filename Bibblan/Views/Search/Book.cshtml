@@ -3,14 +3,11 @@
     ViewBag.Title = "Book";
 }
 
-@using (Html.BeginForm("Results", "Search"))
+@using (Html.BeginForm("Book", "Search"))
 {
     <div class="row">
         <div class="col-sm-4">
             <div class="form-group">
-                @*
-                @Html.TextBox("search-ISBN", null, new { @class = "form-control", @id = "search-ISBN", @style = "margin: 0px", @placeholder = "ISBN" })
-                *@
                 @Html.TextBoxFor(model => model.ISBN, 
                 new { 
                     @class = "form-control", 
@@ -21,9 +18,6 @@
         </div>
         <div class="col-sm-4">
             <div class="form-group">
-                @*
-                @Html.TextBox("search-title", null, new { @class = "form-control", @id = "search-title", @placeholder = "Titel" })
-                *@
                 @Html.TextBoxFor(model => model.Title, 
                 new { 
                     @class = "form-control", 
@@ -34,9 +28,6 @@
         </div>
         <div class="col-sm-4">
             <div class="form-group">
-                @*
-                @Html.TextBox("search-year", null, new { @class = "form-control", @id = "search-year", @placeholder = "Publikationsår" })
-                *@
                 @Html.TextBoxFor(model => model.PublicationYear,
                 new
                 {
@@ -49,7 +40,7 @@
         </div>
         <div class="col-sm-4">
             <div class="form-group">
-                @Html.DropDownList("search-classification", new SelectList((System.Collections.IEnumerable)ViewData["cList"], "Id", "Signum"), new { @class = "form-control", @id = "search-classification" })
+                @Html.DropDownListFor(model => model.Classification, ViewData["classifications-list"] as IEnumerable<SelectListItem>, "- Kategori -")
             </div>
         </div>
         <div class="col-sm-4">
@@ -57,22 +48,7 @@
         </div>
     </div>
 }
-
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Titel</th>
-            <th>Författare</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>Test Bok @Html.ActionLink("Redigera", "EDIT")</td>
-            <td>Herr Test @Html.ActionLink("Redigera", "EDIT")</td>
-        </tr>
-        <tr>
-            <td>En bättre bok</td>
-            <td>En sämre författare</td>
-        </tr>
-    </tbody>
-</table>
+@if (IsPost)
+{
+    @Html.Partial("PartialResult", ViewBag.books as List<Common.Models.Book>);
+}
