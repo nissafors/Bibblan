@@ -1,0 +1,49 @@
+﻿@using (Html.BeginForm("Search", "Borrower", "ISBNNR"))
+{
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="fname">Förnamn</label>
+                @Html.TextBox("fname", null, new { @class = "form-control", @id = "fname" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="lname">Efternamn</label>
+                @Html.TextBox("lname", null, new { @class = "form-control", @id = "lname" })
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="pnumber">Personnummer</label>
+                @Html.TextBox("pnumber", null, new { @class = "form-control", @id = "pnumber" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="adress">Adress</label>
+                @Html.TextBox("adress", null, new { @class = "form-control", @id = "adress" })
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="phonenumber">Telefonnummer</label>
+                @Html.TextBox("phonenumber", null, new { @class = "form-control", @id = "phonenumber" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="category">
+                    DROPDOWN LIST GOES HERE
+                </label>
+            </div>
+        </div>
+    </div>
+    <input type="submit" class="btn btn-block btn-primary" value="Sök" />
+}

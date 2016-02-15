@@ -10,11 +10,14 @@ namespace Bibblan.Controllers
 {
     public class SearchController : Controller
     {
-
-
         //
         // GET: /Search/
         public ActionResult Results()
+        {
+            return View();
+        }
+
+        public ActionResult Borrower()
         {
             return View();
         }
@@ -28,7 +31,7 @@ namespace Bibblan.Controllers
 
         public ActionResult Book()
         {
-            ViewData["cList"] = Services.Mockup.Mockup.cList;
+            ViewData["cList"] = Services.Mockup.Mockup.classifications;
             return View();
         }
 	}

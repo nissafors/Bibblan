@@ -1,0 +1,36 @@
+﻿
+@{
+    ViewBag.Title = "Borrower";
+}
+
+<div class="page-header">
+    <h1>Sök efter Låntagare</h1>
+</div>
+
+@Html.Partial("../Shared/PartialBorrowerForm");
+
+<h2>Resultat</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Förnamn</th>
+            <th>Efternamn</th>
+            <th>Personnummer</th>
+            <th>Adress</th>
+            <th>Telefonnummer</th>
+            <th>Kategori</th>
+            <th class="col-md-1"></th>
+        </tr>
+    </thead>
+    <tbody>
+           <tr>
+                <td>Elias</td>
+                <td>Johnsson</td>
+               <td>930801XXXX</td>
+               <td>Jönköping</td>
+               <td>072XXXXXXX</td>
+               <td>Kund</td>
+               <td><a href="../Edit/Borrower/35326523623236" class="btn btn-xs btn-warning">Redigera</a></td>
+           </tr>
+    </tbody>
+</table>
