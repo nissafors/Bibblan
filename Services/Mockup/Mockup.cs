@@ -24,12 +24,7 @@ namespace Services.Mockup
                 new Author { Id = 3, FirstName = "Olle", LastName = "Olsson", BirthYear = 1700 },
             };
 
-        static public List<BookAuthor> bookAuthors = new List<BookAuthor>
-            {
-                new BookAuthor { ISBN = "1234-5", AuthorId = 1 },
-                new BookAuthor { ISBN = "2345-6", AuthorId = 3 },
-                new BookAuthor { ISBN = "666-6", AuthorId = 2 }
-            };
+
 
         static public List<Status> statuses = new List<Status>
             {
@@ -65,6 +60,13 @@ namespace Services.Mockup
                     PublicationInfo = "Svära i kyrkan förlag AB", Pages = 666,
                     Copies = new List<Copy> { copies.ElementAt(3) }
                 }
+            };
+
+        static public List<BookAuthor> bookAuthors = new List<BookAuthor>
+            {
+                new BookAuthor { Book = books.ElementAt(1), Author = authors.ElementAt(1) },
+                new BookAuthor { Book = books.ElementAt(2), Author = authors.ElementAt(3) },
+                new BookAuthor { Book = books.ElementAt(3), Author = authors.ElementAt(2) }
             };
 
         static public List<Category> categories = new List<Category>

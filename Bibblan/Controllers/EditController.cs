@@ -24,8 +24,10 @@ namespace Bibblan.Controllers
                                                     Id = s.Id,
                                                     FullName = s.FirstName + " " + s.LastName
                                                 }), "Id", "FullName");
-
             ViewData["author"] = authors;
+
+            SelectList classifications = new SelectList(Mockup.classifications, "Id", "Signum");
+            ViewData["classification"] = classifications;
 
             return View();
         }
@@ -37,7 +39,8 @@ namespace Bibblan.Controllers
 
         public ActionResult Author()
         {
-            return View();
+            Common.Models.Author author = Services.Mockup.Mockup.authors[0];
+            return View(author);
         }
     }
 }

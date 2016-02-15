@@ -1,20 +1,22 @@
-﻿
+﻿@model Common.Models.Author
 @{
     ViewBag.Title = "Author";
 }
 
-@using (Html.BeginForm("Results", "Search"))
+<h1>Sök efter författare</h1>
+
+@using (Html.BeginForm("Author", "Search"))
 {
 
     <div class="row">
         <div class="col-sm-4">
             <div class="form-group">
-                @Html.TextBox("search-firstname", null, new { @class = "form-control", @id = "search-title", @style = "margin: 0px", @placeholder = "Förnamn" })
+                @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", @style = "margin: 0px", @placeholder = "Förnamn" })
             </div>
         </div>
         <div class="col-sm-4">
             <div class="form-group">
-                @Html.TextBox("search-lastname", null, new { @class = "form-control", @id = "search-author", @placeholder = "Efternamn" })
+                @Html.TextBoxFor(model => model.LastName, new { @class = "form-control", @style = "margin: 0px", @placeholder = "Efternamn" })
             </div>
         </div>
         <div class="col-sm-4">
@@ -22,21 +24,26 @@
         </div>
     </div>
 }
+@if(IsPost)
+{ 
 <table class="table table-striped">
     <thead>
         <tr>
-            <th>@Html.ActionLink("Titel", "Action")</th>
-            <th>@Html.ActionLink("Författare", "Action")</th>
+            <th>Titel</th>
+            <th>Författare</th>
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td>Test Bok @Html.ActionLink("Redigera", "EDIT")</td>
-            <td>Herr Test @Html.ActionLink("Redigera", "EDIT")</td>
-        </tr>
-        <tr>
-            <td>En bättre bok</td>
-            <td>En sämre författare</td>
-        </tr>
+        @if(@ViewBag.books != null)
+        {
+        foreach (var item in @ViewBag.books)
+        {
+            <tr>
+                <td>@item.Title @Html.ActionLink("Redigera", "EDIT")</td>
+                <td>@item.ISBN @Html.ActionLink("Redigera", "EDIT")</td>
+            </tr>
+        }
+        }
     </tbody>
 </table>
+}
