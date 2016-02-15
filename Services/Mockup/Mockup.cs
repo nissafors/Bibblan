@@ -24,8 +24,6 @@ namespace Services.Mockup
                 new Author { Id = 3, FirstName = "Olle", LastName = "Olsson", BirthYear = 1700 },
             };
 
-
-
         static public List<Status> statuses = new List<Status>
             {
                 new Status { Id = 1, status = "Available" },
@@ -64,9 +62,9 @@ namespace Services.Mockup
 
         static public List<BookAuthor> bookAuthors = new List<BookAuthor>
             {
-                new BookAuthor { Book = books.ElementAt(1), Author = authors.ElementAt(1) },
-                new BookAuthor { Book = books.ElementAt(2), Author = authors.ElementAt(3) },
-                new BookAuthor { Book = books.ElementAt(3), Author = authors.ElementAt(2) }
+                new BookAuthor { Book = books.ElementAt(0), Author = authors.ElementAt(0) },
+                new BookAuthor { Book = books.ElementAt(1), Author = authors.ElementAt(2) },
+                new BookAuthor { Book = books.ElementAt(2), Author = authors.ElementAt(1) }
             };
 
         static public List<Category> categories = new List<Category>

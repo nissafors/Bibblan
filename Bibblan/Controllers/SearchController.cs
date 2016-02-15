@@ -26,18 +26,21 @@ namespace Bibblan.Controllers
         // GET: /Search/
         public ActionResult Author(Common.Models.Author authorSearch = null)
         {
-            List<int> aidList = new List<int>();
-            List<string> isbnList = new List<string>();
-            List<Tuple<string, string>> bookList = new List<Tuple<string, string>>();
+            List<BookAuthor> bookList = new List<BookAuthor>();
 
             if (authorSearch.LastName != null || authorSearch.FirstName != null)
             {
+                //Status testStatus = Services.Mockup.Mockup.statuses[0];
+                //Copy testCopy = Services.Mockup.Mockup.copies[0];
+                //Book testBook = Services.Mockup.Mockup.books[0];
+                //Author testAuthor = Services.Mockup.Mockup.authors[0];
+
                 foreach(BookAuthor bookAuthor in Services.Mockup.Mockup.bookAuthors)
                 {
                     if(bookAuthor.Author.FirstName.Contains(authorSearch.FirstName) &&
                         bookAuthor.Author.LastName.Contains(authorSearch.LastName))
                     {
-                        bookList.Add(Tuple.Create(bookAuthor.Book.Title, bookAuthor.Author.LastName + ", " + bookAuthor.Author.FirstName));
+                        bookList.Add(bookAuthor);
                     }
                 }
 
