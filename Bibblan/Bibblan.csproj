@@ -220,6 +220,7 @@
     <Content Include="Views\Browse\Author.cshtml" />
     <Content Include="Views\Account\AdminPage.cshtml" />
     <Content Include="Views\Edit\Book.cshtml" />
+    <Content Include="Views\Search\Borrower.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

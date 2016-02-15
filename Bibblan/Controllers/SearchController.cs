@@ -14,5 +14,10 @@ namespace Bibblan.Controllers
         {
             return View();
         }
+
+        public ActionResult Borrower()
+        {
+            return View();
+        }
 	}
 }
