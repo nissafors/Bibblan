@@ -24,8 +24,6 @@ namespace Services.Mockup
                 new Author { Id = 3, FirstName = "Olle", LastName = "Olsson", BirthYear = 1700 },
             };
 
-
-
         static public List<Status> statuses = new List<Status>
             {
                 new Status { Id = 1, status = "Available" },

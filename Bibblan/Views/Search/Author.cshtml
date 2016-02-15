@@ -36,13 +36,13 @@
     <tbody>
         @if(@ViewBag.books != null)
         {
-        foreach (var item in @ViewBag.books)
-        {
-            <tr>
-                <td>@item.Title @Html.ActionLink("Redigera", "EDIT")</td>
-                <td>@item.ISBN @Html.ActionLink("Redigera", "EDIT")</td>
-            </tr>
-        }
+            foreach (var item in @ViewBag.books)
+            {
+                <tr>
+                    <td>@item.Book.Title @Html.ActionLink("Redigera", "EDIT")</td>
+                    <td>@item.Author.LastName, @item.Author.FirstName @Html.ActionLink("Redigera", "EDIT")</td>
+                </tr>
+            }
         }
     </tbody>
 </table>
