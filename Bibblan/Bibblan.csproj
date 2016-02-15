@@ -217,6 +217,7 @@
     <Content Include="Views\Search\Results.cshtml" />
     <Content Include="Views\Browse\Title.cshtml" />
     <Content Include="Views\Browse\Author.cshtml" />
+    <Content Include="Views\Account\AdminPage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -227,6 +228,16 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj">
+      <Project>{aeefe3a8-9a6c-425b-9115-21a58dd9ea49}</Project>
+      <Name>Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Services\Services.csproj">
+      <Project>{bce15014-4f29-4f7c-8dc5-d02423a208a5}</Project>
+      <Name>Services</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
