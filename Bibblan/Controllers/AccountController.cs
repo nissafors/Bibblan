@@ -12,9 +12,10 @@ using Bibblan.Models;
 
 namespace Bibblan.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class AccountController : Controller
     {
+        /*
         public AccountController()
             : this(new UserManager<ApplicationUser>(new UserStore<ApplicationUser>(new ApplicationDbContext())))
         {
@@ -26,16 +27,23 @@ namespace Bibblan.Controllers
         }
 
         public UserManager<ApplicationUser> UserManager { get; private set; }
-
+        */
         //
+
         // GET: /Account/Login
-        [AllowAnonymous]
+        //[AllowAnonymous]
         public ActionResult Login(string returnUrl)
         {
             ViewBag.ReturnUrl = returnUrl;
             return View();
         }
 
+        public ActionResult AdminPage()
+        {
+            return View();
+        }
+
+        /*
         //
         // POST: /Account/Login
         [HttpPost]
@@ -259,5 +267,6 @@ namespace Bibblan.Controllers
             }
         }
         #endregion
+        */
     }
 }
