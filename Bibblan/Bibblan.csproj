@@ -225,6 +225,7 @@
     <Content Include="Views\Search\Book.cshtml" />
     <Content Include="Views\Edit\Borrower.cshtml" />
     <Content Include="Views\Shared\PartialBorrowerForm.cshtml" />
+    <Content Include="Views\Edit\Author.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

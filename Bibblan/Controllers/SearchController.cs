@@ -31,7 +31,7 @@ namespace Bibblan.Controllers
 
         public ActionResult Book()
         {
-            ViewData["cList"] = Services.Mockup.Mockup.cList;
+            ViewData["cList"] = Services.Mockup.Mockup.classifications;
             return View();
         }
 	}
