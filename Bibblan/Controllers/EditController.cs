@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Common.Models;
+using Services.Mockup;
 
 namespace Bibblan.Controllers
 {
@@ -17,8 +18,16 @@ namespace Bibblan.Controllers
 
         public ActionResult Book()
         {
-            ViewData["author"] = new SelectList(Services.Mockup.Mockup.authors);
-            ViewData["classification"] = new SelectList(Services.Mockup.Mockup.classifications);
+            SelectList authors = new SelectList((from s in Mockup.authors
+                                                select new
+                                                {
+                                                    Id = s.Id,
+                                                    FullName = s.FirstName + " " + s.LastName
+                                                }), "Id", "FullName");
+            ViewData["author"] = authors;
+
+            SelectList classifications = new SelectList(Mockup.classifications, "Id", "Signum");
+            ViewData["classification"] = classifications;
 
             return View();
         }
