@@ -35,15 +35,13 @@ namespace Bibblan.Controllers
 
             if (authorSearch.LastName != null || authorSearch.FirstName != null)
             {
-                //Status testStatus = Services.Mockup.Mockup.statuses[0];
-                //Copy testCopy = Services.Mockup.Mockup.copies[0];
-                //Book testBook = Services.Mockup.Mockup.books[0];
-                //Author testAuthor = Services.Mockup.Mockup.authors[0];
+                authorSearch.LastName = authorSearch.LastName == null ? "": authorSearch.LastName;
+                authorSearch.FirstName = authorSearch.FirstName == null ? "" : authorSearch.FirstName;
 
                 foreach(BookAuthor bookAuthor in Services.Mockup.Mockup.bookAuthors)
                 {
-                    if(bookAuthor.Author.FirstName.Contains(authorSearch.FirstName) &&
-                        bookAuthor.Author.LastName.Contains(authorSearch.LastName))
+                    if(bookAuthor.Author.FirstName.ToLower().Contains(authorSearch.FirstName.ToLower()) &&
+                        bookAuthor.Author.LastName.ToLower().Contains(authorSearch.LastName.ToLower()))
                     {
                         bookList.Add(bookAuthor);
                     }
