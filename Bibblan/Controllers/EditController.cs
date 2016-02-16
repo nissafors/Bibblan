@@ -31,8 +31,8 @@ namespace Bibblan.Controllers
                                                 }), "Id", "FullName", bookAuthor.Author.Id);
             ViewData["author"] = authors;
 
-            bookAuthor.classifications = new SelectList(Mockup.classifications, "Id", "Signum");
-            bookAuthor.selectedClassificationId = bookAuthor.Book.Classification.Id;
+           // bookAuthor.classifications = new SelectList(Mockup.classifications, "Id", "Signum");
+           // bookAuthor.selectedClassificationId = bookAuthor.Book.Classification.Id;
             //ViewData["classification"] = classifications;
 
             return View(bookAuthor);

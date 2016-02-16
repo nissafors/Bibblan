@@ -18,7 +18,7 @@
             {
             <tr>
                 <td>@item.Book.ISBN</td>
-                <td>@item.Book.Title</td>
+                <td><a href=@("../Book/Details/" + item.Book.ISBN)>@item.Book.Title</a></td>
                 <td>@item.Book.Classification.Signum</td>
                 <td>@item.Book.PublicationYear</td>
                 <!--TODO: ADMIN KONTROLL -->
