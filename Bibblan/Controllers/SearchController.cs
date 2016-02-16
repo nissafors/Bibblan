@@ -49,12 +49,11 @@ namespace Bibblan.Controllers
         }
 
         [HttpPost]
-        public ActionResult Book(Book b)
+        public ActionResult Book(Book book)
         {
-            List<BookAuthor> bookauthors = _bookServices.GetBookAuthors(b);
-            List<Book> books = Mockup.books;
-            ViewBag.books = books;
-            return View(b);
+            List<BookAuthor> bookauthors = _bookServices.GetBookAuthors(book);
+            ViewBag.books = bookauthors;
+            return View(book);
         }
     }
 }
