@@ -42,9 +42,6 @@ namespace Bibblan.Controllers
 
         public ActionResult Book()
         {
-            //ViewData["cList"] = Services.Mockup.Mockup.classifications;
-            Book book = Services.Mockup.Mockup.books[0];
-            //return View(book);
             return View();
         }
 
