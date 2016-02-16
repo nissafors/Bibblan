@@ -7,11 +7,16 @@ using Common.Models;
 
 namespace Services.Services
 {
-    public class BookServices
+    public class BookAuthorServices
     {
-        public BookServices()
+        public BookAuthorServices()
         {
 
+        }
+
+        public List<BookAuthor> GetBookAuthors()
+        {
+            return Mockup.Mockup.bookAuthors;
         }
 
         public List<BookAuthor> GetBookAuthors(Book book)
@@ -27,7 +32,7 @@ namespace Services.Services
                 if(bookAuthor.Book.ISBN.ToLower().Contains(book.ISBN) &&
                     bookAuthor.Book.Title.ToLower().Contains(book.Title) &&
                     bookAuthor.Book.PublicationYear.ToLower().Contains(book.PublicationYear) &&
-                    (book.Classification == null || bookAuthor.Book.Classification.Id == book.Classification.Id))
+                    (book.Classification.Id == 0 || bookAuthor.Book.Classification.Id == book.Classification.Id))
                 {
                     bookList.Add(bookAuthor);
                 } 

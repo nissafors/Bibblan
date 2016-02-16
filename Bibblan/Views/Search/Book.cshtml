@@ -40,7 +40,7 @@
         </div>
         <div class="col-sm-4">
             <div class="form-group">
-                @Html.DropDownListFor(model => model.Classification, ViewData["classifications-list"] as IEnumerable<SelectListItem>, "- Kategori -")
+                @Html.DropDownListFor(model => model.Classification.Id, ViewData["classifications-list"] as IEnumerable<SelectListItem>, "- Kategori -")
             </div>
         </div>
         <div class="col-sm-4">
