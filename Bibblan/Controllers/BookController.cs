@@ -10,7 +10,7 @@ namespace Bibblan.Controllers
     {
         //
         // GET: /Book/
-        public ActionResult Details()
+        public ActionResult Details(string isbn)
         {
             return View();
         }

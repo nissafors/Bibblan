@@ -5,16 +5,20 @@ using System.Web;
 using System.Web.Mvc;
 using Common.Models;
 using Services.Mockup;
+using Services.Services;
 
 namespace Bibblan.Controllers
 {
     public class SearchController : Controller
     {
+        private BookServices _bookServices = new BookServices();
+
         public SearchController()
         {
             IEnumerable<SelectListItem> classification = new SelectList(Mockup.classifications, "Id", "Signum");
             ViewData["classifications-list"] = classification;
         }
+
         //
         // GET: /Search/
         public ActionResult Results()
@@ -26,31 +30,16 @@ namespace Bibblan.Controllers
         {
             return View();
         }
+
         //
         // GET: /Search/
-        public ActionResult Author(Common.Models.Author authorSearch = null)
+        public ActionResult Author(Author author = null)
         {
-            List<BookAuthor> bookList = new List<BookAuthor>();
+            ViewBag.books = _bookServices.GetBookAuthors(author);
 
-            if (authorSearch.LastName != null || authorSearch.FirstName != null)
-            {
-                authorSearch.LastName = authorSearch.LastName == null ? "" : authorSearch.LastName;
-                authorSearch.FirstName = authorSearch.FirstName == null ? "" : authorSearch.FirstName;
-
-                foreach(BookAuthor bookAuthor in Services.Mockup.Mockup.bookAuthors)
-                {
-                    if(bookAuthor.Author.FirstName.ToLower().Contains(authorSearch.FirstName.ToLower()) &&
-                        bookAuthor.Author.LastName.ToLower().Contains(authorSearch.LastName.ToLower()))
-                    {
-                        bookList.Add(bookAuthor);
-                    }
-                }
-
-                ViewBag.books = bookList;
+            return View(author);
             }
             
-            return View(authorSearch);
-        }
         public ActionResult Book()
         {
             //ViewData["cList"] = Services.Mockup.Mockup.classifications;
@@ -62,9 +51,10 @@ namespace Bibblan.Controllers
         [HttpPost]
         public ActionResult Book(Book b)
         {
-            List<BookAuthor> ba = Services.Mockup.Mockup.bookAuthors;
-            ViewBag.books = ba;
-            return View();
+            List<BookAuthor> bookauthors = _bookServices.GetBookAuthors(b);
+            List<Book> books = Mockup.books;
+            ViewBag.books = books;
+            return View(b);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿@model Common.Models.Classification
+@model Common.Models.Book
+
 @{
     ViewBag.Title = "Redigera bok";
 }
@@ -12,48 +13,48 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                <label for="title">Titel</label>
-                @Html.TextBox("title", null, new { @class = "form-control", @id = "title" })
+                <label for="ISBN">ISBN</label>
+                @Html.TextBoxFor(model => model.ISBN, new { @class = "form-control" })
             </div>
         </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="Title">Titel</label>
+                @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
         <div class="col-md-6">
             <div class="form-group">
                 <label for="author">Författare</label>
-                @Html.DropDownList("author", null, new { @class = "form-control", @id = "author" })
+                @Html.DropDownList("author", null, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="Classification">Klassifikation</label>
+                @Html.DropDownListFor(model => model.Classification, ViewData["classifications"] as IEnumerable<SelectListItem>, new { @class = "form-control" })
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                <label for="isbn">ISBN</label>
-                @Html.TextBox("isbn", null, new { @class = "form-control", @id = "isbn" })
+                <label for="PublicationYear">Publikationsår</label>
+                @Html.TextBoxFor(model => model.PublicationYear, new { @class = "form-control" })
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <label for="classification">Klassifikation</label>
-                @Html.DropDownList("classification", null, new { @class = "form-control", @id = "classification" })
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="year">Publikationsår</label>
-                @Html.TextBox("year", null, new { @class = "form-control", @id = "year" })
-            </div>
-        </div>
-        <div class="col-md-6">
-            <div class="form-group">
-                <label for="pages">Antal sidor</label>
-                @Html.TextBox("pages", null, new { @class = "form-control", @id = "pages" })
+                <label for="Pages">Antal sidor</label>
+                @Html.TextBoxFor(model => model.Pages, new { @class = "form-control" })
             </div>
         </div>
     </div>
     <div class="form-group">
-        <label for="pages">Publikationsinfo</label>
-        @Html.TextBox("info", null, new { @class = "form-control", @id = "info" })
+        <label for="PublicationInfo">Publikationsinfo</label>
+        @Html.TextBoxFor(model => model.PublicationInfo, new { @class = "form-control" })
     </div>
     <div class="text-center">
         <input type="submit" class="btn btn-lg btn-primary" value="Spara" style="width: 40%" />
