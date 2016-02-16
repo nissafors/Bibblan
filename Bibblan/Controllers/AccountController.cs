@@ -9,6 +9,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
 using Bibblan.Models;
+using Common.Models;
 
 namespace Bibblan.Controllers
 {
@@ -43,6 +44,12 @@ namespace Bibblan.Controllers
             return View();
         }
 
+        public ActionResult UserPage(string isbn)
+        {
+            List<Loan> loans = Services.Mockup.Mockup.loans;
+
+            return View(loans);
+        }
         /*
         //
         // POST: /Account/Login

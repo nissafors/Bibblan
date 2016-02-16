@@ -5,11 +5,13 @@ using System.Web;
 using System.Web.Mvc;
 using Common.Models;
 using Services.Mockup;
+using Services.Services;
 
 namespace Bibblan.Controllers
 {
     public class EditController : Controller
     {
+        private AuthorServices _authorService = new AuthorServices();
         // GET: Edit
         public ActionResult Index()
         {
@@ -49,10 +51,14 @@ namespace Bibblan.Controllers
             return View();
         }
 
-        public ActionResult Author()
+        public ActionResult Author(int id)
         {
-            Common.Models.Author author = Services.Mockup.Mockup.authors[0];
-            return View(author);
+            //Common.Models.Author author = Services.Mockup.Mockup.authors[0];
+            Author author = _authorService.getAuthorById(id);
+            if(author != null)
+                return View(author);
+
+            return View();
         }
     }
 }
