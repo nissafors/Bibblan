@@ -17,12 +17,15 @@
         <th>Förnamn</th>
         <th>Födelseår</th>
     </tr>
-    @for (int i = 0; i < 200; i++)
-    {
+@if (@ViewBag.authors != null)
+{
+	foreach (var item in @ViewBag.authors)
+	{
         <tr>
-            <td>@Html.ActionLink("Bore", "Results", "Search")</td>
-            <td>@Html.ActionLink("Rob", "Results", "Search")</td>
-            <td>@(i + 1900)</td>
+            <td>@item.Author.LastName</td>
+            <td>@item.Author.FirstName</td>
+            <td>@item.Author.BirthYear</td>
         </tr>
-    }
+	}
+}
 </table>

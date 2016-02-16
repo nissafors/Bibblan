@@ -11,7 +11,7 @@ namespace Bibblan.Controllers
 {
     public class SearchController : Controller
     {
-        private BookServices _bookServices = new BookServices();
+        private BookAuthorServices _bookServices = new BookAuthorServices();
 
         public SearchController()
         {
@@ -38,8 +38,8 @@ namespace Bibblan.Controllers
             ViewBag.books = _bookServices.GetBookAuthors(author);
 
             return View(author);
-            }
-            
+        }
+
         public ActionResult Book()
         {
             //ViewData["cList"] = Services.Mockup.Mockup.classifications;
