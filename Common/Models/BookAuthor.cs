@@ -11,8 +11,5 @@ namespace Common.Models
     {
         public Book Book { get; set; }
         public Author Author { get; set; }
-
-        public int selectedClassificationId { get; set; }
-        public IEnumerable<SelectListItem> classifications { get; set; }
     }
 }
