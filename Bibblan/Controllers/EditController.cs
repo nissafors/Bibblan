@@ -16,26 +16,23 @@ namespace Bibblan.Controllers
             return View();
         }
 
-        public ActionResult Book(Book book = null)
+        public ActionResult Book(BookAuthor bookAuthor = null)
         {
             // Debug
-            //book = Mockup.books[2];
-
-            IEnumerable<BookAuthor> bookAuthors = from ba in Mockup.bookAuthors where ba.Book == book select ba;
-            int authorId = bookAuthors.Count() > 0 ? bookAuthors.ElementAt(0).Author.Id : 0;
+            bookAuthor = Mockup.bookAuthors[2];
 
             SelectList authors = new SelectList((from s in Mockup.authors
                                                 select new
                                                 {
                                                     Id = s.Id,
                                                     FullName = s.FirstName + " " + s.LastName
-                                                }), "Id", "FullName", authorId);
+                                                }), "Id", "FullName", bookAuthor.Author.Id);
             ViewData["author"] = authors;
 
-            IEnumerable<SelectListItem> classifications = new SelectList(Mockup.classifications, "Id", "Signum");
+            IEnumerable<SelectListItem> classifications = new SelectList(Mockup.classifications);
             ViewData["classification"] = classifications;
 
-            return View(book);
+            return View(bookAuthor);
         }
 
         public ActionResult Copy(Copy copy = null)

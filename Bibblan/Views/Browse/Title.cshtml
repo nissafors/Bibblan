@@ -11,22 +11,35 @@
     <h1>Alla titlar</h1>
 </div>
 
-<table class="table table-striped" >
-    <tr>
-        <th>Titel</th>
-        <th>Författare</th>
-        <th>ISBN</th>
-        <th>Klassifikation</th>
-        <th>Publiserad år</th>
-    </tr>
-    @for (int i = 0; i < 200; i++)
-    {
-        <tr>
-            <td>@Html.ActionLink("ABC för dummies", "Details", "Book")</td>
-            <td>@Html.ActionLink("Rob Bore", "Results", "Search")</td>
-            <td>12-34567-8</td>
-            <td>Hce</td>
-            <td>@(i + 1900)</td>
-        </tr>
-    }
+<table class="table table-striped">
+	<thead>
+		<tr>
+			<th>ISBN</th>
+			<th>Titel</th>
+			<th>Klassifikation</th>
+			<th>Utgivningsår</th>
+			<th class="col-md-1"></th>
+			<th>Författare</th>
+			<th class="col-md-1"></th>
+		</tr>
+	</thead>
+	<tbody>
+		@if (@ViewBag.books != null)
+		{
+			foreach (var item in @ViewBag.books)
+			{
+				<tr>
+					<td>@item.Book.ISBN</td>
+					<td>@item.Book.Title</td>
+					<td>@item.Book.Classification.Signum</td>
+					<td>@item.Book.PublicationYear</td>
+					<!--TODO: ADMIN KONTROLL -->
+					<td><a href=@("../edit/book/" + item.Book.ISBN) class="btn btn-xs btn-warning">Redigera bok</a></td>
+					<td>@item.Author.LastName, @item.Author.FirstName</td>
+					<!--TODO: ADMIN KONTROLL -->
+					<td><a href=@("../edit/author/" + item.Author.Id) class="btn btn-xs btn-warning">Redigera Författare</a></td>
+				</tr>
+			}
+		}
+	</tbody>
 </table>
