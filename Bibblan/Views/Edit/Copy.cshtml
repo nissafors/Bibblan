@@ -1,0 +1,53 @@
+﻿@model Common.Models.Copy
+
+@{
+    ViewBag.Title = "View";
+}
+
+<div class="page-header">
+    <h1>Redigera Exemplar</h1>
+</div>
+
+@using (Html.BeginForm("Book", "Edit"))
+{
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="BarCode">Streckkod</label>
+                @Html.TextBoxFor(model => model.BarCode , new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="Location">Plats</label>
+                @Html.TextBoxFor(model => model.Location, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="Library">Bibliotek</label>
+                @Html.TextBoxFor(model => model.Library, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="Status">Klassifikation</label>
+                @Html.DropDownListFor(model => model.Status, ViewData["statuses"] as IEnumerable<SelectListItem>, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <input type="submit" class="btn btn-lg btn-block btn-primary" value="Spara" />
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <a href="#" class="btn btn-lg btn-block btn-danger">Ta Bort</a>
+            </div>
+        </div>
+    </div>
+}

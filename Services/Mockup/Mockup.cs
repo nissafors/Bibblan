@@ -26,11 +26,11 @@ namespace Services.Mockup
 
         static public List<Status> statuses = new List<Status>
             {
-                new Status { Id = 1, status = "Available" },
-                new Status { Id = 2, status = "Borrowed" },
-                new Status { Id = 3, status = "Ordered from bookstore" },
-                new Status { Id = 4, status = "Reference copy" },
-                new Status { Id = 5, status = "Unknown" },
+                new Status { Id = 1, StatusName = "Available" },
+                new Status { Id = 2, StatusName = "Borrowed" },
+                new Status { Id = 3, StatusName = "Ordered from bookstore" },
+                new Status { Id = 4, StatusName = "Reference copy" },
+                new Status { Id = 5, StatusName = "Unknown" },
             };
 
         static public List<Copy> copies = new List<Copy>

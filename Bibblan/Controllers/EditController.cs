@@ -38,6 +38,14 @@ namespace Bibblan.Controllers
             return View(book);
         }
 
+        public ActionResult Copy(Copy copy = null)
+        {
+            IEnumerable<SelectListItem> statuses = new SelectList(Mockup.statuses, "Id", "StatusName");
+            ViewData["statuses"] = statuses;
+
+            return View(copy);
+        }
+
         public ActionResult Borrower()
         {
             return View();

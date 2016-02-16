@@ -219,7 +219,6 @@
     <Content Include="Views\Browse\Title.cshtml" />
     <Content Include="Views\Browse\Author.cshtml" />
     <Content Include="Views\Account\AdminPage.cshtml" />
-    <Content Include="Views\Edit\Book.cshtml" />
     <Content Include="Views\Search\Borrower.cshtml" />
     <Content Include="Views\Search\Author.cshtml" />
     <Content Include="Views\Search\Book.cshtml" />
@@ -227,6 +226,8 @@
     <Content Include="Views\Shared\PartialBorrowerForm.cshtml" />
     <Content Include="Views\Edit\Author.cshtml" />
     <Content Include="Views\Search\PartialResult.cshtml" />
+    <Content Include="Views\Edit\Book.cshtml" />
+    <Content Include="Views\Edit\Copy.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
