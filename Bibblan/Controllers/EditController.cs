@@ -29,7 +29,7 @@ namespace Bibblan.Controllers
                                                 }), "Id", "FullName", bookAuthor.Author.Id);
             ViewData["author"] = authors;
 
-            IEnumerable<SelectListItem> classifications = new SelectList(Mockup.classifications, "Id", "Signum");
+            IEnumerable<SelectListItem> classifications = new SelectList(Mockup.classifications);
             ViewData["classification"] = classifications;
 
             return View(bookAuthor);

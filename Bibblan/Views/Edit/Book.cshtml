@@ -34,7 +34,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="Classification">Klassifikation</label>
-                @Html.DropDownListFor(model => model.Book.Classification.Id, ViewData["classifications"] as IEnumerable<SelectListItem>, new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.Book.Classification.Id, ViewData["classification"] as IEnumerable<SelectListItem>, new { @class = "form-control" })
             </div>
         </div>
     </div>
