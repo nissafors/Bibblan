@@ -8,7 +8,7 @@ namespace Services.Services
 {
     public class AuthorServices
     {
-        public static Author getAuthorById(int id)
+        public Author getAuthorById(int id)
         {
             return Mockup.Mockup.authors[id - 1];
         }
