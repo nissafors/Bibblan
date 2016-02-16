@@ -62,9 +62,9 @@ namespace Bibblan.Controllers
         [HttpPost]
         public ActionResult Book(Book b)
         {
-            List<Book> books = Services.Mockup.Mockup.books;
-            ViewBag.books = books;
-            return View(b);
+            List<BookAuthor> ba = Services.Mockup.Mockup.bookAuthors;
+            ViewBag.books = ba;
+            return View();
         }
     }
 }

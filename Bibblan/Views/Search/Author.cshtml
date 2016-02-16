@@ -25,7 +25,9 @@
     </div>
 }
 @if(IsPost)
-{ 
+{
+    @Html.Partial("PartialResult", ViewBag.books as List<Common.Models.BookAuthor>);
+/*
 <table class="table table-striped">
     <thead>
         <tr>
@@ -46,4 +48,5 @@
         }
     </tbody>
 </table>
+*/
 }
