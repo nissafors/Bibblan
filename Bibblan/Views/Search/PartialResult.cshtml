@@ -1,4 +1,5 @@
-﻿<table class="table table-striped">
+﻿@model List<Common.Models.BookAuthor>
+<table class="table table-striped">
     <thead>
         <tr>
             <th>ISBN</th>
@@ -11,9 +12,9 @@
         </tr>
     </thead>
     <tbody>
-        @if(@ViewBag.books != null)
+        @if(Model != null)
         {
-            foreach (var item in @ViewBag.books)
+            foreach (var item in Model)
             {
             <tr>
                 <td>@item.Book.ISBN</td>
