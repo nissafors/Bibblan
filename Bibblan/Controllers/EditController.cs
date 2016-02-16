@@ -19,7 +19,7 @@ namespace Bibblan.Controllers
         public ActionResult Book(BookAuthor bookAuthor = null)
         {
             // Debug
-            bookAuthor = Mockup.bookAuthors[2];
+            bookAuthor = Mockup.bookAuthors[1];
 
             SelectList authors = new SelectList((from s in Mockup.authors
                                                 select new
@@ -29,8 +29,9 @@ namespace Bibblan.Controllers
                                                 }), "Id", "FullName", bookAuthor.Author.Id);
             ViewData["author"] = authors;
 
-            IEnumerable<SelectListItem> classifications = new SelectList(Mockup.classifications);
-            ViewData["classification"] = classifications;
+            bookAuthor.classifications = new SelectList(Mockup.classifications, "Id", "Signum");
+            bookAuthor.selectedClassificationId = bookAuthor.Book.Classification.Id;
+            //ViewData["classification"] = classifications;
 
             return View(bookAuthor);
         }
