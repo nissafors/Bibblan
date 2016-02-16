@@ -21,11 +21,11 @@
             </div>
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li>@Html.ActionLink("Search", "Results", "Search")</li>
-                    <li>@Html.ActionLink("Browse", "Title", "Browse")</li>
+                    <li>@Html.ActionLink("Sök bok", "Book", "Search")</li>
+                    <li>@Html.ActionLink("Sök författare", "Author", "Search")</li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li>@Html.ActionLink("Log in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+                    <li>@Html.ActionLink("Logga in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
                 </ul>
             </div>
         </div>

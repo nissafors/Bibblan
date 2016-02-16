@@ -51,10 +51,14 @@ namespace Bibblan.Controllers
             return View();
         }
 
-        public ActionResult Author()
+        public ActionResult Author(int id)
         {
-            Common.Models.Author author = Services.Mockup.Mockup.authors[0];
-            return View(author);
+            //Common.Models.Author author = Services.Mockup.Mockup.authors[0];
+            Author author = Services.Services.AuthorServices.getAuthorById(id);
+            if(author != null)
+                return View(author);
+
+            return View();
         }
     }
 }

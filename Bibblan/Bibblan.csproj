@@ -214,7 +214,7 @@
     <Content Include="Views\Account\_SetPasswordPartial.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
     <Content Include="Views\Account\Manage.cshtml" />
-    <Content Include="Views\Borrower\Mypage.cshtml" />
+    <Content Include="Views\Account\UserPage.cshtml" />
     <Content Include="Views\Book\Details.cshtml" />
     <Content Include="Views\Search\Results.cshtml" />
     <Content Include="Views\Browse\Title.cshtml" />
@@ -232,6 +232,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Borrower\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
