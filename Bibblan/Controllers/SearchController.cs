@@ -36,10 +36,10 @@ namespace Bibblan.Controllers
         public ActionResult Author(Author author = null)
         {
             ViewBag.books = _bookServices.GetBookAuthors(author);
-            
-            return View(author);
-        }
 
+            return View(author);
+            }
+            
         public ActionResult Book()
         {
             //ViewData["cList"] = Services.Mockup.Mockup.classifications;
