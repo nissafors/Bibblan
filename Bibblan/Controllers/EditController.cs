@@ -23,17 +23,16 @@ namespace Bibblan.Controllers
             // Debug
             bookAuthor = Mockup.bookAuthors[1];
 
-            SelectList authors = new SelectList((from s in Mockup.authors
+            var authors = new SelectList((from s in Mockup.authors
                                                 select new
                                                 {
                                                     Id = s.Id,
                                                     FullName = s.FirstName + " " + s.LastName
-                                                }), "Id", "FullName", bookAuthor.Author.Id);
+                                                }), "Id", "FullName");
             ViewData["author"] = authors;
 
-           // bookAuthor.classifications = new SelectList(Mockup.classifications, "Id", "Signum");
-           // bookAuthor.selectedClassificationId = bookAuthor.Book.Classification.Id;
-            //ViewData["classification"] = classifications;
+            var classifications = new SelectList(Mockup.classifications, "Id", "Signum");
+            ViewData["classification"] = classifications;
 
             return View(bookAuthor);
         }

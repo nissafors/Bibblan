@@ -28,13 +28,13 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="author">Författare</label>
-                @Html.DropDownList("author", null, new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.Author.Id, ViewData["author"] as SelectList, new { @class = "form-control" })
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
                 <label for="Classification">Klassifikation</label>
-                @Html.DropDownListFor(model => model.selectedClassificationId, Model.classifications, new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.Book.Classification.Id, ViewData["classification"] as SelectList, new { @class = "form-control" })
             </div>
         </div>
     </div>
