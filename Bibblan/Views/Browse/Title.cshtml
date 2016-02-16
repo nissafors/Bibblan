@@ -19,8 +19,6 @@
 			<th>Klassifikation</th>
 			<th>Utgivningsår</th>
 			<th class="col-md-1"></th>
-			<th>Författare</th>
-			<th class="col-md-1"></th>
 		</tr>
 	</thead>
 	<tbody>
@@ -29,15 +27,12 @@
 			foreach (var item in @ViewBag.books)
 			{
 				<tr>
-					<td>@item.Book.ISBN</td>
-					<td>@item.Book.Title</td>
-					<td>@item.Book.Classification.Signum</td>
-					<td>@item.Book.PublicationYear</td>
+					<td>@item.ISBN</td>
+					<td>@item.Title</td>
+					<td>@item.Classification.Signum</td>
+					<td>@item.PublicationYear</td>
 					<!--TODO: ADMIN KONTROLL -->
-					<td><a href=@("../edit/book/" + item.Book.ISBN) class="btn btn-xs btn-warning">Redigera bok</a></td>
-					<td>@item.Author.LastName, @item.Author.FirstName</td>
-					<!--TODO: ADMIN KONTROLL -->
-					<td><a href=@("../edit/author/" + item.Author.Id) class="btn btn-xs btn-warning">Redigera Författare</a></td>
+					<td><a href=@("../edit/book/" + item.ISBN) class="btn btn-xs btn-warning">Redigera bok</a></td>
 				</tr>
 			}
 		}

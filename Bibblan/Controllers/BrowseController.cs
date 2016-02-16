@@ -10,17 +10,20 @@ namespace Bibblan.Controllers
     public class BrowseController : Controller
     {
         BookAuthorServices _bookAuthorServices = new BookAuthorServices();
+        AuthorServices _authorServices = new AuthorServices();
+        BookServices _bookServices = new BookServices();
+
         //
         // GET: /Browse/
         public ActionResult Title()
         {
-            ViewBag.books = _bookAuthorServices.GetBookAuthors();
+            ViewBag.books = _bookServices.GetBooks();
             return View();
         }
 
         public ActionResult Author()
         {
-            ViewBag.authors = _bookAuthorServices.GetBookAuthors();
+            ViewBag.authors = _authorServices.GetAuthors();
             return View();
         }
 	}

@@ -12,5 +12,10 @@ namespace Services.Services
         {
             return Mockup.Mockup.authors[id - 1];
         }
+
+        public List<Author> GetAuthors()
+        {
+            return Mockup.Mockup.authors;
+        }
     }
 }

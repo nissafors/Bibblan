@@ -16,15 +16,18 @@
         <th>Efternamn</th>
         <th>Förnamn</th>
         <th>Födelseår</th>
+		<th class="col-md-1"></th>
     </tr>
 @if (@ViewBag.authors != null)
 {
 	foreach (var item in @ViewBag.authors)
 	{
         <tr>
-            <td>@item.Author.LastName</td>
-            <td>@item.Author.FirstName</td>
-            <td>@item.Author.BirthYear</td>
+            <td>@item.LastName</td>
+            <td>@item.FirstName</td>
+            <td>@item.BirthYear</td>
+			<!--TODO: ADMIN KONTROLL -->
+			<td><a href=@("../edit/author/" + item.Id) class="btn btn-xs btn-warning">Redigera Författare</a></td>
         </tr>
 	}
 }
