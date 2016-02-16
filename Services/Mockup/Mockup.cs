@@ -78,7 +78,7 @@ namespace Services.Mockup
         static public List<Loan> loans = new List<Loan>
         {
             new Loan {Copy = copies.ElementAt(2), BorrowDate = new DateTime(2016, 1, 15), ReturnDate = null, ToBeReturnedDate = new DateTime(2016, 3, 15) },
-            new Loan {Copy = copies.ElementAt(0), BorrowDate = new DateTime(2016, 2, 1), ReturnDate = null, ToBeReturnedDate = new DateTime(2016, 4, 1) }
+            new Loan {Copy = copies.ElementAt(0), BorrowDate = new DateTime(2016, 2, 1), ReturnDate = new DateTime(2016, 3, 12), ToBeReturnedDate = new DateTime(2016, 4, 1) }
         };
 
         static public List<Borrower> borrowers = new List<Borrower>

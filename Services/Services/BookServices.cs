@@ -13,5 +13,15 @@ namespace Services.Services
         {
             return Mockup.Mockup.books;
         }
+
+        public Book GetBookFromCopy(Copy copy)
+        {
+            foreach(var book in Mockup.Mockup.books)
+            {
+                if (book.Copies.Contains(copy))
+                    return book;
+            }
+            return null;
+        }
     }
 }
