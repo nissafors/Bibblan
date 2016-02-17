@@ -28,7 +28,7 @@ namespace Bibblan.Controllers
                                                 {
                                                     Id = s.Id,
                                                     FullName = s.FirstName + " " + s.LastName
-                                                }), "Id", "FullName");
+                                                }), "Id", "FullName", bookAuthor.Author.Id);
             ViewData["author"] = authors;
 
             var classifications = new SelectList(Mockup.classifications, "Id", "Signum");
