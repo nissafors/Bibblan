@@ -18,7 +18,7 @@ namespace Services.Services
         {
             return Mockup.Mockup.bookAuthors;
         }
-
+        
         public List<BookAuthor> GetBookAuthors(Book book)
         {
             List<BookAuthor> bookList = new List<BookAuthor>();
@@ -58,6 +58,13 @@ namespace Services.Services
             }
 
             return bookList;
+        }
+
+        public BookAuthor GetBookAuthorByISBN(string isbn)
+        {
+            return (from bookAuthor in Mockup.Mockup.bookAuthors
+                    where bookAuthor.Book.ISBN == isbn
+                    select bookAuthor).FirstOrDefault();
         }
     }
 }
