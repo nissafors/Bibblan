@@ -60,7 +60,7 @@ namespace Bibblan.Controllers
         [HttpPost]
         public ActionResult Book(Book book)
         {
-            ViewBag.result = new ResultViewModel(model.getAuthor());
+            //ViewBag.result = new ResultViewModel(model.getAuthor());
             return View(book);
         }
     }
