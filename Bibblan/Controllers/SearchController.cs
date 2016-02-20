@@ -54,14 +54,14 @@ namespace Bibblan.Controllers
 
         public ActionResult Book()
         {
-            return View();
+            return View(new SearchBookViewModel());
         }
 
         [HttpPost]
-        public ActionResult Book(Book book)
+        public ActionResult Book(SearchBookViewModel model)
         {
-            ViewBag.result = new ResultViewModel(model.getAuthor());
-            return View(book);
+            ViewBag.result = new ResultViewModel(model.getBook());
+            return View(model);
         }
     }
 }
