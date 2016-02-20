@@ -27,7 +27,7 @@ namespace Bibblan.Controllers
         [HttpGet]
         public ActionResult Book(string isbn)
         {
-            isbn = "666-6";
+            //isbn = "666-6";
             EditBookViewModel bookInfo;
 
             BookServices bc = new BookServices();
@@ -63,40 +63,43 @@ namespace Bibblan.Controllers
         [HttpGet]
         public ActionResult Borrower(string PersonId)
         {
-            if(PersonId != null)
-            {
-                return View(new BorrowerViewModel(PersonId));
-            }
+            Borrower borrower = BorrowerServices.GetBorrowerById(PersonId);
 
-            return View(new BorrowerViewModel());
+            if (borrower != null)
+            {
+                return View(new BorrowerViewModel(borrower));
+            }
+            else
+            {
+                return View(new BorrowerViewModel());
+            }
         }
 
         [HttpPost]
         public ActionResult Borrower(BorrowerViewModel borrower)
         {
-            // Services.addBorrower(borrower.ToBorrowerModel())
+            BorrowerServices.AddBorrower(borrower.ToBorrower());
             return View(borrower);
         }
 
         public ActionResult Delete(string Type, string Id)
         {
             switch(Type)
-        {
+            {
                 case "Borrower":
-                    _borrowerService.DeleteBorrower(Id);
+                    BorrowerServices.DeleteBorrower(Id);
                     return RedirectToAction("Borrower", "Search");
 
                 case "Author":
-                    // Services.deleteAuthor(Id);
+                    AuthorServices.DeleteAuthor(Id);
                     return RedirectToAction("Author", "Search");
 
                 case "Book":
-                    // Services.deleteBorrower(Id);
+                    BookServices.DeleteBook(Id);
                     return RedirectToAction("Book", "Search");
 
                 case "Copy":
-                    // Services.deleteBorrower(Id);
-                    // TODO: Fix link to correct book
+                    CopyServices.DeleteCopy(Id);
                     return RedirectToAction("Book", "Edit", _copyService.GetCopy(Id).Book);
 
                 default:

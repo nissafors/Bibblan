@@ -24,5 +24,10 @@ namespace Services.Services
 
             return Mockup.Mockup.copies[0];
         }
+
+        static public bool DeleteCopy(string BarCode)
+        {
+            return false;
+        }
     }
 }

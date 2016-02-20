@@ -34,5 +34,10 @@ namespace Services.Services
             }
             return null;
         }
+
+        static public bool DeleteBook(string ISBN)
+        {
+            return false;
+        }
     }
 }
