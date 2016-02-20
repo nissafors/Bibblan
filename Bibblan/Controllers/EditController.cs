@@ -14,6 +14,8 @@ namespace Bibblan.Controllers
     public class EditController : Controller
     {
         private AuthorServices _authorService = new AuthorServices();
+        private CopyServices _copyService = new CopyServices();
+        private BorrowerServices _borrowerService = new BorrowerServices();
 
         // GET: Edit
         public ActionResult Index()
@@ -25,7 +27,7 @@ namespace Bibblan.Controllers
         [HttpGet]
         public ActionResult Book(string isbn)
         {
-            isbn = "666-6";
+            //isbn = "666-6";
             EditBookViewModel bookInfo;
 
             BookServices bc = new BookServices();
@@ -43,41 +45,67 @@ namespace Bibblan.Controllers
         public ActionResult Book(EditBookViewModel bookInfo)
                                                 {
             // TODO:
-            // Fill authors list
             // Write bookInfo to db
 
             return View(bookInfo);
         }
 
-        public ActionResult Copy(Copy copy = null)
+        public ActionResult Copy(string barCode)
         {
-            IEnumerable<SelectListItem> statuses = new SelectList(Mockup.statuses, "Id", "StatusName");
-            ViewData["statuses"] = statuses;
+            //CopyServices cs = new CopyServices();
+            //Copy copy = cs.GetCopiesFrom
+            //
+            //EditCopyViewModel copyInfo = new EditCopyViewModel();
 
-            return View(copy);
+            return View();
         }
 
         [HttpGet]
         public ActionResult Borrower(string PersonId)
         {
-            if(PersonId != null)
-            {
-                return View(new BorrowerViewModel(PersonId));
-            }
+            Borrower borrower = BorrowerServices.GetBorrowerById(PersonId);
 
-            return View(new BorrowerViewModel());
+            if (borrower != null)
+            {
+                return View(new BorrowerViewModel(borrower));
+            }
+            else
+            {
+                return View(new BorrowerViewModel());
+            }
         }
 
         [HttpPost]
         public ActionResult Borrower(BorrowerViewModel borrower)
         {
-            // Services.addBorrower(borrower.ToBorrowerModel())
+            BorrowerServices.AddBorrower(borrower.ToBorrower());
             return View(borrower);
         }
 
-        public ActionResult Delete(string PersonId)
+        public ActionResult Delete(string Type, string Id)
         {
-            return View("~/Views/Search/Borrower");
+            switch(Type)
+            {
+                case "Borrower":
+                    BorrowerServices.DeleteBorrower(Id);
+                    return RedirectToAction("Borrower", "Search");
+
+                case "Author":
+                    AuthorServices.DeleteAuthor(Id);
+                    return RedirectToAction("Author", "Search");
+
+                case "Book":
+                    BookServices.DeleteBook(Id);
+                    return RedirectToAction("Book", "Search");
+
+                case "Copy":
+                    CopyServices.DeleteCopy(Id);
+                    return RedirectToAction("Book", "Edit", _copyService.GetCopy(Id).Book);
+
+                default:
+                    return RedirectToAction("Index", "Home");
+
+            }
         }
 
         public ActionResult Author(int id)

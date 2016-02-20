@@ -17,5 +17,10 @@ namespace Services.Services
         {
             return Mockup.Mockup.authors;
         }
+
+        static public bool DeleteAuthor(string AuthorID)
+        {
+            return false;
+        }
     }
 }

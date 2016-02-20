@@ -9,7 +9,7 @@ namespace Services.Services
 {
     public class BorrowerServices
     {
-        public Borrower GetBorrowerById(string personId)
+        static public Borrower GetBorrowerById(string personId)
         {
             Borrower returnBorrower = null;
 
@@ -23,6 +23,26 @@ namespace Services.Services
             }
 
             return returnBorrower;
+        }
+
+        static public List<Borrower> GetBorrowers()
+        {
+            return Mockup.Mockup.borrowers;
+        }
+
+        static public List<Borrower> GetBorrowers(Borrower borrower)
+        {
+            return Mockup.Mockup.borrowers;
+        }
+
+        static public bool AddBorrower(Borrower borrower)
+        {
+            return false;
+        }
+
+        static public bool DeleteBorrower(string PersonId)
+        {
+            return false;
         }
     }
 }

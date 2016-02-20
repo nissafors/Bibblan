@@ -1,19 +1,18 @@
-﻿@model Common.Models.Borrower
+﻿@model Bibblan.Models.BorrowerViewModel
 
-@using (Html.BeginForm("Search", "Borrower", "ISBNNR"))
+@using (Html.BeginForm("Borrower", "Edit"))
 {
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                <label for="firstname">Förnamn</label>
-               @*@Html.TextBox("fname", null, new { @class = "form-control", @id = "fname" })*@
-               @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", @id = "fname"})
+                <label for="FirstName">Förnamn</label>
+                @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control" })
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <label for="lname">Efternamn</label>
-                @Html.TextBox("lname", null, new { @class = "form-control", @id = "lname" })
+                <label for="LastName">Efternamn</label>
+                @Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
             </div>
         </div>
     </div>
@@ -21,14 +20,14 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                <label for="pnumber">Personnummer</label>
-                @Html.TextBox("pnumber", null, new { @class = "form-control", @id = "pnumber" })
+                <label for="PersonId">Personnummer</label>
+                @Html.TextBoxFor(model => model.PersonId, Model.PersonId != null ? (object)new { @class = "form-control", @readonly = "readonly" } : new { @class = "form-control" })
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <label for="adress">Adress</label>
-                @Html.TextBox("adress", null, new { @class = "form-control", @id = "adress" })
+                <label for="Adress">Adress</label>
+                @Html.TextBoxFor(model => model.Adress, new { @class = "form-control" })
             </div>
         </div>
     </div>
@@ -36,17 +35,34 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                <label for="phonenumber">Telefonnummer</label>
-                @Html.TextBox("phonenumber", null, new { @class = "form-control", @id = "phonenumber" })
+                <label for="TelephoneNumber">Telefonnummer</label>
+                @Html.TextBoxFor(model => model.TelephoneNumber, new { @class = "form-control" })
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <label for="category">
-                    DROPDOWN LIST GOES HERE
-                </label>
+                <label for="ChosenCategory">Kategori</label>
+                @Html.DropDownListFor(model => model.SelectedCategory, Model.Category, new { @class = "form-control" })
             </div>
         </div>
     </div>
-    <input type="submit" class="btn btn-block btn-primary" value="Sök" />
+
+    if(ViewBag.Title == "Redigera lånetagare")
+    { 
+    <div class="row">
+        <div class="col-md-6">
+            <input type="submit" class="btn btn-block btn-primary" value="Bekräfta" />
+        </div>
+        if (Model.PersonId != null)
+        {
+            <div class="col-md-6">
+                <a href=@("../Delete/Copy/" + Model.PersonId) class="form-control btn btn-block btn-danger">Ta bort</a>
+            </div>
+        }
+    </div>
+    }
+    else
+    {
+        <input type="submit" class="btn btn-block btn-primary" value="Sök" />
+    }
 }

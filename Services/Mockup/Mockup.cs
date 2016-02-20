@@ -30,8 +30,8 @@ namespace Services.Mockup
             {
                 new Copy { BarCode = "12345", Library = "Huvudbiblioteket", Location = "Översta hyllan", Status = statuses.ElementAt(0) },
                 new Copy { BarCode = "23456", Library = "Huvudbiblioteket", Location = "Nedersta hyllan", Status = statuses.ElementAt(0) },
-                new Copy { BarCode = "34567", Library = "Huvudbiblioteket", Location = "", Status = statuses.ElementAt(1) },
-                new Copy { BarCode = "45678", Library = "Huvudbiblioteket", Location = "", Status = statuses.ElementAt(1) }
+                new Copy { BarCode = "34567", Library = "Huvudbiblioteket", Location = "Under mattan", Status = statuses.ElementAt(1) },
+                new Copy { BarCode = "45678", Library = "Huvudbiblioteket", Location = "I hallen", Status = statuses.ElementAt(1) }
             };
 
         static public List<Author> authors = new List<Author>

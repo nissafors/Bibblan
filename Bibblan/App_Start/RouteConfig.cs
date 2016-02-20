@@ -26,12 +26,22 @@ namespace Bibblan
             );
 
             routes.MapRoute(
+                    name: "DeleteObject",
+                    url: "Edit/Delete/{Type}/{Id}",
+                    defaults: new { controller = "Edit", action = "Delete" }
+            );
+
+            routes.MapRoute(
+                    name: "EditCopy",
+                    url: "Edit/Copy/{barCode}",
+                    defaults: new { controller = "Edit", action = "Copy" }
+            );
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
-
-
         }
     }
 }

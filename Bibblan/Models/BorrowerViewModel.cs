@@ -20,18 +20,17 @@ namespace Bibblan.Models
         public string TelephoneNumber { get; set; }
 
         public SelectList Category { get; set; }
-        public int ChosenCategory { get; set; }
+        public int SelectedCategory { get; set; }
 
-        public BorrowerViewModel(string personId)
+        public BorrowerViewModel(Borrower borrower)
             : this()
         {
-            this.setup(_borrowerServices.GetBorrowerById(personId));
-        }
-
-        public BorrowerViewModel(Borrower borrower) 
-            : this()
-        {
-            this.setup(borrower);
+            this.PersonId = borrower.PersonId;
+            this.FirstName = borrower.FirstName;
+            this.LastName = borrower.LastName;
+            this.Adress = borrower.Adress;
+            this.TelephoneNumber = borrower.TelephoneNumber;
+            this.SelectedCategory = borrower.Category.Id;
         }
 
         public BorrowerViewModel()
@@ -39,17 +38,17 @@ namespace Bibblan.Models
             this.Category = new SelectList(_categoryServices.GetAllCategories(), "Id", "CategoryName");
         }
 
-        private void setup(Borrower borrower)
+        public Borrower ToBorrower()
         {
-            if (borrower != null)
+            return new Borrower
             {
-                this.PersonId = borrower.PersonId;
-                this.FirstName = borrower.FirstName;
-                this.LastName = borrower.LastName;
-                this.Adress = borrower.Adress;
-                this.TelephoneNumber = borrower.TelephoneNumber;
-                this.ChosenCategory = borrower.Category.Id;
-            }
+                PersonId = this.PersonId,
+                FirstName = this.FirstName,
+                LastName = this.LastName,
+                Adress = this.Adress,
+                TelephoneNumber = this.TelephoneNumber,
+                Category = CategoryServices.GetCategory(SelectedCategory)
+            };
         }
-	}
+    }
 }

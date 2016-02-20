@@ -1,7 +1,7 @@
-﻿@model Common.Models.Borrower
+﻿@model Bibblan.Models.BorrowerViewModel
 
 @{
-    ViewBag.Title = "Borrower";
+    ViewBag.Title = "Sök lånetagare";
 }
 
 <div class="page-header">
@@ -24,14 +24,20 @@
         </tr>
     </thead>
     <tbody>
+        @if(ViewBag.Results != null)
+        { 
+        foreach(var item in ViewBag.Results)
+        { 
            <tr>
-                <td>Elias</td>
-                <td>Johnsson</td>
+               <td>Elias</td>
+               <td>Johnsson</td>
                <td>930801XXXX</td>
                <td>Jönköping</td>
                <td>072XXXXXXX</td>
                <td>Kund</td>
                <td><a href="../Edit/Borrower/19111111-1111" class="btn btn-xs btn-warning">Redigera</a></td>
            </tr>
+        }
+        }
     </tbody>
 </table>

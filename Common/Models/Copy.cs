@@ -9,6 +9,7 @@ namespace Common.Models
     public class Copy
     {
         public string BarCode { get; set; }
+        public Book Book { get; set; }
         public string Location { get; set; }
         public Status Status {get; set;}
         public string Library { get; set; }

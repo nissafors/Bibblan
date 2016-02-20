@@ -13,5 +13,10 @@ namespace Services.Services
         {
             return Mockup.Mockup.categories;
         }
+
+        static public Category GetCategory(int id)
+        {
+            return Mockup.Mockup.categories[0];
+        }
     }
 }

@@ -27,9 +27,26 @@ namespace Bibblan.Controllers
             return View();
         }
 
-        public ActionResult Borrower()
+        [HttpGet]
+        public ActionResult Borrower(string PersonId)
         {
-            return View(Services.Mockup.Mockup.borrowers[1]);
+            Borrower borrower = BorrowerServices.GetBorrowerById(PersonId);
+
+            if (borrower != null)
+            {
+                return View(new BorrowerViewModel(borrower));
+            }
+            else
+            {
+                return View(new BorrowerViewModel());
+            }
+        }
+
+        [HttpPost]
+        public ActionResult Borrower(BorrowerViewModel borrower)
+        {
+            ViewBag.Results = BorrowerServices.GetBorrowers(borrower.ToBorrower());
+            return View(borrower);
         }
 
         //

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Common.Models;
+using Services.Services;
 
 namespace Services.Services
 {
@@ -62,5 +63,5 @@ namespace Services.Services
                 }
                 return books;
             }
-        }
     }
+}
