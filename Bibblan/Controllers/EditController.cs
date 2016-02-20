@@ -43,18 +43,19 @@ namespace Bibblan.Controllers
         public ActionResult Book(EditBookViewModel bookInfo)
                                                 {
             // TODO:
-            // Fill authors list
             // Write bookInfo to db
 
             return View(bookInfo);
         }
 
-        public ActionResult Copy(Copy copy = null)
+        public ActionResult Copy(string barCode)
         {
-            IEnumerable<SelectListItem> statuses = new SelectList(Mockup.statuses, "Id", "StatusName");
-            ViewData["statuses"] = statuses;
+            //CopyServices cs = new CopyServices();
+            //Copy copy = cs.GetCopiesFrom
+            //
+            //EditCopyViewModel copyInfo = new EditCopyViewModel();
 
-            return View(copy);
+            return View();
         }
 
         [HttpGet]

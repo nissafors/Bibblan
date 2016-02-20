@@ -24,6 +24,8 @@ namespace Bibblan.ViewModels
                 Id = s.Id,
                 FullName = s.FirstName + " " + s.LastName
             }), "Id", "FullName");
+
+            Copies = new List<Copy>();
         }
 
         /// <summary>

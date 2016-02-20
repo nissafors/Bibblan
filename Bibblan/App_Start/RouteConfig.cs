@@ -31,7 +31,11 @@ namespace Bibblan
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
 
-
+            routes.MapRoute(
+                    name: "EditCopy",
+                    url: "Edit/Copy/{barCode}",
+                    defaults: new { controller = "Edit", action = "Copy" }
+            );
         }
     }
 }
