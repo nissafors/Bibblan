@@ -43,7 +43,7 @@
         </div>
         <div class="col-sm-4">
             <div class="form-group">
-                @Html.DropDownListFor(model => model.Classification.Id, ViewData["classifications-list"] as IEnumerable<SelectListItem>, "- Kategori -")
+                @Html.DropDownListFor(model => model.ChosenClassification, Model.Classification, new { @class = "form-control" })
             </div>
         </div>
         <div class="col-sm-4">
@@ -53,5 +53,5 @@
 }
 @if (IsPost)
 {
-    @Html.Partial("PartialResult", ViewBag.books as List<Common.Models.BookAuthor>);
+    @Html.Partial("PartialResult", ViewBag.result as Bibblan.Models.ResultViewModel);
 }

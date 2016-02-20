@@ -9,6 +9,7 @@ namespace Bibblan.Models
     public class ResultViewModel
     {
         private List<BookAuthor> bookAuthors;
+
         public ResultViewModel(Author author)
         {
             bookAuthors = new List<BookAuthor>();
@@ -37,13 +38,6 @@ namespace Bibblan.Models
             {
                 return bookAuthors;
             }
-        }
-
-        public class BookAuthor
-        {
-            public Book Book {get; set;}
-            public Author Author {get; set;}
-        
         }
 
     }

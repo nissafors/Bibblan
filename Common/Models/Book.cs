@@ -15,5 +15,6 @@ namespace Common.Models
         public string PublicationInfo { get; set; }
         public int Pages { get; set; }
         public List<Copy> Copies { get; set; }
+        public List<Author> Authors { get; set; }
     }
 }

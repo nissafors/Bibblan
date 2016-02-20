@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using Common.Models;
 using System.Web.Mvc;
+using Services.Services;
 
 namespace Bibblan.Models
 {
@@ -25,11 +26,22 @@ namespace Bibblan.Models
         public string Title { get; set; }
         public string PublicationYear { get; set; }
         public SelectList Classification { get; set; }
-        public int ClassificationId { get; set; }
+        public int ChosenClassification { get; set; }
+
+        public SearchBookViewModel(Book book)
+        {
+            this.Classification = new SelectList(ClassificationServices.getClassifications(), "Id", "Signum", book.Classification);
+            this.ChosenClassification = book.Classification.Id;
+        }
 
         public SearchBookViewModel()
         {
+            this.Classification = new SelectList(Services.Mockup.Mockup.classifications, "Id", "Signum");
         }
 
+        public Book getBook()
+        {
+            return new Book { Title = this.Title, ISBN = this.ISBN, PublicationYear = this.PublicationYear, Classification = ClassificationServices.getClassification(ChosenClassification)};
+        }
     }
 }
