@@ -48,8 +48,13 @@ namespace Bibblan.Controllers
         }
 
         [HttpGet]
-        public ActionResult Borrower()
+        public ActionResult Borrower(string PersonId)
         {
+            if(PersonId != null)
+            {
+                return View(new BorrowerViewModel(PersonId));
+            }
+
             return View(new BorrowerViewModel());
         }
 
@@ -58,6 +63,11 @@ namespace Bibblan.Controllers
         {
             // Services.addBorrower(borrower.ToBorrowerModel())
             return View(borrower);
+        }
+
+        public ActionResult Delete(string PersonId)
+        {
+            return View("~/Views/Search/Borrower");
         }
 
         public ActionResult Author(int id)
