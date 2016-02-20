@@ -23,5 +23,15 @@ namespace Services.Services
             }
             return null;
         }
+
+        public Book GetBookFromISBN(string ISBN)
+        {
+            foreach (var book in Mockup.Mockup.books)
+            {
+                if (book.ISBN == ISBN)
+                    return book;
+            }
+            return null;
+        }
     }
 }

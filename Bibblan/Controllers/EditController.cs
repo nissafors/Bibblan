@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Common.Models;
 using Services.Mockup;
 using Services.Services;
+using Bibblan.ViewModels;
 
 namespace Bibblan.Controllers
 {
@@ -18,23 +19,32 @@ namespace Bibblan.Controllers
             return View();
         }
 
-        public ActionResult Book(BookAuthor bookAuthor = null)
+        // GET: edit/book
+        [HttpGet]
+        public ActionResult Book(string isbn)
         {
-            // Debug
-            bookAuthor = Mockup.bookAuthors[1];
+            isbn = "666-6";
+            EditBookViewModel bookInfo;
 
-            var authors = new SelectList((from s in Mockup.authors
-                                                select new
-                                                {
-                                                    Id = s.Id,
-                                                    FullName = s.FirstName + " " + s.LastName
-                                                }), "Id", "FullName", bookAuthor.Author.Id);
-            ViewData["author"] = authors;
+            BookServices bc = new BookServices();
+            Book book = bc.GetBookFromISBN(isbn);
 
-            var classifications = new SelectList(Mockup.classifications, "Id", "Signum");
-            ViewData["classification"] = classifications;
+            if (book != null)
+                bookInfo = new EditBookViewModel(book);
+            else
+                bookInfo = new EditBookViewModel();
 
-            return View(bookAuthor);
+            return View(bookInfo);
+        }
+
+        [HttpPost]
+        public ActionResult Book(EditBookViewModel bookInfo)
+        {
+            // TODO:
+            // Fill authors list
+            // Write bookInfo to db
+
+            return View(bookInfo);
         }
 
         public ActionResult Copy(Copy copy = null)
@@ -53,7 +63,7 @@ namespace Bibblan.Controllers
         public ActionResult Author(int id)
         {
             //Common.Models.Author author = Services.Mockup.Mockup.authors[0];
-            Author author = _authorService.getAuthorById(id);
+            Author author = _authorService.GetAuthorById(id);
             if(author != null)
                 return View(author);
 

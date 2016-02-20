@@ -1,4 +1,4 @@
-﻿@model Common.Models.BookAuthor
+﻿@model Bibblan.ViewModels.EditBookViewModel
 
 @{
     ViewBag.Title = "Redigera bok";
@@ -14,27 +14,27 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="ISBN">ISBN</label>
-                @Html.TextBoxFor(model => model.Book.ISBN, new { @class = "form-control" })
+                @Html.TextBoxFor(model => model.ISBN, new { @class = "form-control" })
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
                 <label for="Title">Titel</label>
-                @Html.TextBoxFor(model => model.Book.Title, new { @class = "form-control" })
+                @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                <label for="author">Författare</label>
-                @Html.DropDownListFor(model => model.Author.Id, ViewData["author"] as SelectList, new { @class = "form-control" })
+                <label for="Classification">Klassifikation</label>
+                @Html.DropDownListFor(model => model.ClassificationId, Model.classifications, new { @class = "form-control" })
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <label for="Classification">Klassifikation</label>
-                @Html.DropDownListFor(model => model.Book.Classification.Id, ViewData["classification"] as SelectList, new { @class = "form-control" })
+                <label for="Pages">Antal sidor</label>
+                @Html.TextBoxFor(model => model.Pages, new { @class = "form-control" })
             </div>
         </div>
     </div>
@@ -42,20 +42,22 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="PublicationYear">Publikationsår</label>
-                @Html.TextBoxFor(model => model.Book.PublicationYear, new { @class = "form-control" })
+                @Html.TextBoxFor(model => model.PublicationYear, new { @class = "form-control" })
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <label for="Pages">Antal sidor</label>
-                @Html.TextBoxFor(model => model.Book.Pages, new { @class = "form-control" })
+                <label for="PublicationInfo">Publikationsinfo</label>
+                @Html.TextBoxFor(model => model.PublicationInfo, new { @class = "form-control" })
             </div>
         </div>
     </div>
     <div class="form-group">
-        <label for="PublicationInfo">Publikationsinfo</label>
-        @Html.TextBoxFor(model => model.Book.PublicationInfo, new { @class = "form-control" })
+        <label for="Authors">Authors (ctrl/command+click to select multiple)</label>
+        @Html.ListBoxFor(model => model.authorIds, Model.authors, new { @class = "form-control" })
     </div>
+
+        
     <div class="text-center">
         <input type="submit" class="btn btn-lg btn-primary" value="Spara" style="width: 40%" />
     </div>

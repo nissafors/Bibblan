@@ -17,13 +17,6 @@ namespace Services.Mockup
                 new Classification{ Id=4, Signum="Pubbz Ada", Description="NULL" }
             };
 
-        static public List<Author> authors = new List<Author>
-            {
-                new Author { Id = 1, FirstName = "Pelle", LastName = "Persson", BirthYear = 1900 },
-                new Author { Id = 2, FirstName = "Kalle", LastName = "Karlsson", BirthYear = 1800 },
-                new Author { Id = 3, FirstName = "Olle", LastName = "Olsson", BirthYear = 1700 },
-            };
-
         static public List<Status> statuses = new List<Status>
             {
                 new Status { Id = 1, StatusName = "Available" },
@@ -41,22 +34,32 @@ namespace Services.Mockup
                 new Copy { BarCode = "45678", Library = "Huvudbiblioteket", Location = "", Status = statuses.ElementAt(1) }
             };
 
+        static public List<Author> authors = new List<Author>
+            {
+                new Author { Id = 1, FirstName = "Pelle", LastName = "Persson", BirthYear = 1900 },
+                new Author { Id = 2, FirstName = "Kalle", LastName = "Karlsson", BirthYear = 1800 },
+                new Author { Id = 3, FirstName = "Olle", LastName = "Olsson", BirthYear = 1700 }
+            };
+
         static public List<Book> books = new List<Book>
             {
                 new Book { ISBN = "1234-5", Title = "Stora boken om bananer",
                     Classification = classifications.ElementAt(1), PublicationYear = "1920",
                     PublicationInfo = "Kalles förlag", Pages = 2897,
-                    Copies = new List<Copy> { copies.ElementAt(0), copies.ElementAt(1) }
+                    Copies = new List<Copy> { copies.ElementAt(0), copies.ElementAt(1) },
+                    Authors = new List<Author> { authors.ElementAt(0) }
                 },
                 new Book { ISBN = "2345-6", Title = "Stora boken om chokladponnyer",
                     Classification = classifications.ElementAt(2), PublicationYear = "1720",
                     PublicationInfo = "Roliga timmen", Pages = 8,
-                    Copies = new List<Copy> { copies.ElementAt(2) }
+                    Copies = new List<Copy> { copies.ElementAt(2) },
+                    Authors = new List<Author> { authors.ElementAt(1) }
                 },
                 new Book { ISBN = "666-6", Title = "Stora boken om Satan",
                     Classification = classifications.ElementAt(0), PublicationYear = "1820",
                     PublicationInfo = "Svära i kyrkan förlag AB", Pages = 666,
-                    Copies = new List<Copy> { copies.ElementAt(3) }
+                    Copies = new List<Copy> { copies.ElementAt(3) },
+                    Authors = new List<Author> { authors.ElementAt(1), authors.ElementAt(2) }
                 }
             };
 
