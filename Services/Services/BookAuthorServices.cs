@@ -29,10 +29,10 @@ namespace Services.Services
 
             foreach(BookAuthor bookAuthor in Mockup.Mockup.bookAuthors)
             {
-                if(bookAuthor.Book.ISBN.ToLower().Contains(book.ISBN) &&
-                    bookAuthor.Book.Title.ToLower().Contains(book.Title) &&
-                    bookAuthor.Book.PublicationYear.ToLower().Contains(book.PublicationYear) &&
-                    (book.Classification.Id == 0 || bookAuthor.Book.Classification.Id == book.Classification.Id))
+                if(bookAuthor.Book.ISBN.ToLower().Contains(book.ISBN.ToLower()) &&
+                    bookAuthor.Book.Title.ToLower().Contains(book.Title.ToLower()) &&
+                    bookAuthor.Book.PublicationYear.ToLower().Contains(book.PublicationYear.ToLower()) &&
+                    (book.Classification.Id == -1 || bookAuthor.Book.Classification.Id == book.Classification.Id))
                 {
                     bookList.Add(bookAuthor);
                 } 

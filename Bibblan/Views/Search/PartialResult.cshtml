@@ -24,10 +24,10 @@
                 <!--TODO: ADMIN KONTROLL -->
                 <td><a href=@("../edit/book/" + item.Book.ISBN) class="btn btn-xs btn-warning">Redigera bok</a></td>
                 <td>
-                    @foreach(var author in item.authors)
+                    @foreach(var author in item.Book.Authors)
                     {
-                        <a href=@("../edit/author/" + item.Author.Id)>
-                        @(author.FistName + " , " + author.LastName)
+                        <a href=@("../edit/author/" + author.Id)>
+                        @(author.FirstName + " , " + author.LastName)
                         </a>
                         <br/>
                     }

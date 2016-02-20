@@ -15,6 +15,8 @@ namespace Services.Services
 
         public static Classification getClassification(int id)
         {
+            if (id == 0)
+                return new Classification { Id = -1 };
             return Mockup.Mockup.classifications[id - 1];
         }
     }

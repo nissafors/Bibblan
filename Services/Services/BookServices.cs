@@ -33,5 +33,34 @@ namespace Services.Services
             }
             return null;
         }
+
+        public static List<Book> GetBooksByAuthor(Author author)
+        {
+            if(Mockup.Mockup.authors[0].Books == null)
+            {
+                Mockup.Mockup.authors[0].Books = new List<Book> { Mockup.Mockup.books[0] };
+                Mockup.Mockup.authors[1].Books = new List<Book> { Mockup.Mockup.books[1], Mockup.Mockup.books[2] };
+                Mockup.Mockup.authors[2].Books = new List<Book> { Mockup.Mockup.books[2] };
+            }
+            string firstName =  author.FirstName == null ? "" : author.FirstName.ToLower();
+            string lastName = author.LastName == null ? "" : author.LastName.ToLower();
+            var books = new List<Book>();
+                foreach(var au in Mockup.Mockup.authors)
+                {
+                    string fname = au.FirstName.ToLower();
+                    string lname = au.LastName.ToLower();
+
+                    if (fname.Contains(firstName) && lname.Contains(lastName))
+                    {
+                        foreach(var b in au.Books)
+                        {
+                            if (!books.Contains(b))
+                                books.Add(b);
+                        }
+                    }
+                        //books.AddRange(au.Books);
+                }
+                return books;
+            }
+        }
     }
-}

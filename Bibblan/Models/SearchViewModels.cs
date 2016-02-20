@@ -36,7 +36,7 @@ namespace Bibblan.Models
 
         public SearchBookViewModel()
         {
-            this.Classification = new SelectList(Services.Mockup.Mockup.classifications, "Id", "Signum");
+            this.Classification = new SelectList(ClassificationServices.getClassifications(), "Id", "Signum");
         }
 
         public Book getBook()

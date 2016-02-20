@@ -36,9 +36,9 @@ namespace Services.Mockup
 
         static public List<Author> authors = new List<Author>
             {
-                new Author { Id = 1, FirstName = "Pelle", LastName = "Persson", BirthYear = 1900 },
-                new Author { Id = 2, FirstName = "Kalle", LastName = "Karlsson", BirthYear = 1800 },
-                new Author { Id = 3, FirstName = "Olle", LastName = "Olsson", BirthYear = 1700 }
+                new Author { Id = 1, FirstName = "Pelle", LastName = "Persson", BirthYear = 1900},
+                new Author { Id = 2, FirstName = "Kalle", LastName = "Karlsson", BirthYear = 1800},
+                new Author { Id = 3, FirstName = "Olle", LastName = "Olsson", BirthYear = 1700}
             };
 
         static public List<Book> books = new List<Book>

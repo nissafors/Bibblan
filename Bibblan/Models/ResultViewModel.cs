@@ -13,11 +13,10 @@ namespace Bibblan.Models
         public ResultViewModel(Author author)
         {
             bookAuthors = new List<BookAuthor>();
-            var bas = new BookAuthorServices();
-            var bal = bas.GetBookAuthors(author);
+            var bal = BookServices.GetBooksByAuthor(author);
             foreach(var ba in bal)
             {
-                bookAuthors.Add(new BookAuthor() { Author = ba.Author, Book = ba.Book });
+                bookAuthors.Add(new BookAuthor() { Book = ba});
             }
         }
 
