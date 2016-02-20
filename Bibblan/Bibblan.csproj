@@ -173,6 +173,8 @@
     <Compile Include="Models\BookModel.cs" />
     <Compile Include="Models\BorrowerModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
+    <Compile Include="Models\ResultViewModel.cs" />
+    <Compile Include="Models\SearchViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
