@@ -1,6 +1,5 @@
 ﻿@model Bibblan.Models.BorrowerViewModel
 
-
 @{
     ViewBag.Title = "Redigera lånetagare";
 }
@@ -15,6 +14,7 @@
         <h1>Lägg till ny lånetagare</h1>
     }
 </div>
+
 @using (Html.BeginForm("Borrower", "Edit"))
 {
     <div class="row">
@@ -56,12 +56,12 @@
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <label for="category">
-                    @Html.DropDownListFor(model => model.ChosenCategory, Model.Category, new { @class = "form-control" })
-                </label>
+                <label for="ChosenCategory">Kategori</label>
+                @Html.DropDownListFor(model => model.ChosenCategory, Model.Category, new { @class = "form-control" })
             </div>
         </div>
     </div>
     
     <input type="submit" class="btn btn-block btn-primary" value="Bekräfta" />
+    <a href=@("../Edit/Delete/" + Model.PersonId) class="form-control btn btn-block btn-primary">Ta bort</a>
 }

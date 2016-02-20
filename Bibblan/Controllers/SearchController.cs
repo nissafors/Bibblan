@@ -29,7 +29,7 @@ namespace Bibblan.Controllers
 
         public ActionResult Borrower()
         {
-            return View();
+            return View(Services.Mockup.Mockup.borrowers[1]);
         }
 
         //

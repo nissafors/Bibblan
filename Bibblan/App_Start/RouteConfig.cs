@@ -20,6 +20,12 @@ namespace Bibblan
             );
 
             routes.MapRoute(
+                    name: "EditBorrower",
+                    url: "Edit/Borrower/{PersonId}",
+                    defaults: new { controller = "Edit", action = "Borrower" }
+            );
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
