@@ -1,4 +1,4 @@
-﻿@model Common.Models.Author
+﻿@model Bibblan.Models.SearchAuthorViewModel
 @{
     ViewBag.Title = "Author";
 }
@@ -26,7 +26,7 @@
 }
 @if(IsPost)
 {
-    @Html.Partial("PartialResult", ViewBag.books as List<Common.Models.BookAuthor>);
+    @Html.Partial("PartialResult", ViewBag.result as Bibblan.Models.ResultViewModel);
 /*
 <table class="table table-striped">
     <thead>
