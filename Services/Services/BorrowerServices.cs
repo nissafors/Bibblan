@@ -24,5 +24,10 @@ namespace Services.Services
 
             return returnBorrower;
         }
+
+        public bool DeleteBorrower(string PersonId)
+        {
+            return false;
+        }
     }
 }

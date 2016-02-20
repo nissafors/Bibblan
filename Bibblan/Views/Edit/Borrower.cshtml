@@ -61,7 +61,16 @@
             </div>
         </div>
     </div>
-    
-    <input type="submit" class="btn btn-block btn-primary" value="Bekräfta" />
-    <a href=@("../Edit/Delete/" + Model.PersonId) class="form-control btn btn-block btn-primary">Ta bort</a>
+
+    <div class="row">
+        <div class="col-md-6">
+            <input type="submit" class="btn btn-block btn-primary" value="Bekräfta" />
+        </div>
+        @if(Model.PersonId != null)
+        { 
+        <div class="col-md-6">
+            <a href=@("../Delete/Copy/" + Model.PersonId) class="form-control btn btn-block btn-danger">Ta bort</a>
+        </div>
+        }
+    </div>
 }

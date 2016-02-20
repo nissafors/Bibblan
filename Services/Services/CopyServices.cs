@@ -9,9 +9,20 @@ namespace Services.Services
 {
     public class CopyServices
     {
-        //public List<Copy> GetCopiesFromBarCode(string barCode)
-        //{
-        //    //return from c in Mockup.Mockup.copies
-        //}
+        public Copy GetCopy(string barcode)
+        {
+            Copy returnCopy = null;
+
+            foreach(Copy copy in Mockup.Mockup.copies)
+            {
+                if(copy.BarCode == barcode)
+                {
+                    returnCopy = copy;
+                    break;
+                }
+            }
+
+            return Mockup.Mockup.copies[0];
+        }
     }
 }

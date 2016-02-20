@@ -23,9 +23,20 @@
                 <td>@item.Book.PublicationYear</td>
                 <!--TODO: ADMIN KONTROLL -->
                 <td><a href=@("../edit/book/" + item.Book.ISBN) class="btn btn-xs btn-warning">Redigera bok</a></td>
+                <td>
+                    @foreach(var author in item.authors)
+                    {
+                        <a href=@("../edit/author/" + item.Author.Id)>
+                        @(author.FistName + " , " + author.LastName)
+                        </a>
+                        <br/>
+                    }
+                </td>
+                @*
                 <td>@item.Author.LastName, @item.Author.FirstName</td>
                 <!--TODO: ADMIN KONTROLL -->
                 <td><a href=@("../edit/author/" + item.Author.Id) class="btn btn-xs btn-warning">Redigera Författare</a></td>
+                *@
             </tr>
         }
         }
