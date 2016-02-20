@@ -6,12 +6,14 @@ using System.Web.Mvc;
 using Common.Models;
 using Services.Mockup;
 using Services.Services;
+using Bibblan.Models;
 
 namespace Bibblan.Controllers
 {
     public class EditController : Controller
     {
         private AuthorServices _authorService = new AuthorServices();
+
         // GET: Edit
         public ActionResult Index()
         {
@@ -28,7 +30,7 @@ namespace Bibblan.Controllers
                                                 {
                                                     Id = s.Id,
                                                     FullName = s.FirstName + " " + s.LastName
-                                                }), "Id", "FullName");
+                                                }), "Id", "FullName", bookAuthor.Author.Id);
             ViewData["author"] = authors;
 
             var classifications = new SelectList(Mockup.classifications, "Id", "Signum");
@@ -45,9 +47,17 @@ namespace Bibblan.Controllers
             return View(copy);
         }
 
+        [HttpGet]
         public ActionResult Borrower()
         {
-            return View();
+            return View(new BorrowerViewModel());
+        }
+
+        [HttpPost]
+        public ActionResult Borrower(BorrowerViewModel borrower)
+        {
+            // Services.addBorrower(borrower.ToBorrowerModel())
+            return View(borrower);
         }
 
         public ActionResult Author(int id)
