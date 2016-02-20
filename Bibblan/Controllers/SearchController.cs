@@ -4,6 +4,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Common.Models;
+using Bibblan.Models;
 using Services.Mockup;
 using Services.Services;
 
@@ -28,16 +29,27 @@ namespace Bibblan.Controllers
 
         public ActionResult Borrower()
         {
-            return View();
+            return View(Services.Mockup.Mockup.borrowers[1]);
+        }
+
+        //
+        // POST: /Search/
+        [HttpPost]
+        public ActionResult Author(SearchAuthorViewModel model)
+        {
+            ViewBag.result = new ResultViewModel(model.getAuthor());
+            return View(model);
         }
 
         //
         // GET: /Search/
-        public ActionResult Author(Author author = null)
+        public ActionResult Author()
         {
+            /*
             ViewBag.books = _bookServices.GetBookAuthors(author);
-
-            return View(author);
+            return View(new SearchAuthorViewModel(author));
+            */
+            return View();
         }
 
         public ActionResult Book()
@@ -48,8 +60,7 @@ namespace Bibblan.Controllers
         [HttpPost]
         public ActionResult Book(Book book)
         {
-            List<BookAuthor> bookauthors = _bookServices.GetBookAuthors(book);
-            ViewBag.books = bookauthors;
+            //ViewBag.result = new ResultViewModel(model.getAuthor());
             return View(book);
         }
     }

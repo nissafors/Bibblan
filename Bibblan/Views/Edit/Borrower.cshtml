@@ -1,10 +1,67 @@
-﻿
+﻿@model Bibblan.Models.BorrowerViewModel
+
 @{
-    ViewBag.Title = "Redigera {NAMN}";
+    ViewBag.Title = "Redigera lånetagare";
 }
 
 <div class="page-header">
-    <h1>Redigera {NAMN}</h1>
+    @if (Model.PersonId != null)
+    {
+        <h1>Redigera @(Model.LastName), @(Model.FirstName)</h1>
+    }
+    else
+    {
+        <h1>Lägg till ny lånetagare</h1>
+    }
 </div>
 
-@Html.Partial("../Shared//PartialBorrowerForm");
+@using (Html.BeginForm("Borrower", "Edit"))
+{
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="FirstName">Förnamn</label>
+                @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control"})
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="LastName">Efternamn</label>
+                @Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="PersonId">Personnummer</label>
+                @Html.TextBoxFor(model => model.PersonId, Model.PersonId != null ? (object)new { @class = "form-control", @readonly="readonly"} : new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="Adress">Adress</label>
+                @Html.TextBoxFor(model => model.Adress, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="TelephoneNumber">Telefonnummer</label>
+                @Html.TextBoxFor(model => model.TelephoneNumber, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="ChosenCategory">Kategori</label>
+                @Html.DropDownListFor(model => model.ChosenCategory, Model.Category, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+    
+    <input type="submit" class="btn btn-block btn-primary" value="Bekräfta" />
+    <a href=@("../Edit/Delete/" + Model.PersonId) class="form-control btn btn-block btn-primary">Ta bort</a>
+}

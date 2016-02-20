@@ -14,13 +14,15 @@ namespace Bibblan.Controllers
         BookServices _bookServices = new BookServices();
 
         //
-        // GET: /Browse/
+        // GET: /Browse/Title
         public ActionResult Title()
         {
             ViewBag.books = _bookServices.GetBooks();
             return View();
         }
 
+        //
+        // GET: /Browse/Author
         public ActionResult Author()
         {
             ViewBag.authors = _authorServices.GetAuthors();

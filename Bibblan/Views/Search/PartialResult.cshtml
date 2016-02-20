@@ -1,4 +1,4 @@
-﻿@model List<Common.Models.BookAuthor>
+﻿@model Bibblan.Models.ResultViewModel
 <table class="table table-striped">
     <thead>
         <tr>
@@ -14,7 +14,7 @@
     <tbody>
         @if(Model != null)
         {
-            foreach (var item in Model)
+            foreach (var item in Model.BookAuthors)
             {
             <tr>
                 <td>@item.Book.ISBN</td>

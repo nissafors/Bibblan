@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using Common.Models;
 using Services.Mockup;
 using Services.Services;
+using Bibblan.Models;
 using Bibblan.ViewModels;
 
 namespace Bibblan.Controllers
@@ -13,6 +14,7 @@ namespace Bibblan.Controllers
     public class EditController : Controller
     {
         private AuthorServices _authorService = new AuthorServices();
+
         // GET: Edit
         public ActionResult Index()
         {
@@ -39,7 +41,7 @@ namespace Bibblan.Controllers
 
         [HttpPost]
         public ActionResult Book(EditBookViewModel bookInfo)
-        {
+                                                {
             // TODO:
             // Fill authors list
             // Write bookInfo to db
@@ -55,9 +57,27 @@ namespace Bibblan.Controllers
             return View(copy);
         }
 
-        public ActionResult Borrower()
+        [HttpGet]
+        public ActionResult Borrower(string PersonId)
         {
-            return View();
+            if(PersonId != null)
+            {
+                return View(new BorrowerViewModel(PersonId));
+            }
+
+            return View(new BorrowerViewModel());
+        }
+
+        [HttpPost]
+        public ActionResult Borrower(BorrowerViewModel borrower)
+        {
+            // Services.addBorrower(borrower.ToBorrowerModel())
+            return View(borrower);
+        }
+
+        public ActionResult Delete(string PersonId)
+        {
+            return View("~/Views/Search/Borrower");
         }
 
         public ActionResult Author(int id)
