@@ -6,7 +6,7 @@ using Common.Models;
 using System.Web.Mvc;
 using Services.Services;
 
-namespace Bibblan.ViewModels
+namespace Bibblan.Models
 {
     public class EditCopyViewModel
     {

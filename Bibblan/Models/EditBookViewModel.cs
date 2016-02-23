@@ -6,8 +6,9 @@ using Common.Models;
 using System.Web.Mvc;
 using Services.Mockup;
 using Services.Services;
+using System.ComponentModel.DataAnnotations;
 
-namespace Bibblan.ViewModels
+namespace Bibblan.Models
 {
     public class EditBookViewModel
     {
@@ -41,7 +42,7 @@ namespace Bibblan.ViewModels
             this.PublicationInfo = book.PublicationInfo;
             this.Pages = book.Pages;
             this.Copies = book.Copies;
-            this.authorIds = book.Authors.Select(author => author.Id).ToList();
+            this.AuthorIds = book.Authors.Select(author => author.Id).ToList();
         }
 
         /// <summary>
@@ -58,22 +59,44 @@ namespace Bibblan.ViewModels
             book.PublicationInfo = this.PublicationInfo;
             book.Pages = this.Pages;
             book.Copies = this.Copies;
-            book.Authors = AuthorServices.GetAuthors(authorIds);
+            book.Authors = AuthorServices.GetAuthors(AuthorIds);
 
             return book;
         }
 
         // Properties
+        [Required]
+        [Display(Name = "ISBN")]
         public string ISBN { get; set; }
+
+        [Required]
+        [Display(Name = "Titel")]
         public string Title { get; set; }
+
+        [Required]
+        [Display(Name = "Klassifikation")]
         public int ClassificationId { get; set; }
+
+        [Required]
+        [Display(Name = "Publiceringsår")]
         public string PublicationYear { get; set; }
+
+        [Required]
+        [Display(Name = "Publiceringsinformation")]
         public string PublicationInfo { get; set; }
+
+        [Required]
+        [Display(Name = "Sidantal")]
         public int Pages { get; set; }
-        public List<int> authorIds { get; set; }
+
+        [Required]
+        [Display(Name = "Författare")]
+        public List<int> AuthorIds { get; set; }
+
         public List<Copy> Copies { get; set; }
 
         public SelectList classifications { get; set; }
         public SelectList authors { get; set; }
+
     }
 }

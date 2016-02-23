@@ -7,6 +7,7 @@ using Common.Models;
 using Bibblan.Models;
 using Services.Mockup;
 using Services.Services;
+using System.Diagnostics;
 
 namespace Bibblan.Controllers
 {
@@ -60,34 +61,43 @@ namespace Bibblan.Controllers
 
         //
         // POST: /Search/
+        /*
         [HttpPost]
         public ActionResult Author(SearchAuthorViewModel model)
         {
             ViewBag.result = new ResultViewModel(model.getAuthor());
             return View(model);
         }
-
+        */
         //
         // GET: /Search/
-        public ActionResult Author()
+        public ActionResult Author(SearchAuthorViewModel model)
         {
-            /*
-            ViewBag.books = _bookServices.GetBookAuthors(author);
-            return View(new SearchAuthorViewModel(author));
-            */
-            return View();
+            if (ViewHelper.isQueryMapped(model, Request.QueryString))
+                ViewBag.result = new ResultViewModel(model.getAuthor());
+            else
+                ViewBag.result = null;
+
+            return View(model);
         }
 
-        public ActionResult Book()
+        public ActionResult Book(SearchBookViewModel model)
         {
-            return View(new SearchBookViewModel());
-        }
+            if (ViewHelper.isQueryMapped(model, Request.QueryString, model.GetType().GetProperty("Classification")))
+                ViewBag.result = new ResultViewModel(model.getBook());
+            else
+                ViewBag.result = null;
 
+            return View(model);
+        
+        }
+        /*
         [HttpPost]
         public ActionResult Book(SearchBookViewModel model)
         {
             ViewBag.result = new ResultViewModel(model.getBook());
             return View(model);
         }
+        */
     }
 }

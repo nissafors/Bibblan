@@ -5,7 +5,7 @@
 
 <h1>Sök efter författare</h1>
 
-@using (Html.BeginForm("Author", "Search"))
+@using (Html.BeginForm("Author", "Search", FormMethod.Get))
 {
 
     <div class="row">
@@ -24,7 +24,7 @@
         </div>
     </div>
 }
-@if(IsPost)
+@if(ViewBag.result != null)
 {
     @Html.Partial("PartialResult", ViewBag.result as Bibblan.Models.ResultViewModel);
 /*
