@@ -35,7 +35,7 @@ namespace Services.Services
             return null;
         }
 
-        public bool DeleteBook(string isbn)
+        public static bool DeleteBook(string isbn)
         {
             return false;
         }
