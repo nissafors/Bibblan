@@ -14,17 +14,17 @@
     <tbody>
         @if(Model != null)
         {
-            foreach (var item in Model.BookAuthors)
+            foreach (var item in Model.Books)
             {
             <tr>
-                <td>@item.Book.ISBN</td>
-                <td><a href=@("../Book/Details/" + item.Book.ISBN)>@item.Book.Title</a></td>
-                <td>@item.Book.Classification.Signum</td>
-                <td>@item.Book.PublicationYear</td>
+                <td>@item.ISBN</td>
+                <td><a href=@("../Book/Details/" + item.ISBN)>@item.Title</a></td>
+                <td>@item.Classification.Signum</td>
+                <td>@item.PublicationYear</td>
                 <!--TODO: ADMIN KONTROLL -->
-                <td><a href=@("../edit/book/" + item.Book.ISBN) class="btn btn-xs btn-warning">Redigera bok</a></td>
+                <td><a href=@("../edit/book/" + item.ISBN) class="btn btn-xs btn-warning">Redigera bok</a></td>
                 <td>
-                    @foreach(var author in item.Book.Authors)
+                    @foreach(var author in item.Authors)
                     {
                         <a href=@("../edit/author/" + author.Id)>
                         @(author.FirstName + " , " + author.LastName)

@@ -90,8 +90,14 @@ namespace Bibblan.Controllers
         [HttpPost]
         public ActionResult Borrower(BorrowerViewModel borrower)
         {
-            BorrowerServices.AddBorrower(borrower.ToBorrower());
-            return View(borrower);
+            if(BorrowerServices.AddBorrower(borrower.ToBorrower()))
+            {
+                return RedirectToAction("Borrower", "Search");
+            }
+            else
+            {
+                return View(borrower);
+            }
         }
 
         public ActionResult Delete(string Type, string Id)

@@ -1,6 +1,10 @@
 ﻿@model Bibblan.Models.BorrowerViewModel
+           
+@{
+    string controller = ViewBag.Controller;               
+}
 
-@using (Html.BeginForm("Borrower", "Edit"))
+@using (Html.BeginForm("Borrower", controller))
 {
     <div class="row">
         <div class="col-md-6">
@@ -47,7 +51,7 @@
         </div>
     </div>
 
-    if(ViewBag.Title == "Redigera lånetagare")
+    if(ViewBag.Controller == "Edit")
     { 
     <div class="row">
         <div class="col-md-6">
