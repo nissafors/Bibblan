@@ -8,12 +8,12 @@ namespace Services.Services
 {
     public class ClassificationServices
     {
-        public static List<Classification> getClassifications()
+        public static List<Classification> GetClassifications()
         {
             return Mockup.Mockup.classifications;
         }
 
-        public static Classification getClassification(int id)
+        public static Classification GetClassification(int id)
         {
             if (id == 0)
                 return new Classification { Id = -1 };

@@ -30,18 +30,18 @@ namespace Bibblan.Models
 
         public SearchBookViewModel(Book book)
         {
-            this.Classification = new SelectList(ClassificationServices.getClassifications(), "Id", "Signum", book.Classification);
+            this.Classification = new SelectList(ClassificationServices.GetClassifications(), "Id", "Signum", book.Classification);
             this.ChosenClassification = book.Classification.Id;
         }
 
         public SearchBookViewModel()
         {
-            this.Classification = new SelectList(ClassificationServices.getClassifications(), "Id", "Signum");
+            this.Classification = new SelectList(ClassificationServices.GetClassifications(), "Id", "Signum");
         }
 
         public Book getBook()
         {
-            return new Book { Title = this.Title, ISBN = this.ISBN, PublicationYear = this.PublicationYear, Classification = ClassificationServices.getClassification(ChosenClassification)};
+            return new Book { Title = this.Title, ISBN = this.ISBN, PublicationYear = this.PublicationYear, Classification = ClassificationServices.GetClassification(ChosenClassification)};
         }
     }
 }

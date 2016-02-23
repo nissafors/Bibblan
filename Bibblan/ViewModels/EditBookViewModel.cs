@@ -44,6 +44,25 @@ namespace Bibblan.ViewModels
             this.authorIds = book.Authors.Select(author => author.Id).ToList();
         }
 
+        /// <summary>
+        /// Convert this viewmodel to a Book object
+        /// </summary>
+        /// <returns></returns>
+        public Book ToBook()
+        {
+            var book = new Book();
+            book.ISBN = this.ISBN;
+            book.Title = this.Title;
+            book.Classification = ClassificationServices.GetClassification(this.ClassificationId);
+            book.PublicationYear = this.PublicationYear;
+            book.PublicationInfo = this.PublicationInfo;
+            book.Pages = this.Pages;
+            book.Copies = this.Copies;
+            book.Authors = AuthorServices.GetAuthors(authorIds);
+
+            return book;
+        }
+
         // Properties
         public string ISBN { get; set; }
         public string Title { get; set; }

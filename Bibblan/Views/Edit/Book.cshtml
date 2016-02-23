@@ -14,7 +14,14 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="ISBN">ISBN</label>
-                @Html.TextBoxFor(model => model.ISBN, new { @class = "form-control" })
+                @if (Model.ISBN != null)
+                {
+                    @Html.TextBoxFor(model => model.ISBN, new { @class = "form-control", @readonly = "readonly" })
+                }
+                else
+                {
+                    @Html.TextBoxFor(model => model.ISBN, new { @class = "form-control" })
+                }
             </div>
         </div>
         <div class="col-md-6">
@@ -61,27 +68,31 @@
     <div class="text-center">
         <input type="submit" class="btn btn-lg btn-primary" value="Spara" style="width: 40%" />
     </div>
-    <h2>Exemplar</h2>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Streckkod</th>
-                <th>Plats</th>
-                <th>Bibliotek</th>
-                <th class="col-md-1"></th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                @foreach (var copy in Model.Copies)
-                {
-                    <td>@copy.BarCode</td>
-                    <td>@copy.Location</td>
-                    <td>@copy.Library</td>
-                    <td><a href="copy/@copy.BarCode" class="btn btn-xs btn-warning">Redigera</a></td>
-                }
-            </tr>
-        </tbody>
-    </table>
-    <a href="copy" class="btn btn-success">Lägg till exemplar</a>
+    
+    if (Model.ISBN != null)
+    {
+        <h2>Exemplar</h2>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Streckkod</th>
+                    <th>Plats</th>
+                    <th>Bibliotek</th>
+                    <th class="col-md-1"></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    @foreach (var copy in Model.Copies)
+                    {
+                        <td>@copy.BarCode</td>
+                        <td>@copy.Location</td>
+                        <td>@copy.Library</td>
+                        <td><a href="copy/@copy.BarCode" class="btn btn-xs btn-warning">Redigera</a></td>
+                    }
+                </tr>
+            </tbody>
+        </table>
+        <a href="copy" class="btn btn-success">Lägg till exemplar</a>
+    }
 }

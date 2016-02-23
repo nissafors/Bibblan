@@ -10,26 +10,38 @@ namespace Bibblan.ViewModels
 {
     public class EditCopyViewModel
     {
-        StatusServices statusServices = new StatusServices();
-
-        EditCopyViewModel()
+        public EditCopyViewModel()
         {
-            statuses = new SelectList(statusServices.GetStatuses(), "Id", "StatusName");
+            Statuses = new SelectList(StatusServices.GetStatuses(), "Id", "StatusName");
         }
 
-        EditCopyViewModel(Copy copy) : this()
+        public EditCopyViewModel(Copy copy) : this()
         {
             this.BarCode = copy.BarCode;
             this.Location = copy.Location;
             this.StatusId = copy.Status.Id;
             this.Library = copy.Library;
+            this.ISBN = copy.Book.ISBN;
+        }
+
+        public Copy ToCopy()
+        {
+            var copy = new Copy();
+            copy.BarCode = this.BarCode;
+            copy.Location = this.Location;
+            copy.Status = StatusServices.GetStatus(this.StatusId);
+            copy.Library = this.Library;
+            copy.Book = BookServices.GetBookFromISBN(this.ISBN);
+
+            return copy;
         }
 
         public string BarCode { get; set; }
         public string Location { get; set; }
         public int StatusId { get; set; }
         public string Library { get; set; }
+        public string ISBN { get; set; }
 
-        public SelectList statuses { get; set; }
+        public SelectList Statuses { get; set; }
     }
 }
