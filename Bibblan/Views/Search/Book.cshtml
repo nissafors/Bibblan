@@ -6,7 +6,7 @@
 <h1>Sök efter bok</h1>
 
 
-@using (Html.BeginForm("Book", "Search"))
+@using (Html.BeginForm("Book", "Search", FormMethod.Get))
 {
     <div class="row">
         <div class="col-sm-4">
@@ -51,7 +51,7 @@
         </div>
     </div>
 }
-@if (IsPost)
+@if (ViewBag.result != null)
 {
     @Html.Partial("PartialResult", ViewBag.result as Bibblan.Models.ResultViewModel);
 }
