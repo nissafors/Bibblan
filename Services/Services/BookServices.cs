@@ -35,6 +35,11 @@ namespace Services.Services
             return null;
         }
 
+        public bool DeleteBook(string isbn)
+        {
+            return false;
+        }
+
         public static List<Book> GetBooksByAuthor(Author author)
         {
             if(Mockup.Mockup.authors[0].Books == null)
