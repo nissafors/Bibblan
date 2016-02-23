@@ -9,8 +9,9 @@
     <h1>Sök efter Låntagare</h1>
 </div>
 
-@Html.Partial("../Shared/PartialBorrowerForm");
-
+@Html.Partial("../Shared/PartialBorrowerForm")
+@if(ViewBag.Results != null)
+{
 <h2>Resultat</h2>
 <table class="table table-striped">
     <thead>
@@ -25,9 +26,8 @@
         </tr>
     </thead>
     <tbody>
-        @if(ViewBag.Results != null)
-        { 
-        foreach(var item in ViewBag.Results)
+         
+        @foreach(var item in ViewBag.Results)
         { 
            <tr>
                <td>@item.FirstName</td>
@@ -39,6 +39,7 @@
                <td><a href="../Edit/Borrower/@(item.PersonId)" class="btn btn-xs btn-warning">Redigera</a></td>
            </tr>
         }
-        }
+        
     </tbody>
 </table>
+}
