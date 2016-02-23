@@ -60,9 +60,6 @@
     <Folder Include="Scripts" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Scripts\Add Tables.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <Build Include="Scripts\CreateDatabase.sql" />
+    <None Include="Scripts\UpdateFilePath.sql" />
   </ItemGroup>
 </Project>
