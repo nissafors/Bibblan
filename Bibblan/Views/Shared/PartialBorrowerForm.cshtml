@@ -9,13 +9,13 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                <label for="FirstName">Förnamn</label>
+                @Html.LabelFor(model => model.FirstName)
                 @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control" })
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <label for="LastName">Efternamn</label>
+                @Html.LabelFor(model => model.LastName)
                 @Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
             </div>
         </div>
@@ -24,13 +24,13 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                <label for="PersonId">Personnummer</label>
+                @Html.LabelFor(model => model.PersonId)
                 @Html.TextBoxFor(model => model.PersonId, Model.PersonId != null ? (object)new { @class = "form-control", @readonly = "readonly" } : new { @class = "form-control" })
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <label for="Adress">Adress</label>
+                @Html.LabelFor(model => model.Adress)
                 @Html.TextBoxFor(model => model.Adress, new { @class = "form-control" })
             </div>
         </div>
@@ -39,13 +39,13 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                <label for="TelephoneNumber">Telefonnummer</label>
+                @Html.LabelFor(model => model.TelephoneNumber)
                 @Html.TextBoxFor(model => model.TelephoneNumber, new { @class = "form-control" })
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <label for="ChosenCategory">Kategori</label>
+                @Html.LabelFor(model => model.Category)
                 @Html.DropDownListFor(model => model.SelectedCategory, Model.Category, new { @class = "form-control" })
             </div>
         </div>
@@ -57,12 +57,9 @@
         <div class="col-md-6">
             <input type="submit" class="btn btn-block btn-primary" value="Bekräfta" />
         </div>
-        if (Model.PersonId != null)
-        {
-            <div class="col-md-6">
-                <a href=@("../Delete/Copy/" + Model.PersonId) class="form-control btn btn-block btn-danger">Ta bort</a>
-            </div>
-        }
+        <div class="col-md-6">
+            <a href=@("../Delete/Borrower/" + Model.PersonId) class="form-control btn btn-block btn-danger @(Model.PersonId != null ? "": "disabled")">Ta bort</a>
+        </div>
     </div>
     }
     else
