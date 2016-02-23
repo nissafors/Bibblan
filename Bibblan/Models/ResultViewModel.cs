@@ -8,34 +8,23 @@ namespace Bibblan.Models
 {
     public class ResultViewModel
     {
-        private List<BookAuthor> bookAuthors;
+        private List<Book> books;
 
         public ResultViewModel(Author author)
         {
-            bookAuthors = new List<BookAuthor>();
-            var bal = BookServices.GetBooksByAuthor(author);
-            foreach(var ba in bal)
-            {
-                bookAuthors.Add(new BookAuthor() { Book = ba});
-            }
+            books = BookServices.GetBooks(author);
         }
 
         public ResultViewModel(Book book)
         {
-            bookAuthors = new List<BookAuthor>();
-            var bas = new BookAuthorServices();
-            var bal = bas.GetBookAuthors(book);
-            foreach (var ba in bal)
-            {
-                bookAuthors.Add(new BookAuthor() { Author = ba.Author, Book = ba.Book });
-            }
+            books = BookServices.GetBooks(book);
         }
 
-        public List<BookAuthor> BookAuthors
+        public List<Book> Books
         {
             get
             {
-                return bookAuthors;
+                return books;
             }
         }
 

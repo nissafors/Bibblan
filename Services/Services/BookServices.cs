@@ -35,7 +35,30 @@ namespace Services.Services
             return null;
         }
 
-        public static List<Book> GetBooksByAuthor(Author author)
+        public static List<Book> GetBooks(Book book)
+        {
+
+            book.Title = book.Title == null ? "" : book.Title.ToLower();
+            book.ISBN = book.ISBN == null ? "" : book.ISBN.ToLower();
+            book.PublicationYear = book.PublicationYear == null ? "" : book.PublicationYear;
+
+            var books = new List<Book>();
+            foreach(var b in Mockup.Mockup.books)
+            {
+                var title = b.Title.ToLower();
+                var isbn = b.ISBN.ToLower();
+                var year = b.PublicationYear;
+                var cat = b.Classification;
+
+                if(title.Contains(book.Title) && isbn.Contains(book.ISBN) && year.Contains(b.PublicationYear) && (cat.Id == book.Classification.Id || book.Classification.Id == -1))
+                    books.Add(b);
+
+            }
+
+            return books;
+        }
+
+        public static List<Book> GetBooks(Author author)
         {
             if(Mockup.Mockup.authors[0].Books == null)
             {
