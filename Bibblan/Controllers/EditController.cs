@@ -7,14 +7,12 @@ using Common.Models;
 using Services.Mockup;
 using Services.Services;
 using Bibblan.Models;
-using Bibblan.ViewModels;
 
 namespace Bibblan.Controllers
 {
     public class EditController : Controller
     {
         private AuthorServices _authorService = new AuthorServices();
-        private CopyServices _copyService = new CopyServices();
         private BorrowerServices _borrowerService = new BorrowerServices();
 
         // GET: Edit
@@ -27,11 +25,9 @@ namespace Bibblan.Controllers
         [HttpGet]
         public ActionResult Book(string isbn)
         {
-            //isbn = "666-6";
             EditBookViewModel bookInfo;
 
-            BookServices bc = new BookServices();
-            Book book = bc.GetBookFromISBN(isbn);
+            Book book = BookServices.GetBookFromISBN(isbn);
 
             if (book != null)
                 bookInfo = new EditBookViewModel(book);
@@ -43,21 +39,36 @@ namespace Bibblan.Controllers
 
         [HttpPost]
         public ActionResult Book(EditBookViewModel bookInfo)
-                                                {
+        {
+            Book book = bookInfo.ToBook();
             // TODO:
             // Write bookInfo to db
 
             return View(bookInfo);
         }
 
+        [HttpGet]
         public ActionResult Copy(string barCode)
         {
-            //CopyServices cs = new CopyServices();
-            //Copy copy = cs.GetCopiesFrom
-            //
-            //EditCopyViewModel copyInfo = new EditCopyViewModel();
+            Copy copy = CopyServices.GetCopy(barCode);
+            EditCopyViewModel copyInfo;
 
-            return View();
+            if (copy != null)
+                copyInfo = new EditCopyViewModel(copy);
+            else
+                copyInfo = new EditCopyViewModel();
+
+            return View(copyInfo);
+        }
+
+        [HttpPost]
+        public ActionResult Copy(EditCopyViewModel copyInfo)
+        {
+            Copy copy = copyInfo.ToCopy();
+            // TODO:
+            // Write copyInfo to db
+
+            return RedirectToAction("Book", copy.Book);
         }
 
         [HttpGet]
@@ -106,7 +117,7 @@ namespace Bibblan.Controllers
 
                 case "Copy":
                     CopyServices.DeleteCopy(Id);
-                    return RedirectToAction("Book", "Edit", _copyService.GetCopy(Id).Book);
+                    return RedirectToAction("Book", "Edit", CopyServices.GetCopy(Id).Book);
 
                 default:
                     return RedirectToAction("Index", "Home");

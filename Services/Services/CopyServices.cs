@@ -9,7 +9,7 @@ namespace Services.Services
 {
     public class CopyServices
     {
-        public Copy GetCopy(string barcode)
+        public static Copy GetCopy(string barcode)
         {
             Copy returnCopy = null;
 
@@ -22,10 +22,13 @@ namespace Services.Services
                 }
             }
 
-            return Mockup.Mockup.copies[0];
+            if (returnCopy != null)
+                returnCopy.Book = Mockup.Mockup.books[2];
+
+            return returnCopy;
         }
 
-        static public bool DeleteCopy(string BarCode)
+        public static bool DeleteCopy(string BarCode)
         {
             return false;
         }

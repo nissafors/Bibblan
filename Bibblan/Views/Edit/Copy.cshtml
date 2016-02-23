@@ -1,4 +1,4 @@
-﻿@model Common.Models.Copy
+﻿@model Bibblan.Models.EditCopyViewModel
 
 @{
     ViewBag.Title = "View";
@@ -8,13 +8,20 @@
     <h1>Redigera Exemplar</h1>
 </div>
 
-@using (Html.BeginForm("Book", "Edit"))
+@using (Html.BeginForm("Copy", "Edit"))
 {
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
                 <label for="BarCode">Streckkod</label>
-                @Html.TextBoxFor(model => model.BarCode , new { @class = "form-control" })
+                @if (Model.BarCode != null)
+                {
+                    @Html.TextBoxFor(model => model.BarCode , new { @class = "form-control", @readonly="readonly" })
+                }
+                else
+                {
+                    @Html.TextBoxFor(model => model.BarCode , new { @class = "form-control" })
+                }
             </div>
         </div>
         <div class="col-md-6">
@@ -34,12 +41,13 @@
         <div class="col-md-6">
             <div class="form-group">
                 <label for="Status">Klassifikation</label>
-                @Html.DropDownListFor(model => model.Status, ViewData["statuses"] as IEnumerable<SelectListItem>, new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.StatusId, Model.Statuses, new { @class = "form-control" })
             </div>
         </div>
     </div>
     <div class="row">
         <div class="col-md-6">
+            @Html.HiddenFor(model => model.ISBN)
             <div class="form-group">
                 <input type="submit" class="btn btn-lg btn-block btn-primary" value="Spara" />
             </div>

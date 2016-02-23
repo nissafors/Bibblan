@@ -9,9 +9,14 @@ namespace Services.Services
 {
     public class StatusServices
     {
-        public List<Status> GetStatuses()
+        public static List<Status> GetStatuses()
         {
             return Mockup.Mockup.statuses;
+        }
+
+        public static Status GetStatus(int id)
+        {
+            return Mockup.Mockup.statuses.ElementAt(id - 1);
         }
     }
 }

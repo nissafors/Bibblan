@@ -25,7 +25,7 @@ namespace Services.Services
             return null;
         }
 
-        public Book GetBookFromISBN(string ISBN)
+        public static Book GetBookFromISBN(string ISBN)
         {
             foreach (var book in Mockup.Mockup.books)
             {

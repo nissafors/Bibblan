@@ -13,6 +13,22 @@ namespace Services.Services
             return Mockup.Mockup.authors[id - 1];
         }
 
+        public static List<Author> GetAuthors(List<int> ids)
+        {
+            var authors = new List<Author>();
+
+            if (ids == null)
+                return authors;
+
+            foreach(Author author in Mockup.Mockup.authors)
+            {
+                if (ids.Contains(author.Id))
+                    authors.Add(author);
+            }
+
+            return authors;
+        }
+
         public List<Author> GetAuthors()
         {
             return Mockup.Mockup.authors;
