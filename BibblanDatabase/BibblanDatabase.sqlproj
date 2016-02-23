@@ -62,4 +62,7 @@
   <ItemGroup>
     <None Include="Scripts\Add Tables.sql" />
   </ItemGroup>
+  <ItemGroup>
+    <Build Include="Scripts\CreateDatabase.sql" />
+  </ItemGroup>
 </Project>
