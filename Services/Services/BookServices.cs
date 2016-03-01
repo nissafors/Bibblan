@@ -40,10 +40,27 @@ namespace Services.Services
             return ebvm;
         }
 
-        //public List<Book> GetBooks()
-        //{
-        //    return Mockup.Mockup.books;
-        //}
+        public List<BookViewModel> GetBooks()
+        {
+            List<Book> bookList;
+            if(Book.GetBooks(out bookList))
+            {
+                List<BookViewModel> bookViewModelList = new List<BookViewModel>();
+                foreach(Book book in bookList)
+                {
+                    bookViewModelList.Add(new BookViewModel()
+                    {
+                        ISBN = book.ISBN,
+                        Title = book.ISBN,
+                        Pages = book.Pages,
+                        PublicationInfo = book.PublicationInfo,
+                        PublicationYear = book.PublicationYear,
+                    });
+                }
+                return bookViewModelList;
+            }
+            return null;
+        }
 
         //public 
 

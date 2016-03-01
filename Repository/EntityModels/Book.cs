@@ -51,7 +51,7 @@ namespace Repository.EntityModels
             return true;
         }
 
-        public bool GetBooks(out List<Book> bookList)
+        public static bool GetBooks(out List<Book> bookList)
         {
             bookList = new List<Book>();
             using (SqlConnection connection = DatabaseConnection.GetConnection())
