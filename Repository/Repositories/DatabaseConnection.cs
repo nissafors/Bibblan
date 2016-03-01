@@ -10,7 +10,7 @@ namespace Repository.Repositories
 {
     public class DatabaseConnection
     {
-        SqlConnection connection = new SqlConnection(@"Data Source=(localdb)\Projects;Initial Catalog=BibblanDatabase;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False");
+        private SqlConnection connection = new SqlConnection(@"Data Source=(localdb)\Projects;Initial Catalog=BibblanDatabase;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False");
 
         public bool GetAuthors(out List<Author> authorList)
         {
