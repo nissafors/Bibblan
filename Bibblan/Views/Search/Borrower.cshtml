@@ -1,4 +1,4 @@
-﻿@model Bibblan.Models.BorrowerViewModel
+﻿@model Common.Models.BorrowerViewModel
 
 @{
     ViewBag.Title = "Sök lånetagare";
@@ -10,7 +10,7 @@
 </div>
 
 @Html.Partial("../Shared/PartialBorrowerForm")
-@if(ViewBag.Results != null)
+@if (ViewBag.Results != null)
 {
 <h2>Resultat</h2>
 <table class="table table-striped">
@@ -27,7 +27,7 @@
     </thead>
     <tbody>
          
-        @foreach(var item in ViewBag.Results)
+        @foreach (var item in ViewBag.Results)
         { 
            <tr>
                <td>@item.FirstName</td>
@@ -35,7 +35,7 @@
                <td>@item.PersonId</td>
                <td>@item.Adress</td>
                <td>@item.TelephoneNumber</td>
-               <td>@item.Category.CategoryName</td>
+               <td>@item.CategoryName</td>
                <td><a href="../Edit/Borrower/@(item.PersonId)" class="btn btn-xs btn-warning">Redigera</a></td>
            </tr>
         }

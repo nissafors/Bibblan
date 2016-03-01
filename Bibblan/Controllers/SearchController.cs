@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Common.Models;
-using Bibblan.Models;
 using Services.Mockup;
 using Services.Services;
 using System.Diagnostics;
@@ -54,7 +53,7 @@ namespace Bibblan.Controllers
             //    viewModelList.Add(new BorrowerViewModel(borrowerItem));
             //}
 
-            ViewBag.Results = BorrowerServices.GetBorrowers(borrower.ToBorrower());
+            ViewBag.Results = BorrowerServices.GetBorrowers(borrower);
 
             return View(borrower);
         }

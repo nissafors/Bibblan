@@ -1,0 +1,4 @@
+﻿Instans: dblibrary
+Username: libmaster
+Password: L:sen0rd
+
