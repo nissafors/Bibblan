@@ -10,10 +10,6 @@ namespace Bibblan.Controllers
 {
     public class BrowseController : Controller
     {
-        BookAuthorServices _bookAuthorServices = new BookAuthorServices();
-        AuthorServices _authorServices = new AuthorServices();
-        BookServices _bookServices = new BookServices();
-
         //
         // GET: /Browse/Title
         public ActionResult Title()
@@ -26,8 +22,9 @@ namespace Bibblan.Controllers
         // GET: /Browse/Author
         public ActionResult Author()
         {
-            //ViewBag.authors = _authorServices.GetAuthors();
-            return View();
+            var model = new BrowserAuthorViewModel();
+            model.Authors = AuthorServices.GetAuthors();
+            return View(model);
         }
 	}
 }
