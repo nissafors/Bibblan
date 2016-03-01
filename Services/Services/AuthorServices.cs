@@ -4,11 +4,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Common.Models;
+using Repository.EntityModels;
+
 namespace Services.Services
 {
     public class AuthorServices
     {
-        //public static GetIdAndNameAsList
+        public static Dictionary<int, string> GetAuthorsAsDictionary()
+        {
+            var dic = new Dictionary<int, string>();
+            List<Author> al;
+
+            if (Author.GetAuthors(out al))
+            {
+                foreach (Author a in al)
+                    dic.Add(a.Aid, a.FirstName + " " + a.LastName);
+            }
+
+            return dic;
+        }
 
         //public Author GetAuthorById(int id)
         //{

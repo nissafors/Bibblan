@@ -48,7 +48,7 @@ namespace Repository.EntityModels
             return true;
         }
 
-        static public bool GetAuthor(out List<Author> authorList)
+        static public bool GetAuthors(out List<Author> authorList)
         {
             authorList = new List<Author>();
 
