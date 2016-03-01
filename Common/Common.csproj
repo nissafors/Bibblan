@@ -43,10 +43,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\BookViewModel.cs" />
     <Compile Include="Models\BorrowerViewModel.cs" />
     <Compile Include="Models\EditBookViewModel.cs" />
     <Compile Include="Models\EditCopyViewModel.cs" />
-    <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ResultViewModel.cs" />
     <Compile Include="Models\SearchViewModels.cs" />
     <Compile Include="Models\ViewHelper.cs" />

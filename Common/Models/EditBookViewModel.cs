@@ -8,6 +8,15 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Bibblan.Models
 {
+    public struct BookCopy
+    {
+        public string barCode;
+        public string location;
+        public int statusId;
+        public string isbn;
+        public string library;
+    }
+
     public class EditBookViewModel
     {
         // Properties
@@ -39,25 +48,28 @@ namespace Bibblan.Models
         [Display(Name = "Författare")]
         public List<int> AuthorIds { get; set; }
 
-        public List<Copy> Copies { get; set; }
+        public List<BookCopy> Copies { get; set; }
 
         [Display(Name = "Klassifikation")]
         public SelectList Classifications { get; set; }
+
         [Display(Name = "Författare")]
         public SelectList Authors { get; set; }
+
         /// <summary>
         /// Create a new empty EditBookViewModel
         /// </summary>
         public EditBookViewModel()
         {
+            /*
             this.classifications = new SelectList(Mockup.classifications, "Id", "Signum");
             this.authors = new SelectList((from s in authorServices.GetAuthors() select new
             {
                 Id = s.Id,
                 FullName = s.FirstName + " " + s.LastName
             }), "Id", "FullName");
-
-            Copies = new List<Copy>();
+            */
+            Copies = new List<BookCopy>();
         }
 
         public EditBookViewModel(Dictionary<int, string> classifications, Dictionary<int, string> authors)
@@ -65,24 +77,5 @@ namespace Bibblan.Models
             this.Classifications = new SelectList(classifications.OrderBy(x => x.Value), "Key", "Value");
             this.Authors = new SelectList(authors.OrderBy(x => x.Value), "Key", "Value");
         }
-
-        /// <summary>
-        /// Create a new EditBookViewModel from a Book model
-        /// </summary>
-        /// <param name="book">Populate properties from this Book</param>
-        public EditBookViewModel(Book book) : this()
-        {
-            this.ISBN = book.ISBN;
-            this.Title = book.Title;
-            this.ClassificationId = book.Classification.Id;
-            this.PublicationYear = book.PublicationYear;
-            this.PublicationInfo = book.PublicationInfo;
-            this.Pages = book.Pages;
-            this.Copies = book.Copies;
-            this.AuthorIds = book.Authors.Select(author => author.Id).ToList();
-        }
-
-
-
     }
 }
