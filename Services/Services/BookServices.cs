@@ -10,6 +10,22 @@ namespace Services.Services
 {
     public class BookServices
     {
+        public static List<BookViewModel> GetBookViewModels(string search)
+        {
+            /* TODO: EVERYTHING
+            List<Book> books;
+            List<BookViewModel> models;
+            if(Book.GetBooks(out books) && books != null)
+            {
+                var model = new BookViewModel();
+                List<Author> authors;
+                Author.GetAuthor(;
+                model.Authors = 
+            }*/
+            return null;
+
+        }
+
         public static EditBookViewModel GetEditBookViewModel(string isbn)
         {
             EditBookViewModel ebvm = new EditBookViewModel();
@@ -17,7 +33,7 @@ namespace Services.Services
             List<CopyViewModel> cvm;
             var bookAuthors = new List<BookAuthor>();
             var authorIds = new List<int>();
-
+            
             if (Book.GetBook(out book, isbn))
             {
                 if (BookAuthor.GetBookAuthors(out bookAuthors, book.ISBN))

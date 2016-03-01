@@ -16,9 +16,11 @@ namespace Services.Services
 
         }
         */
+        /*
         public List<Loan> GetLoans(Borrower user)
         {
             return user.Loans;
         }
+        */
     }
 }

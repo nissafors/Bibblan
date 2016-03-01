@@ -9,6 +9,7 @@ namespace Services.Services
 {
     public class CopyServices
     {
+        /*
         public static Copy GetCopy(string barcode)
         {
             Copy returnCopy = null;
@@ -32,5 +33,6 @@ namespace Services.Services
         {
             return false;
         }
+        */
     }
 }
