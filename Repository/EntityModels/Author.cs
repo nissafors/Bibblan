@@ -55,7 +55,7 @@ namespace Repository.EntityModels
             using (SqlConnection connection = DatabaseConnection.GetConnection())
             {
                 connection.Open();
-                using (SqlCommand command = new SqlCommand("SELECT * from dbo.AUTHOR", connection))
+                using (SqlCommand command = new SqlCommand("SELECT * from dbo.AUTHOR ORDER BY LastName", connection))
                 {
                     using (SqlDataReader myReader = command.ExecuteReader())
                     {
@@ -65,10 +65,10 @@ namespace Repository.EntityModels
                             {
                                 authorList.Add(new Author()
                                 {
-                                    Aid = myReader.GetInt32(myReader.GetOrdinal("Aid")),
-                                    FirstName = myReader.GetString(myReader.GetOrdinal("FirstName")),
-                                    LastName = myReader.GetString(myReader.GetOrdinal("LastName")),
-                                    BirthYear = myReader.GetString(myReader.GetOrdinal("Birthyear")),
+                                    Aid = Convert.ToInt32(myReader["Aid"]),
+                                    FirstName = myReader["FirstName"].ToString(),
+                                    LastName = myReader["LastName"].ToString(),
+                                    BirthYear = myReader["Birthyear"].ToString(),
                                 });
                             }
                         }

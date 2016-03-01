@@ -60,9 +60,6 @@
     <Folder Include="Scripts" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Scripts\UpdateFilePath.sql" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Scripts\SetupDatabase.sql" />
     <None Include="Scripts\Setup.sql" />
   </ItemGroup>

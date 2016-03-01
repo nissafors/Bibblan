@@ -23,7 +23,8 @@ namespace Bibblan.Controllers
         [HttpGet]
         public ActionResult Book(string isbn)
         {
-            EditBookViewModel bookInfo = BookServices.GetEditBookViewModel(isbn);
+            isbn = "0078815037";
+            EditBookViewModel bookInfo = isbn == null ? new EditBookViewModel() : BookServices.GetEditBookViewModel(isbn);
 
             var classDic = ClassificationServices.GetClassificationsAsDictionary();
             var authorDic = AuthorServices.GetAuthorsAsDictionary();

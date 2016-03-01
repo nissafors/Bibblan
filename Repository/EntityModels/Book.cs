@@ -26,7 +26,7 @@ namespace Repository.EntityModels
                 connection.Open();
                 using (SqlCommand command = new SqlCommand("SELECT * from dbo.BOOK WHERE ISBN = @ISBN", connection))
                 {
-                    command.Parameters.AddWithValue("ISBN", isbn);
+                    command.Parameters.AddWithValue("@ISBN", isbn);
                     using (SqlDataReader myReader = command.ExecuteReader())
                     {
                         if (myReader != null)
@@ -34,11 +34,11 @@ namespace Repository.EntityModels
                             myReader.Read();
                             book = new Book()
                             {
-                                ISBN = myReader.GetString(myReader.GetOrdinal("ISBN")),
-                                Title = myReader.GetString(myReader.GetOrdinal("Title")),
-                                PublicationInfo = myReader.GetString(myReader.GetOrdinal("PublicationInfo")),
-                                PublicationYear = myReader.GetString(myReader.GetOrdinal("PublicationYear")),
-                                Pages = myReader.GetInt32(myReader.GetOrdinal("Pages"))
+                                ISBN = myReader["ISBN"].ToString(),
+                                Title = myReader["Title"].ToString(),
+                                PublicationInfo = myReader["PublicationInfo"].ToString(),
+                                PublicationYear = myReader["PublicationYear"].ToString(),
+                                Pages = Convert.ToInt32(myReader["Pages"])
                             };
                         }
                         else

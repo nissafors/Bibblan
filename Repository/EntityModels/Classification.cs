@@ -56,9 +56,9 @@ namespace Repository.EntityModels
                             {
                                 classificationList.Add(new Classification()
                                 {
-                                    SignId = myReader.GetInt32(myReader.GetOrdinal("SignId")),
-                                    Signum = myReader.GetString(myReader.GetOrdinal("Signum")),
-                                    Description = myReader.GetString(myReader.GetOrdinal("Description"))
+                                    SignId = Convert.ToInt32(myReader["SignId"]),
+                                    Signum = myReader["Signum"].ToString(),
+                                    Description = myReader["Description"].ToString()
                                 });
                             }
                         }
