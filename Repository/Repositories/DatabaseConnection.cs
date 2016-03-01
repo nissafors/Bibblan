@@ -10,7 +10,11 @@ namespace Repository.Repositories
 {
     public class DatabaseConnection
     {
-        private SqlConnection connection = new SqlConnection(@"Data Source=(localdb)\Projects;Initial Catalog=BibblanDatabase;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False");
+        static SqlConnection connection = new SqlConnection(@"Data Source=(localdb)\Projects;Initial Catalog=BibblanDatabase;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False");
+
+        public static SqlConnection GetConnection() {
+            return new SqlConnection(@"Data Source=(localdb)\Projects;Initial Catalog=BibblanDatabase;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False");
+        }
 
         public bool GetAuthors(out List<Author> authorList)
         {
@@ -47,6 +51,7 @@ namespace Repository.Repositories
             return true;
         }
 
+
         public bool GetBooks(out List<Book> bookList)
         {
             bookList = new List<Book>();
@@ -55,7 +60,7 @@ namespace Repository.Repositories
             try
             {
                 connection.Open();
-                SqlCommand myCommand = new SqlCommand("select * from dbo.AUTHOR", connection);
+                SqlCommand myCommand = new SqlCommand("select * from dbo.BOOK", connection);
 
                 myReader = myCommand.ExecuteReader();
                 while (myReader.Read())
