@@ -13,48 +13,36 @@ namespace Repository.EntityModels
         public string ISBN { get; set; }
         public int Aid { get; set; }
 
-        public bool GetBookAuthors(out List<BookAuthor> bookAuthorList, int Aid, string ISBN)
+        public static bool GetBookAuthors(out List<BookAuthor> bookAuthorList, int Aid)
         {
-            bookAuthorList = new List<BookAuthor>();
-
-            using (SqlConnection connection = DatabaseConnection.GetConnection())
-            {
-                connection.Open();
-                using (SqlCommand command = new SqlCommand("SELECT * from dbo.BOOKAUTHOR WHERE Aid = @Aid OR ISBN = @ISBN", connection))
-                {
-                    command.Parameters.AddWithValue("Aid", Aid);
-                    command.Parameters.AddWithValue("ISBN", ISBN);
-                    using (SqlDataReader myReader = command.ExecuteReader())
-                    {
-                        if (myReader != null)
-                        {
-                            while (myReader.Read())
-                            {
-                                bookAuthorList.Add(new BookAuthor()
-                                {
-                                    Aid = myReader.GetInt32(myReader.GetOrdinal("Aid")),
-                                    ISBN = myReader.GetString(myReader.GetOrdinal("ISBN")),
-                                });
-                            }
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-                }
-            }
-            return true;
+            SqlCommand command = new SqlCommand("SELECT * from dbo.BOOKAUTHOR WHERE Aid = @Aid");
+            command.Parameters.AddWithValue("Aid", Aid);
+            return getBookAuthors(out bookAuthorList, command);
         }
 
-        public bool GetBookAuthors(out List<BookAuthor> bookAuthorList)
+        public static bool GetBookAuthors(out List<BookAuthor> bookAuthorList, string ISBN)
+        {
+            SqlCommand command = new SqlCommand("SELECT * from dbo.BOOKAUTHOR WHERE ISBN = @ISBN");
+            command.Parameters.AddWithValue("ISBN", ISBN);
+            return getBookAuthors(out bookAuthorList, command);
+        }
+
+        public static bool GetBookAuthors(out List<BookAuthor> bookAuthorList)
+        {
+            SqlCommand command = new SqlCommand("SELECT * from dbo.BOOKAUTHOR");
+            return getBookAuthors(out bookAuthorList, command);
+        }
+
+        private static bool getBookAuthors(out List<BookAuthor> bookAuthorList, SqlCommand command)
         {
             bookAuthorList = new List<BookAuthor>();
+
             using (SqlConnection connection = DatabaseConnection.GetConnection())
             {
                 connection.Open();
-                using (SqlCommand command = new SqlCommand("SELECT * from dbo.BOOKAUTHOR", connection))
+                using (command)
                 {
+                    command.Connection = connection;
                     using (SqlDataReader myReader = command.ExecuteReader())
                     {
                         if (myReader != null)
