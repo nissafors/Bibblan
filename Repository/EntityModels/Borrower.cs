@@ -49,7 +49,7 @@ namespace Repository.EntityModels
         public bool GetBorrowers(out List<Borrower> borrowerList)
         {
             borrowerList = new List<Borrower>();
-            return GetBorrowers(out borrowerList, new SqlCommand("SELECT * from dbo.AUTHOR"));
+            return GetBorrowers(out borrowerList, new SqlCommand("SELECT * from dbo.BORROWER"));
         }
 
         private static bool GetBorrowers(out List<Borrower> borrowerList, SqlCommand command)
