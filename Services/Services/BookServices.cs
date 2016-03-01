@@ -73,7 +73,7 @@ namespace Services.Services
             return ebvm;
         }
 
-        public List<BookViewModel> GetBooks()
+        public static List<BookViewModel> GetBooks()
         {
             List<Book> bookList;
             if(Book.GetBooks(out bookList))
@@ -84,7 +84,7 @@ namespace Services.Services
                     bookViewModelList.Add(new BookViewModel()
                     {
                         ISBN = book.ISBN,
-                        Title = book.ISBN,
+                        Title = book.Title,
                         Pages = book.Pages,
                         PublicationInfo = book.PublicationInfo,
                         PublicationYear = book.PublicationYear,

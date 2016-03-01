@@ -1,34 +1,32 @@
-﻿
-@{
-    ViewBag.Title = "Author";
-}
-
-@using (Html.BeginForm("Title", "Browse"))
-{
-    <input type="submit" class="btn btn-default" value="Visa alla titlar" />
-}
-<div class="page-header">
-    <h1>Alla författare</h1>
-</div>
-
-<table class="table table-striped">
-    <tr>
-        <th>Efternamn</th>
-        <th>Förnamn</th>
-        <th>Födelseår</th>
-		<th class="col-md-1"></th>
-    </tr>
-@if (@ViewBag.authors != null)
-{
-	foreach (var item in @ViewBag.authors)
-	{
+﻿@model Common.Models.BrowserAuthorViewModel
+    @{
+        ViewBag.Title = "Author";
+    }
+    @using (Html.BeginForm("Title", "Browse"))
+    {
+        <input type="submit" class="btn btn-default" value="Visa alla titlar" />
+    }
+    <div class="page-header">
+        <h1>Alla författare</h1>
+    </div>
+    <table class="table table-striped">
         <tr>
-            <td>@item.LastName</td>
-            <td>@item.FirstName</td>
-            <td>@item.BirthYear</td>
-			<!--TODO: ADMIN KONTROLL -->
-			<td><a href=@("../edit/author/" + item.Id) class="btn btn-xs btn-warning">Redigera Författare</a></td>
+            <th>Efternamn</th>
+            <th>Förnamn</th>
+            <th>Födelseår</th>
+            <th class="col-md-1"></th>
         </tr>
-	}
-}
-</table>
+        @if (@Model != null)
+        {
+            foreach (var item in Model.Authors)
+            {
+                <tr>
+                    <td>@item.LastName</td>
+                    <td>@item.FirstName</td>
+                    <td>@item.BirthYear</td>
+                    <!--TODO: ADMIN KONTROLL -->
+                    <td><a href=@("../edit/author/" + item.Id) class="btn btn-xs btn-warning">Redigera Författare</a></td>
+                </tr>
+            }
+        }
+    </table>
