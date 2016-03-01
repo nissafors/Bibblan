@@ -6,7 +6,6 @@ using System.Web.Mvc;
 using Common.Models;
 using Services.Mockup;
 using Services.Services;
-using Bibblan.Models;
 
 namespace Bibblan.Controllers
 {
@@ -25,8 +24,7 @@ namespace Bibblan.Controllers
         [HttpGet]
         public ActionResult Book(string isbn)
         {
-            EditBookViewModel bookInfo = new EditBookViewModel();
-
+            EditBookViewModel bookInfo = BookServices.GetEditBookViewModel(isbn);
 
             return View(bookInfo);
         }

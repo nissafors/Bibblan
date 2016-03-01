@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Common.Models;
 using System.Web.Mvc;
 
-namespace Bibblan.Models
+namespace Common.Models
 {
     public class EditCopyViewModel
     {

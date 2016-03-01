@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
-using Common.Models;
 
-namespace Bibblan.Models
+namespace Common.Models
 {
     public class ResultViewModel
     {
