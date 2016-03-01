@@ -35,7 +35,7 @@ namespace Repository.EntityModels
                                 Aid = myReader.GetInt32(myReader.GetOrdinal("Aid")),
                                 FirstName = myReader.GetString(myReader.GetOrdinal("FirstName")),
                                 LastName = myReader.GetString(myReader.GetOrdinal("LastName")),
-                                BirthYear = myReader.GetString(myReader.GetOrdinal("Birthyear")),
+                                BirthYear = myReader.GetString(myReader.GetOrdinal("Birthyear"))
                             };
                         }
                         else
@@ -48,11 +48,6 @@ namespace Repository.EntityModels
             return true;
         }
 
-        /// <summary>
-        /// Returns a list of all authors in the database
-        /// </summary>
-        /// <param name="authorList"></param>
-        /// <returns></returns>
         static public bool GetAuthor(out List<Author> authorList)
         {
             authorList = new List<Author>();

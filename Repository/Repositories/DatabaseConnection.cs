@@ -15,44 +15,6 @@ namespace Repository.Repositories
             return new SqlConnection(@"Data Source=(localdb)\Projects;Initial Catalog=BibblanDatabase;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False");
         }
         
-        
-
-        public bool GetBorrows(out List<Borrow> borrowList)
-        {
-            borrowList = new List<Borrow>();
-            SqlDataReader myReader = null;
-
-            try
-            {
-                connection.Open();
-                SqlCommand myCommand = new SqlCommand("select * from dbo.BORROWER", connection);
-
-                myReader = myCommand.ExecuteReader();
-                while (myReader.Read())
-                {
-                    borrowList.Add(new Borrow()
-                    {
-                        Barcode = myReader.GetString(myReader.GetOrdinal("Barcode")),
-                        PersonId = myReader.GetString(myReader.GetOrdinal("PersonId")),
-                        BorrowDate = myReader.GetDateTime(myReader.GetOrdinal("BorrowDate")),
-                        ReturnDate = myReader.GetDateTime(myReader.GetOrdinal("ReturnDate")),
-                        ToBeReturnedDate = myReader.GetDateTime(myReader.GetOrdinal("ToBeReturnedDate"))
-                    });
-                }
-            }
-            catch (Exception e)
-            {
-                System.Diagnostics.Debug.WriteLine("ERROR: " + e.Message);
-                return false;
-            }
-            finally
-            {
-                myReader.Close();
-            }
-
-            return true;
-        }
-
         public bool GetBorrowers(out List<Borrower> borrowerList)
         {
             borrowerList = new List<Borrower>();
