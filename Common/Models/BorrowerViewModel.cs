@@ -31,9 +31,9 @@ namespace Common.Models
             } 
         }
 
-        public BorrowerViewModel(Dictionary<int, string> categoryList)
-        {
-            this.Category = new SelectList(categoryList.OrderBy(x => x.Value), "Key", "Value");
-        }
+        //public BorrowerViewModel(Dictionary<int, string> categoryList)
+        //{
+        //    this.Category = new SelectList(categoryList.OrderBy(x => x.Value), "Key", "Value");
+        //}
     }
 }
