@@ -77,7 +77,7 @@ namespace Bibblan.Controllers
                 ViewBag.result = model;
             }
 
-            return ViewBag.result;
+            return View();
         }
         /*
         [HttpPost]

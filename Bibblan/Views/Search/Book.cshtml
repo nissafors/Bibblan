@@ -1,4 +1,4 @@
-﻿@model Bibblan.Models.SearchBookViewModel
+﻿@model Common.Models.SearchBookViewModel
 @{
     ViewBag.Title = "Book";
 }
@@ -8,6 +8,22 @@
 
 @using (Html.BeginForm("Book", "Search", FormMethod.Get))
 {
+    <div class="row">
+    <div class="form-group" >
+        <div class="col-md-6">
+            @Html.TextBox("search", "", new
+       {
+           @class = "form-control",
+           @id = "input-search",
+           @placeholder = "Författare / Titel"
+       })
+        </div>
+        <div class="col-md-6">
+            <input type="submit" class="btn btn-block btn-primary" value="Sök" />
+        </div>
+    </div>
+    </div>
+    @*
     <div class="row">
         <div class="col-sm-4">
             <div class="form-group">
@@ -50,8 +66,9 @@
             <input type="submit" class="btn btn-primary" value="Sök" />
         </div>
     </div>
+    *@
 }
 @if (ViewBag.result != null)
 {
-    @Html.Partial("PartialResult", ViewBag.result as Bibblan.Models.ResultViewModel);
+    @Html.Partial("PartialResult", ViewBag.result as Common.Models.ResultViewModel);
 }
