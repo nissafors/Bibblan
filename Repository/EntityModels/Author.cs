@@ -18,76 +18,72 @@ namespace Repository.EntityModels
         static public bool GetAuthor(out Author author, int Aid)
         {
             author = null;
-            SqlDataReader myReader = null;
-            SqlConnection connection = DatabaseConnection.GetConnection();
 
-            try
+            using (SqlConnection connection = DatabaseConnection.GetConnection())
             {
-                string sqlString = "SELECT * from dbo.AUTHOR WHERE Aid = @Aid";
-                SqlCommand command = new SqlCommand(sqlString);
-                command.Parameters.AddWithValue("Aid", Aid);
-
                 connection.Open();
-
-                myReader = command.ExecuteReader();
-                myReader.Read();
-                author = new Author()
+                using (SqlCommand command = new SqlCommand("SELECT * from dbo.AUTHOR WHERE Aid = @Aid", connection))
                 {
-                    Aid = myReader.GetInt32(myReader.GetOrdinal("Aid")),
-                    FirstName = myReader.GetString(myReader.GetOrdinal("FirstName")),
-                    LastName = myReader.GetString(myReader.GetOrdinal("LastName")),
-                    BirthYear = myReader.GetString(myReader.GetOrdinal("Birthyear")),
-                };
-            }
-            catch (Exception e)
-            {
-                System.Diagnostics.Debug.WriteLine("ERROR: " + e.Message);
-                return false;
-            }
-            finally
-            {
-                if (myReader != null)
-                {
-                    myReader.Close();
+                    command.Parameters.AddWithValue("Aid", Aid);
+                    using(SqlDataReader myReader = command.ExecuteReader())
+                    {
+                        if (myReader != null)
+                        {
+                            myReader.Read();
+                            author = new Author()
+                            {
+                                Aid = myReader.GetInt32(myReader.GetOrdinal("Aid")),
+                                FirstName = myReader.GetString(myReader.GetOrdinal("FirstName")),
+                                LastName = myReader.GetString(myReader.GetOrdinal("LastName")),
+                                BirthYear = myReader.GetString(myReader.GetOrdinal("Birthyear")),
+                            };
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
                 }
             }
-
             return true;
         }
 
-        static public bool GetAuthors(out List<Author> authorList)
+        /// <summary>
+        /// Returns a list of all authors in the database
+        /// </summary>
+        /// <param name="authorList"></param>
+        /// <returns></returns>
+        static public bool GetAuthor(out List<Author> authorList)
         {
             authorList = new List<Author>();
-            SqlDataReader myReader = null;
-            SqlConnection connection = DatabaseConnection.GetConnection();
 
-            try
+            using (SqlConnection connection = DatabaseConnection.GetConnection())
             {
                 connection.Open();
-                SqlCommand myCommand = new SqlCommand("select * from dbo.AUTHOR", connection);
-
-                myReader = myCommand.ExecuteReader();
-                while (myReader.Read())
+                using (SqlCommand command = new SqlCommand("SELECT * from dbo.AUTHOR", connection))
                 {
-                    authorList.Add(new Author()
+                    using (SqlDataReader myReader = command.ExecuteReader())
                     {
-                        Aid = myReader.GetInt32(myReader.GetOrdinal("Aid")),
-                        FirstName = myReader.GetString(myReader.GetOrdinal("FirstName")),
-                        LastName = myReader.GetString(myReader.GetOrdinal("LastName")),
-                        BirthYear = myReader.GetString(myReader.GetOrdinal("Birthyear")),
-                    });
+                        if (myReader != null)
+                        {
+                            while (myReader.Read())
+                            {
+                                authorList.Add(new Author()
+                                {
+                                    Aid = myReader.GetInt32(myReader.GetOrdinal("Aid")),
+                                    FirstName = myReader.GetString(myReader.GetOrdinal("FirstName")),
+                                    LastName = myReader.GetString(myReader.GetOrdinal("LastName")),
+                                    BirthYear = myReader.GetString(myReader.GetOrdinal("Birthyear")),
+                                });
+                            }
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
                 }
             }
-            catch (Exception e)
-            {
-                System.Diagnostics.Debug.WriteLine("ERROR: " + e.Message);
-                return false;
-            }
-            finally
-            {
-                myReader.Close();
-            }
-
             return true;
         }
     }

@@ -19,38 +19,70 @@ namespace Repository.EntityModels
 
         public static bool GetBook(out Book book, string isbn)
         {
-            var connection = DatabaseConnection.GetConnection();
-            SqlDataReader myReader = null;
             book = null;
 
-            try
+            using (SqlConnection connection = DatabaseConnection.GetConnection())
             {
                 connection.Open();
-                SqlCommand myCommand = new SqlCommand("select * from dbo.BOOK WHERE ISBN = " + isbn, connection);
-
-                myReader = myCommand.ExecuteReader();
-                myReader.Read();
-                book = new Book()
+                using (SqlCommand command = new SqlCommand("SELECT * from dbo.BOOK WHERE ISBN = @ISBN", connection))
                 {
-                    ISBN = myReader.GetString(myReader.GetOrdinal("ISBN")),
-                    Title = myReader.GetString(myReader.GetOrdinal("Title")),
-                    PublicationInfo = myReader.GetString(myReader.GetOrdinal("PublicationInfo")),
-                    PublicationYear = myReader.GetString(myReader.GetOrdinal("PublicationYear")),
-                    Pages = myReader.GetInt32(myReader.GetOrdinal("Pages"))
-                };
+                    command.Parameters.AddWithValue("ISBN", isbn);
+                    using (SqlDataReader myReader = command.ExecuteReader())
+                    {
+                        if (myReader != null)
+                        {
+                            myReader.Read();
+                            book = new Book()
+                            {
+                                ISBN = myReader.GetString(myReader.GetOrdinal("ISBN")),
+                                Title = myReader.GetString(myReader.GetOrdinal("Title")),
+                                PublicationInfo = myReader.GetString(myReader.GetOrdinal("PublicationInfo")),
+                                PublicationYear = myReader.GetString(myReader.GetOrdinal("PublicationYear")),
+                                Pages = myReader.GetInt32(myReader.GetOrdinal("Pages"))
+                            };
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                }
             }
-            catch (Exception e)
-            {
-                System.Diagnostics.Debug.WriteLine("ERROR: " + e.Message);
-                return false;
-            }
-            finally
-            {
-                myReader.Close();
-            }
-
             return true;
         }
 
+        public bool GetBooks(out List<Book> bookList)
+        {
+            bookList = new List<Book>();
+            using (SqlConnection connection = DatabaseConnection.GetConnection())
+            {
+                connection.Open();
+                using (SqlCommand command = new SqlCommand("SELECT * from dbo.BOOK", connection))
+                {
+                    using (SqlDataReader myReader = command.ExecuteReader())
+                    {
+                        if (myReader != null)
+                        {
+                            while (myReader.Read())
+                            {
+                                bookList.Add(new Book()
+                                {
+                                    ISBN = myReader.GetString(myReader.GetOrdinal("ISBN")),
+                                    Title = myReader.GetString(myReader.GetOrdinal("Title")),
+                                    PublicationInfo = myReader.GetString(myReader.GetOrdinal("PublicationInfo")),
+                                    PublicationYear = myReader.GetString(myReader.GetOrdinal("PublicationYear")),
+                                    Pages = myReader.GetInt32(myReader.GetOrdinal("Pages"))
+                                });
+                            }
+                        }
+                        else
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            return true;
+        }
     }
 }
