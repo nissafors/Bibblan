@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
-
+using Repository.EntityModels;
 namespace Repository.Repositories
 {
     public class DatabaseConnection
@@ -195,6 +195,7 @@ namespace Repository.Repositories
             return true;
         }
 
+        /*
         public bool GetCopies(out List<Copy> copiesList)
         {
             copiesList = new List<Copy>();
@@ -230,6 +231,7 @@ namespace Repository.Repositories
 
             return true;
         }
+        */
 
         public bool GetStatus(out List<Status> statusList)
         {

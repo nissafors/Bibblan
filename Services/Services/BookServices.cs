@@ -10,6 +10,20 @@ namespace Services.Services
 {
     public class BookServices
     {
+        public static List<BookViewModel> GetBookViewModels(string search)
+        {
+            List<Book> books;
+            List<BookViewModel> models;
+            if(Book.GetBooks(out books) && books != null)
+            {
+                var model = new BookViewModel();
+                List<Author> authors;
+                Author.GetAuthor(;
+                model.Authors = 
+            }
+
+        }
+
         public static EditBookViewModel GetEditBookViewModel(string isbn)
         {
             EditBookViewModel ebvm = new EditBookViewModel();
