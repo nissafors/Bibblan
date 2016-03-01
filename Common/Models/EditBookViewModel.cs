@@ -52,8 +52,7 @@ namespace Common.Models
         public EditBookViewModel()
         {
             /*
-            this.classifications = new SelectList(Mockup.classifications, "Id", "Signum");
-            this.authors = new SelectList((from s in authorServices.GetAuthors() select new
+            this.Authors = new SelectList((from s in authorServices.GetAuthors() select new
             {
                 Id = s.Id,
                 FullName = s.FirstName + " " + s.LastName
@@ -61,11 +60,5 @@ namespace Common.Models
             */
             Copies = new List<CopyViewModel>();
         }
-
-        //public EditBookViewModel(Dictionary<int, string> classifications, Dictionary<int, string> authors)
-        //{
-        //    this.Classifications = new SelectList(classifications.OrderBy(x => x.Value), "Key", "Value");
-        //    this.Authors = new SelectList(authors.OrderBy(x => x.Value), "Key", "Value");
-        //}
     }
 }

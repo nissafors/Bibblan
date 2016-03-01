@@ -26,6 +26,14 @@ namespace Bibblan.Controllers
         {
             EditBookViewModel bookInfo = BookServices.GetEditBookViewModel(isbn);
 
+            //bookInfo.Classifications = new SelectList(dict.OrderBy(x => x.Value), "Key", "Value");
+            //bookInfo.Classifications = new SelectList(Mockup.classifications, "Id", "Signum");
+            //bookInfo.Authors = new SelectList((from s in authorServices.GetAuthors() select new
+            //{
+            //    Id = s.Id,
+            //    FullName = s.FirstName + " " + s.LastName
+            //}), "Id", "FullName");
+
             return View(bookInfo);
         }
 
