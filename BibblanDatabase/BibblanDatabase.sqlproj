@@ -63,6 +63,7 @@
     <None Include="Scripts\UpdateFilePath.sql" />
   </ItemGroup>
   <ItemGroup>
-    <Build Include="Scripts\SetupDatabase.sql" />
+    <None Include="Scripts\SetupDatabase.sql" />
+    <None Include="Scripts\Setup.sql" />
   </ItemGroup>
 </Project>

@@ -11,6 +11,6 @@ namespace Repository.EntityModels
         public int Aid { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
-        public int BirthYear { get; set; }
+        public string BirthYear { get; set; }
     }
 }
