@@ -13,5 +13,12 @@ namespace Repository.EntityModels
         public int StatusId {get; set;}
         public string ISBN { get; set; }
         public string Library { get; set; }
+
+        //public static bool GetCopies(out List<Copy> copies, string isbn)
+        //{
+        //
+        //}
+
+        //private static bool getCopies(out List<Copy> copies, )
     }
 }
