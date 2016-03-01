@@ -45,6 +45,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\BookViewModel.cs" />
     <Compile Include="Models\BorrowerViewModel.cs" />
+    <Compile Include="Models\CopyViewModel.cs" />
     <Compile Include="Models\EditBookViewModel.cs" />
     <Compile Include="Models\EditCopyViewModel.cs" />
     <Compile Include="Models\ResultViewModel.cs" />
