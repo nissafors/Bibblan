@@ -14,7 +14,7 @@ namespace Bibblan.Controllers
         // GET: /Browse/Title
         public ActionResult Title()
         {
-            //ViewBag.books = _bookServices.GetBooks();
+            ViewBag.books = BookServices.GetBooks();
             return View();
         }
 
