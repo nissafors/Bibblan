@@ -12,8 +12,6 @@ namespace Services.Services
     {
         public static EditBookViewModel GetEditBookViewModel(string isbn)
         {
-
-
             EditBookViewModel ebvm = new EditBookViewModel();
 
             return ebvm;
