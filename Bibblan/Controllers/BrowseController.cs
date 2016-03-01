@@ -17,7 +17,7 @@ namespace Bibblan.Controllers
         // GET: /Browse/Title
         public ActionResult Title()
         {
-            ViewBag.books = _bookServices.GetBooks();
+            //ViewBag.books = _bookServices.GetBooks();
             return View();
         }
 
@@ -25,7 +25,7 @@ namespace Bibblan.Controllers
         // GET: /Browse/Author
         public ActionResult Author()
         {
-            ViewBag.authors = _authorServices.GetAuthors();
+            //ViewBag.authors = _authorServices.GetAuthors();
             return View();
         }
 	}

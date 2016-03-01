@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Common.Models
 {
-    class CopyViewModel
+    public class CopyViewModel
     {
         public string BarCode { get; set; }
         public string Location { get; set; }

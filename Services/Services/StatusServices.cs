@@ -9,6 +9,7 @@ namespace Services.Services
 {
     public class StatusServices
     {
+        /*
         public static List<Status> GetStatuses()
         {
             return Mockup.Mockup.statuses;
@@ -18,5 +19,6 @@ namespace Services.Services
         {
             return Mockup.Mockup.statuses.ElementAt(id - 1);
         }
+        */
     }
 }

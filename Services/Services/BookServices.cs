@@ -10,6 +10,11 @@ namespace Services.Services
 {
     public class BookServices
     {
+        public static List<BookViewModel> GetBookViewModels(string search)
+        {
+            return null;
+        }
+        /*
         public List<Book> GetBooks()
         {
             return Mockup.Mockup.books;
@@ -91,5 +96,6 @@ namespace Services.Services
                 }
                 return books;
             }
+         */
     }
 }

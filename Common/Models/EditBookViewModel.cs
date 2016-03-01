@@ -6,7 +6,7 @@ using Common.Models;
 using System.Web.Mvc;
 using System.ComponentModel.DataAnnotations;
 
-namespace Bibblan.Models
+namespace Common.Models
 {
     public class EditBookViewModel
     {

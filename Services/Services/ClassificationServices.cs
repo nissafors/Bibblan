@@ -8,6 +8,7 @@ namespace Services.Services
 {
     public class ClassificationServices
     {
+        /*
         public static List<Classification> GetClassifications()
         {
             return Mockup.Mockup.classifications;
@@ -19,5 +20,6 @@ namespace Services.Services
                 return new Classification { Id = -1 };
             return Mockup.Mockup.classifications[id - 1];
         }
+        */
     }
 }

@@ -12,39 +12,22 @@ namespace Bibblan.Controllers
 {
     public class SearchController : Controller
     {
-        private BookAuthorServices _bookServices = new BookAuthorServices();
 
-        public SearchController()
+        // Show borrower
+        [HttpGet]
+        public ActionResult Borrower(string personId)
         {
-            IEnumerable<SelectListItem> classification = new SelectList(Mockup.classifications, "Id", "Signum");
-            ViewData["classifications-list"] = classification;
+            BorrowerViewModel model = BorrowerServices.GetBorrower(personId);
+            return model == null ? View(new BorrowerViewModel()) : View(model);
         }
 
-        //
-        // GET: /Search/
-        public ActionResult Results()
-        {
-            return View();
-        }
-
-        //[HttpGet]
-        public ActionResult Borrower(string PersonId)
-        {
-            Borrower borrower = BorrowerServices.GetBorrowerById(PersonId);
-
-            if (borrower != null)
-            {
-                return View(new BorrowerViewModel(borrower));
-            }
-            else
-            {
-                return View(new BorrowerViewModel());
-            }
-        }
-        /*
+        // Update or add borrower
         [HttpPost]
-        public ActionResult Borrower(BorrowerViewModel borrower)
+        public ActionResult Borrower(BorrowerViewModel model)
         {
+            return View(model);
+            
+            /*
             //List<Borrower> borrowerList = BorrowerServices.GetBorrowers(borrower.ToBorrower());
             //List<BorrowerViewModel> viewModelList = new List<BorrowerViewModel>();
             //
@@ -56,8 +39,9 @@ namespace Bibblan.Controllers
             ViewBag.Results = BorrowerServices.GetBorrowers(borrower);
 
             return View(borrower);
+            */
         }
-        */
+        
 
         //
         // POST: /Search/
@@ -71,6 +55,7 @@ namespace Bibblan.Controllers
         */
         //
         // GET: /Search/
+        /*
         public ActionResult Author(SearchAuthorViewModel model)
         {
             if (ViewHelper.isQueryMapped(model, Request.QueryString))
@@ -80,16 +65,19 @@ namespace Bibblan.Controllers
 
             return View(model);
         }
-
-        public ActionResult Book(SearchBookViewModel model)
+        */
+        public ActionResult Book(string search)
         {
-            if (ViewHelper.isQueryMapped(model, Request.QueryString, model.GetType().GetProperty("Classification")))
-                ViewBag.result = new ResultViewModel(model.getBook());
-            else
+            if (search == null)
                 ViewBag.result = null;
+            else
+            {
+                ResultViewModel model = new ResultViewModel();
+                model.Books = BookServices.GetBookViewModels(search);
+                ViewBag.result = model;
+            }
 
-            return View(model);
-        
+            return ViewBag.result;
         }
         /*
         [HttpPost]

@@ -9,6 +9,7 @@ namespace Services.Services
 {
     public class CategoryServices
     {
+        /*
         public List<Category> GetAllCategories()
         {
             return Mockup.Mockup.categories;
@@ -18,5 +19,6 @@ namespace Services.Services
         {
             return Mockup.Mockup.categories[0];
         }
+        */
     }
 }

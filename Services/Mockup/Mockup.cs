@@ -9,6 +9,7 @@ namespace Services.Mockup
 {
     public class Mockup
     {
+        /*
         static public List<Classification> classifications = new List<Classification>
             {
                 new Classification{ Id=1, Signum="Pub", Description="NULL" },
@@ -89,6 +90,6 @@ namespace Services.Mockup
             new Borrower{PersonId="19111111-1111",LastName="Elvansson", FirstName="Elvan", Adress="Älvv.11 11111 Älvstad", TelephoneNumber="0111-111111", Category = categories.ElementAt(0), Loans=null},
             new Borrower{PersonId="19121212-1212",LastName="Tolvansson", FirstName="Tolvan", Adress="Tolvv.12 12121 Tolvstad", TelephoneNumber="0121-121212", Category = categories.ElementAt(1), Loans = new List<Loan> { loans.ElementAt(0), loans.ElementAt(1) } }
         };
-
+        */
     }
 }

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Common.Models
 {
-    class BookViewModel
+    public class BookViewModel
     {
         public string ISBN { get; set; }
         public string Title { get; set; }

@@ -8,6 +8,7 @@ namespace Services.Services
 {
     public class AuthorServices
     {
+        /*
         public Author GetAuthorById(int id)
         {
             return Mockup.Mockup.authors[id - 1];
@@ -38,5 +39,6 @@ namespace Services.Services
         {
             return false;
         }
+        */
     }
 }

@@ -14,7 +14,10 @@ namespace Bibblan.Controllers
         // GET: /Book/
         public ActionResult Details(string isbn)
         {
+            /*
             return View(_bookAuthorServices.GetBookAuthorByISBN(isbn));
+            */
+            return View();
         }
 	}
 }

@@ -9,6 +9,7 @@ namespace Services.Services
 {
     public class BookAuthorServices
     {
+        /*
         public BookAuthorServices()
         {
 
@@ -66,5 +67,6 @@ namespace Services.Services
                     where bookAuthor.Book.ISBN == isbn
                     select bookAuthor).FirstOrDefault();
         }
+        */
     }
 }
