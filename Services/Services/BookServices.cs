@@ -13,6 +13,22 @@ namespace Services.Services
         public static EditBookViewModel GetEditBookViewModel(string isbn)
         {
             EditBookViewModel ebvm = new EditBookViewModel();
+            Book book = new Book();
+            var bookAuthors = new List<BookAuthor>();
+            
+            if (Book.GetBook(out book, isbn))
+            {
+                ebvm.ISBN = book.ISBN;
+                ebvm.Title = book.Title;
+                ebvm.ClassificationId = book.SignId;
+                ebvm.PublicationYear = book.PublicationYear;
+                ebvm.PublicationInfo = book.PublicationInfo;
+                ebvm.Pages = book.Pages;
+
+                // if (BookAuthor.GetBookAuthors(out bookAuthors, book.ISBN))
+                // {
+                //     
+            }
 
             return ebvm;
         }
