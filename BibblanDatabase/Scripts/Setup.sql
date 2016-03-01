@@ -158,8 +158,8 @@ CREATE TABLE [dbo].[BOOK](
 	[Title] [nvarchar](255) NULL,
 	[SignId] [int] NULL,
 	[PublicationYear] [nvarchar](10) NULL,
-	[publicationinfo] [nvarchar](255) NULL,
-	pages [smallint] NULL,
+	[PublicationInfo] [nvarchar](255) NULL,
+	[Pages] [smallint] NULL,
  CONSTRAINT [PK_BOOK] PRIMARY KEY CLUSTERED 
 (
 	[ISBN] ASC
@@ -249,8 +249,8 @@ GO
 
 /****** Object:  Table [dbo].[STATUS]    Script Date: 2014-08-25 15:24:36 ******/
 CREATE TABLE [dbo].[STATUS](
-	[statusid] [int] NOT NULL,
-	[status] [nvarchar](50) NULL,
+	[StatusId] [int] NOT NULL,
+	[Status] [nvarchar](50) NULL,
  CONSTRAINT [PK_STATUS] PRIMARY KEY CLUSTERED 
 (
 	[statusid] ASC
@@ -265,7 +265,7 @@ CREATE TABLE [dbo].[COPY](
 	[Location] [nvarchar](50) NULL,
 	[StatusId] [int] NULL,
 	[ISBN] [nvarchar](15) NULL,
-	[library] [nvarchar](50) NULL,
+	[Library] [nvarchar](50) NULL,
  CONSTRAINT [PK_COPY] PRIMARY KEY CLUSTERED 
 (
 	[Barcode] ASC
@@ -314,7 +314,7 @@ CREATE TABLE [dbo].[CATEGORY](
 	[CatergoryId] [int] NOT NULL,
 	[Category] [nvarchar](50) NULL,
 	[Period] [smallint] NULL,
-	[Penaltyperday] [int] NULL,
+	[PenaltyPerDay] [int] NULL,
  CONSTRAINT [PK_CATEGORY] PRIMARY KEY CLUSTERED 
 (
 	[CatergoryId] ASC
@@ -328,8 +328,8 @@ CREATE TABLE [dbo].[BORROWER](
 	[PersonId] [nvarchar](13) NOT NULL,
 	[FirstName] [nvarchar](50) NULL,
 	[LastName] [nvarchar](50) NULL,
-	[Address] [nvarchar](50) NULL,
-	[Telno] [nvarchar](50) NULL,
+	[Adress] [nvarchar](50) NULL,
+	[TelNo] [nvarchar](50) NULL,
 	[CategoryId] [int] NULL,
  CONSTRAINT [PK_BORROWER] PRIMARY KEY CLUSTERED 
 (
@@ -4663,7 +4663,7 @@ INSERT INTO [dbo].[BOOK]
            ,[Title]
            ,[SignId]
            ,[PublicationYear]
-           ,[Publicationinfo]
+           ,[PublicationInfo]
            ,[Pages])
      VALUES
            ('0070062722','Data warehousing data mining and OLAP',33,NULL,NULL,742);
