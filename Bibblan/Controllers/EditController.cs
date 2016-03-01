@@ -24,8 +24,7 @@ namespace Bibblan.Controllers
         [HttpGet]
         public ActionResult Book(string isbn)
         {
-            EditBookViewModel bookInfo = new EditBookViewModel();
-
+            EditBookViewModel bookInfo = BookServices.GetEditBookViewModel(isbn);
 
             return View(bookInfo);
         }

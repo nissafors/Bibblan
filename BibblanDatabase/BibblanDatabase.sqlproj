@@ -64,5 +64,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\SetupDatabase.sql" />
+    <None Include="Scripts\Setup.sql" />
   </ItemGroup>
 </Project>
