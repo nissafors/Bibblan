@@ -15,19 +15,23 @@ namespace Services.Services
             EditBookViewModel ebvm = new EditBookViewModel();
             Book book = new Book();
             var bookAuthors = new List<BookAuthor>();
-            
+            var authorIds = new List<int>();
+
             if (Book.GetBook(out book, isbn))
             {
+                // if (BookAuthor.GetBookAuthors(out bookAuthors, null, book.ISBN))
+                // {
+                //     foreach(ba in bookAuthors)
+                //         authorIds.Add(ba.Aid);
+                // }
+
                 ebvm.ISBN = book.ISBN;
                 ebvm.Title = book.Title;
                 ebvm.ClassificationId = book.SignId;
                 ebvm.PublicationYear = book.PublicationYear;
                 ebvm.PublicationInfo = book.PublicationInfo;
                 ebvm.Pages = book.Pages;
-
-                // if (BookAuthor.GetBookAuthors(out bookAuthors, book.ISBN))
-                // {
-                //     
+                ebvm.AuthorIds = authorIds;
             }
 
             return ebvm;
