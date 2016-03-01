@@ -4,7 +4,7 @@
     string controller = ViewBag.Controller;               
 }
 
-@using (Html.BeginForm("Borrower", controller))
+@using (Html.BeginForm("Borrower", controller, FormMethod.Get))
 {
     <div class="row">
         <div class="col-md-6">

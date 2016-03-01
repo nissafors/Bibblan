@@ -27,7 +27,7 @@ namespace Bibblan.Controllers
             return View();
         }
 
-        [HttpGet]
+        //[HttpGet]
         public ActionResult Borrower(string PersonId)
         {
             Borrower borrower = BorrowerServices.GetBorrowerById(PersonId);
@@ -41,7 +41,7 @@ namespace Bibblan.Controllers
                 return View(new BorrowerViewModel());
             }
         }
-
+        /*
         [HttpPost]
         public ActionResult Borrower(BorrowerViewModel borrower)
         {
@@ -57,6 +57,7 @@ namespace Bibblan.Controllers
 
             return View(borrower);
         }
+        */
 
         //
         // POST: /Search/
