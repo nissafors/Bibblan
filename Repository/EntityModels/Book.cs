@@ -67,11 +67,11 @@ namespace Repository.EntityModels
                             {
                                 bookList.Add(new Book()
                                 {
-                                    ISBN = myReader.GetString(myReader.GetOrdinal("ISBN")),
-                                    Title = myReader.GetString(myReader.GetOrdinal("Title")),
-                                    PublicationInfo = myReader.GetString(myReader.GetOrdinal("PublicationInfo")),
-                                    PublicationYear = myReader.GetString(myReader.GetOrdinal("PublicationYear")),
-                                    Pages = myReader.GetInt32(myReader.GetOrdinal("Pages"))
+                                    ISBN = myReader["ISBN"].ToString(),
+                                    Title = myReader["Title"].ToString(),
+                                    PublicationInfo = myReader["PublicationInfo"].ToString(),
+                                    PublicationYear = myReader["PublicationYear"].ToString(),
+                                    Pages = Convert.ToInt32(myReader["Pages"])
                                 });
                             }
                         }

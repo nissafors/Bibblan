@@ -41,9 +41,9 @@ namespace Services.Services
                     foreach(BookAuthor ba in bookAuthors)
                         authorIds.Add(ba.Aid);
                 }
-
+        
                 //get copies
-
+        
                 ebvm.ISBN = book.ISBN;
                 ebvm.Title = book.Title;
                 ebvm.ClassificationId = book.SignId;
@@ -52,11 +52,11 @@ namespace Services.Services
                 ebvm.Pages = book.Pages;
                 ebvm.AuthorIds = authorIds;
             }
-
+        
             return ebvm;
         }
 
-        public List<BookViewModel> GetBooks()
+        public static List<BookViewModel> GetBooks()
         {
             List<Book> bookList;
             if(Book.GetBooks(out bookList))
@@ -67,7 +67,7 @@ namespace Services.Services
                     bookViewModelList.Add(new BookViewModel()
                     {
                         ISBN = book.ISBN,
-                        Title = book.ISBN,
+                        Title = book.Title,
                         Pages = book.Pages,
                         PublicationInfo = book.PublicationInfo,
                         PublicationYear = book.PublicationYear,
