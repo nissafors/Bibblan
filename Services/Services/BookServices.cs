@@ -12,6 +12,7 @@ namespace Services.Services
     {
         public static List<BookViewModel> GetBookViewModels(string search)
         {
+            /* TODO: EVERYTHING
             List<Book> books;
             List<BookViewModel> models;
             if(Book.GetBooks(out books) && books != null)
@@ -20,7 +21,8 @@ namespace Services.Services
                 List<Author> authors;
                 Author.GetAuthor(;
                 model.Authors = 
-            }
+            }*/
+            return null;
 
         }
 
