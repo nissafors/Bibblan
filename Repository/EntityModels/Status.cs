@@ -13,15 +13,15 @@ namespace Repository.EntityModels
         public int StatusId { get; set; }
         public string StatusName { get; set; }
 
-        public static bool GetClassifications(out Classification status, int SignId)
+        public static bool GetStatus(out Status status, int StatusId)
         {
             status = null;
-            SqlCommand command = new SqlCommand("SELECT * from dbo.CLASSIFICATION WHERE SignId = @SignId");
-            command.Parameters.AddWithValue("SignId", SignId);
+            SqlCommand command = new SqlCommand("SELECT * from dbo.STATUS WHERE StatusId = @StatusId");
+            command.Parameters.AddWithValue("StatusId", StatusId);
 
             List<Status> statusList;
 
-            bool result = GetStatuss(out statusList, command);
+            bool result = GetStatus(out statusList, command);
 
             if (statusList.Count > 0)
             {
@@ -35,7 +35,7 @@ namespace Repository.EntityModels
         {
             statusList = new List<Status>();
 
-            return GetStatuss(out statusList, new SqlCommand("SELECT * FROM dbo.CLASSIFICATION"));
+            return GetStatus(out statusList, new SqlCommand("SELECT * FROM dbo.STATUS"));
         }
 
         private static bool GetStatus(out List<Status> statusList, SqlCommand command)
@@ -55,9 +55,8 @@ namespace Repository.EntityModels
                             {
                                 statusList.Add(new Status()
                                 {
-                                    SignId = myReader.GetInt32(myReader.GetOrdinal("SignId")),
-                                    Signum = myReader.GetString(myReader.GetOrdinal("Signum")),
-                                    Description = myReader.GetString(myReader.GetOrdinal("Description"))
+                                    StatusId = myReader.GetInt32(myReader.GetOrdinal("StatusId")),
+                                    StatusName = myReader.GetString(myReader.GetOrdinal("Status"))
                                 });
                             }
                         }

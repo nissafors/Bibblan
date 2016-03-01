@@ -10,12 +10,28 @@ namespace Services.Services
 {
     public class BookServices
     {
+        public static List<BookViewModel> GetBookViewModels(string search)
+        {
+            /* TODO: EVERYTHING
+            List<Book> books;
+            List<BookViewModel> models;
+            if(Book.GetBooks(out books) && books != null)
+            {
+                var model = new BookViewModel();
+                List<Author> authors;
+                Author.GetAuthor(;
+                model.Authors = 
+            }*/
+            return null;
+
+        }
+
         public static EditBookViewModel GetEditBookViewModel(string isbn)
         {
             EditBookViewModel ebvm = new EditBookViewModel();
             Book book = new Book();
             var authorIds = new List<int>();
-
+            
             if (Book.GetBook(out book, isbn))
             {
                 var bookAuthors = new List<BookAuthor>();
@@ -57,10 +73,27 @@ namespace Services.Services
             return ebvm;
         }
 
-        //public List<Book> GetBooks()
-        //{
-        //    return Mockup.Mockup.books;
-        //}
+        public List<BookViewModel> GetBooks()
+        {
+            List<Book> bookList;
+            if(Book.GetBooks(out bookList))
+            {
+                List<BookViewModel> bookViewModelList = new List<BookViewModel>();
+                foreach(Book book in bookList)
+                {
+                    bookViewModelList.Add(new BookViewModel()
+                    {
+                        ISBN = book.ISBN,
+                        Title = book.ISBN,
+                        Pages = book.Pages,
+                        PublicationInfo = book.PublicationInfo,
+                        PublicationYear = book.PublicationYear,
+                    });
+                }
+                return bookViewModelList;
+            }
+            return null;
+        }
 
         //public 
 

@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Common.Models;
-using Services.Mockup;
 using Services.Services;
 
 namespace Bibblan.Controllers
@@ -46,6 +45,7 @@ namespace Bibblan.Controllers
         [HttpGet]
         public ActionResult Copy(string barCode)
         {
+            /*
             Copy copy = CopyServices.GetCopy(barCode);
             EditCopyViewModel copyInfo;
 
@@ -53,23 +53,27 @@ namespace Bibblan.Controllers
                 copyInfo = new EditCopyViewModel(copy);
             else
                 copyInfo = new EditCopyViewModel();
-
-            return View(copyInfo);
+            */
+            return View();
         }
 
         [HttpPost]
         public ActionResult Copy(EditCopyViewModel copyInfo)
-        {
+        {/*
             Copy copy = copyInfo.ToCopy();
             // TODO:
             // Write copyInfo to db
-
+            */
+            /*
             return RedirectToAction("Book", copy.Book);
+            */
+            return View();
         }
 
         [HttpGet]
         public ActionResult Borrower(string PersonId)
         {
+            /*
             Borrower borrower = BorrowerServices.GetBorrowerById(PersonId);
 
             if (borrower != null)
@@ -80,11 +84,14 @@ namespace Bibblan.Controllers
             {
                 return View(new BorrowerViewModel());
             }
+            */
+            return View();
         }
 
         [HttpPost]
         public ActionResult Borrower(BorrowerViewModel borrower)
         {
+            /*
             if(BorrowerServices.AddBorrower(borrower.ToBorrower()))
             {
                 return RedirectToAction("Borrower", "Search");
@@ -93,10 +100,13 @@ namespace Bibblan.Controllers
             {
                 return View(borrower);
             }
+            */
+            return View();
         }
 
         public ActionResult Delete(string Type, string Id)
         {
+            /*
             switch(Type)
             {
                 case "Borrower":
@@ -119,15 +129,18 @@ namespace Bibblan.Controllers
                     return RedirectToAction("Index", "Home");
 
             }
+            */
+            return View();
         }
 
         public ActionResult Author(int id)
         {
+            /*
             //Common.Models.Author author = Services.Mockup.Mockup.authors[0];
             Author author = authorService.GetAuthorById(id);
             if(author != null)
                 return View(author);
-
+            */
             return View();
         }
     }

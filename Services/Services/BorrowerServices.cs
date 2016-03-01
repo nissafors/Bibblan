@@ -11,6 +11,22 @@ namespace Services.Services
 {
    public class BorrowerServices
    {
+
+       static public BorrowerViewModel GetBorrower(string personId)
+       {
+           // TODO:
+           // Make SQL-queries through repository
+           return null;
+       }
+
+
+       static public bool AddBorrower(BorrowerViewModel model)
+       {
+           // TODO:
+           // Make SQL-queries through repository
+           return false;
+       }
+       /*
       static public Borrower GetBorrowerById(string personId)
       {
          
@@ -77,5 +93,6 @@ namespace Services.Services
       {
          return false;
       }
+      */
    }
 }

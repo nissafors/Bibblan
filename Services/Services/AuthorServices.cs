@@ -16,7 +16,7 @@ namespace Services.Services
             List<Author> al;
 
             if (Author.GetAuthors(out al))
-            {
+        {
                 foreach (Author a in al)
                     dic.Add(a.Aid, a.FirstName + " " + a.LastName);
             }

@@ -8,7 +8,6 @@ using System.Web.Mvc;
 using Microsoft.AspNet.Identity;
 using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
-using Bibblan.Models;
 using Common.Models;
 using Services.Services;
 
@@ -47,6 +46,7 @@ namespace Bibblan.Controllers
 
         public ActionResult UserPage(string isbn)
         {
+            /*
             List<Loan> loans = Services.Mockup.Mockup.loans;
             BookServices bookService = new BookServices();
             var loanBookList = new List<Tuple<Loan, Book>>();
@@ -56,7 +56,8 @@ namespace Bibblan.Controllers
                 if (b != null)
                     loanBookList.Add(new Tuple<Loan, Book>(loan, b));
             }
-            return View(loanBookList);
+            */
+            return View();
         }
         /*
         //
