@@ -12,8 +12,8 @@ namespace Bibblan.Controllers
 {
     public class EditController : Controller
     {
-        private AuthorServices _authorService = new AuthorServices();
-        private BorrowerServices _borrowerService = new BorrowerServices();
+        private AuthorServices authorService = new AuthorServices();
+        private BorrowerServices borrowerService = new BorrowerServices();
 
         // GET: Edit
         public ActionResult Index()
@@ -25,14 +25,8 @@ namespace Bibblan.Controllers
         [HttpGet]
         public ActionResult Book(string isbn)
         {
-            EditBookViewModel bookInfo;
+            EditBookViewModel bookInfo = new EditBookViewModel();
 
-            Book book = BookServices.GetBookFromISBN(isbn);
-
-            if (book != null)
-                bookInfo = new EditBookViewModel(book);
-            else
-                bookInfo = new EditBookViewModel();
 
             return View(bookInfo);
         }
@@ -40,9 +34,8 @@ namespace Bibblan.Controllers
         [HttpPost]
         public ActionResult Book(EditBookViewModel bookInfo)
         {
-            Book book = bookInfo.ToBook();
             // TODO:
-            // Write bookInfo to db
+            // Write bookInfo to db via service
 
             return View(bookInfo);
         }
@@ -128,7 +121,7 @@ namespace Bibblan.Controllers
         public ActionResult Author(int id)
         {
             //Common.Models.Author author = Services.Mockup.Mockup.authors[0];
-            Author author = _authorService.GetAuthorById(id);
+            Author author = authorService.GetAuthorById(id);
             if(author != null)
                 return View(author);
 
