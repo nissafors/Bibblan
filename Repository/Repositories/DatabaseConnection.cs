@@ -85,7 +85,7 @@ namespace Repository.Repositories
                 myReader.Close();
             }
 
-            return true;
+            return true; 
         }
 
         public bool GetBookAuthors(out List<BookAuthor> bookAuthorList)
