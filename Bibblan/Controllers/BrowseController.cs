@@ -23,8 +23,9 @@ namespace Bibblan.Controllers
         // GET: /Browse/Author
         public ActionResult Author()
         {
-            //ViewBag.authors = _authorServices.GetAuthors();
-            return View();
+            var model = new BrowserAuthorViewModel();
+            model.Authors = AuthorServices.GetAuthors();
+            return View(model);
         }
 	}
 }
