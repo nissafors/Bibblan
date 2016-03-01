@@ -43,12 +43,14 @@ namespace Services.Services
       static public List<BorrowerViewModel> GetBorrowers(BorrowerViewModel searchBorrower)
       {
           // TODO: Get from database
+          List<Borrower> resultList = new List<Borrower>();
           List<BorrowerViewModel> borrowerList = new List<BorrowerViewModel>();
-          foreach (Repository.EntityModels.Borrower borrower in Mockup.Mockup.borrowers)
+          foreach (Borrower borrower in resultList)
           {
               borrowerList.Add(
                   new BorrowerViewModel(new Dictionary<int, string>()
                   {
+                      // TODO: Get categories from CategoryServices
                       {Mockup.Mockup.categories[0].Id, Mockup.Mockup.categories[0].CategoryName},
                       {Mockup.Mockup.categories[1].Id, Mockup.Mockup.categories[1].CategoryName},
                       {Mockup.Mockup.categories[2].Id, Mockup.Mockup.categories[2].CategoryName},
