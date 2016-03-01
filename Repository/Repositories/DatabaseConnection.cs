@@ -4,52 +4,29 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
-using Repository.EntityModels;
 
 namespace Repository.Repositories
 {
     public class DatabaseConnection
     {
-        static SqlConnection connection = new SqlConnection(@"Data Source=(localdb)\Projects;Initial Catalog=BibblanDatabase;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False");
+        SqlConnection connection = new SqlConnection(@"Data Source=(localdb)\Projects;Initial Catalog=BibblanDatabase;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False");
 
         public static SqlConnection GetConnection() {
             return new SqlConnection(@"Data Source=(localdb)\Projects;Initial Catalog=BibblanDatabase;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False");
         }
 
-        public bool GetAuthors(out List<Author> authorList)
+        public static SqlDataReader GetReader(SqlCommand sqlCommand)
         {
-            authorList = new List<Author>();
-            SqlDataReader myReader = null;
-
-            try
-            {
-                connection.Open();
-                SqlCommand myCommand = new SqlCommand("select * from dbo.AUTHOR", connection);
-
-                myReader = myCommand.ExecuteReader();
-                while (myReader.Read())
-                {
-                    authorList.Add(new Author()
-                    {
-                        Aid = myReader.GetInt32(myReader.GetOrdinal("Aid")),
-                        FirstName = myReader.GetString(myReader.GetOrdinal("FirstName")),
-                        LastName = myReader.GetString(myReader.GetOrdinal("LastName")),
-                        BirthYear = myReader.GetString(myReader.GetOrdinal("Birthyear")),
-                    });
-                }
-            }
-            catch (Exception e)
-            {
-                System.Diagnostics.Debug.WriteLine("ERROR: " + e.Message);
-                return false;
-            }
-            finally
-            {
-                myReader.Close();
-            }
-
-            return true;
+            SqlConnection connection = GetConnection();
+            sqlCommand.Connection = connection;
+            
+            connection.Open();
+            SqlDataReader reader = sqlCommand.ExecuteReader();
+            connection.Close();
+            // Can close connection early?
+            return reader;
         }
+        
 
 
         public bool GetBooks(out List<Book> bookList)
