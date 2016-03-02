@@ -21,8 +21,8 @@ namespace Repository.EntityModels
         {
             borrower = null;
             
-            SqlCommand command = new SqlCommand("SELECT * from dbo.BORROWER WHERE PersonId = @PersonId");
-            command.Parameters.AddWithValue("PersonId", PersonId);
+            SqlCommand command = new SqlCommand("SELECT * from BORROWER WHERE PersonId = @PersonId");
+            command.Parameters.AddWithValue("@PersonId", PersonId);
             
             List<Borrower> borrowerList;
             
@@ -38,53 +38,60 @@ namespace Repository.EntityModels
 
         public static bool GetBorrowers(out List<Borrower> borrowerList, string searchParameter)
         {
-            borrowerList = new List<Borrower>();
             // TODO: Search by index
-            SqlCommand command = new SqlCommand("SELECT * from dbo.BORROWER WHERE PersonId = @SearchParameter");
-            command.Parameters.AddWithValue("SearchParameter", searchParameter);
+            SqlCommand command = new SqlCommand("SELECT * from BORROWER WHERE PersonId = @SearchParameter");
+            command.Parameters.AddWithValue("@SearchParameter", searchParameter);
 
             return GetBorrowers(out borrowerList, command);
         }
 
         public bool GetBorrowers(out List<Borrower> borrowerList)
         {
-            borrowerList = new List<Borrower>();
-            return GetBorrowers(out borrowerList, new SqlCommand("SELECT * from dbo.BORROWER"));
+            return GetBorrowers(out borrowerList, new SqlCommand("SELECT * from BORROWER"));
         }
 
         private static bool GetBorrowers(out List<Borrower> borrowerList, SqlCommand command)
         {
             borrowerList = new List<Borrower>();
-            using (SqlConnection connection = DatabaseConnection.GetConnection())
+
+            try
             {
-                connection.Open();
-                using (command)
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
                 {
-                    command.Connection = connection;
-                    using (SqlDataReader myReader = command.ExecuteReader())
+                    connection.Open();
+                    using (command)
                     {
-                        if (myReader != null)
+                        command.Connection = connection;
+                        using (SqlDataReader myReader = command.ExecuteReader())
                         {
-                            while (myReader.Read())
+                            if (myReader != null)
                             {
-                                borrowerList.Add(new Borrower()
+                                while (myReader.Read())
                                 {
-                                    PersonId = myReader.GetString(myReader.GetOrdinal("PersonId")),
-                                    FirstName = myReader.GetString(myReader.GetOrdinal("FirstName")),
-                                    LastName = myReader.GetString(myReader.GetOrdinal("LastName")),
-                                    Adress = myReader.GetString(myReader.GetOrdinal("Adress")),
-                                    CategoryId = myReader.GetInt32(myReader.GetOrdinal("CategoryId")),
-                                    TelNo = myReader.GetString(myReader.GetOrdinal("TelNo"))
-                                });
+                                    borrowerList.Add(new Borrower()
+                                    {
+                                        PersonId = Convert.ToString(myReader["PersonId"]),
+                                        FirstName = Convert.ToString(myReader["FirstName"]),
+                                        LastName = Convert.ToString(myReader["LastName"]),
+                                        Adress = Convert.ToString(myReader["Adress"]),
+                                        CategoryId = Convert.ToInt32(myReader["CategoryId"]),
+                                        TelNo = Convert.ToString(myReader["TelNo"])
+                                    });
+                                }
                             }
-                        }
-                        else
-                        {
-                            return false;
+                            else
+                            {
+                                return false;
+                            }
                         }
                     }
                 }
             }
+            catch(Exception)
+            {
+                return false;
+            }
+
             return true;
         }
     }

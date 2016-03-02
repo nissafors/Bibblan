@@ -15,54 +15,60 @@ namespace Repository.EntityModels
 
         public static bool GetBookAuthors(out List<BookAuthor> bookAuthorList, int Aid)
         {
-            SqlCommand command = new SqlCommand("SELECT * from dbo.BOOKAUTHOR WHERE Aid = @Aid");
-            command.Parameters.AddWithValue("Aid", Aid);
+            SqlCommand command = new SqlCommand("SELECT * from BOOKAUTHOR WHERE Aid = @Aid");
+            command.Parameters.AddWithValue("@Aid", Aid);
             return getBookAuthors(out bookAuthorList, command);
         }
 
         public static bool GetBookAuthors(out List<BookAuthor> bookAuthorList, string ISBN)
         {
-            SqlCommand command = new SqlCommand("SELECT * from dbo.BOOK_AUTHOR WHERE ISBN = @ISBN");
+            SqlCommand command = new SqlCommand("SELECT * from BOOK_AUTHOR WHERE ISBN = @ISBN");
             command.Parameters.AddWithValue("@ISBN", ISBN);
             return getBookAuthors(out bookAuthorList, command);
         }
 
         public static bool GetBookAuthors(out List<BookAuthor> bookAuthorList)
         {
-            SqlCommand command = new SqlCommand("SELECT * from dbo.BOOK_AUTHOR");
-            return getBookAuthors(out bookAuthorList, command);
+            return getBookAuthors(out bookAuthorList, new SqlCommand("SELECT * from BOOK_AUTHOR"));
         }
 
         private static bool getBookAuthors(out List<BookAuthor> bookAuthorList, SqlCommand command)
         {
             bookAuthorList = new List<BookAuthor>();
-
-            using (SqlConnection connection = DatabaseConnection.GetConnection())
+            try
             {
-                connection.Open();
-                using (command)
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
                 {
-                    command.Connection = connection;
-                    using (SqlDataReader myReader = command.ExecuteReader())
+                    connection.Open();
+                    using (command)
                     {
-                        if (myReader != null)
+                        command.Connection = connection;
+                        using (SqlDataReader myReader = command.ExecuteReader())
                         {
-                            while (myReader.Read())
+                            if (myReader != null)
                             {
-                                bookAuthorList.Add(new BookAuthor()
+                                while (myReader.Read())
                                 {
-                                    Aid = myReader.GetInt32(myReader.GetOrdinal("Aid")),
-                                    ISBN = myReader.GetString(myReader.GetOrdinal("ISBN")),
-                                });
+                                    bookAuthorList.Add(new BookAuthor()
+                                    {
+                                        Aid = Convert.ToInt32(myReader["Aid"]),
+                                        ISBN = Convert.ToString(myReader["ISBN"])
+                                    });
+                                }
                             }
-                        }
-                        else
-                        {
-                            return false;
+                            else
+                            {
+                                return false;
+                            }
                         }
                     }
                 }
             }
+            catch(Exception)
+            {
+                return false;
+            }
+
             return true;
         }
     }

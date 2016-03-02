@@ -16,8 +16,8 @@ namespace Repository.EntityModels
         public static bool GetStatus(out Status status, int StatusId)
         {
             status = null;
-            SqlCommand command = new SqlCommand("SELECT * from dbo.STATUS WHERE StatusId = @StatusId");
-            command.Parameters.AddWithValue("StatusId", StatusId);
+            SqlCommand command = new SqlCommand("SELECT * from STATUS WHERE StatusId = @StatusId");
+            command.Parameters.AddWithValue("@StatusId", StatusId);
 
             List<Status> statusList;
 
@@ -33,40 +33,47 @@ namespace Repository.EntityModels
 
         public static bool GetStatus(out List<Status> statusList)
         {
-            statusList = new List<Status>();
-
-            return GetStatus(out statusList, new SqlCommand("SELECT * FROM dbo.STATUS"));
+            return GetStatus(out statusList, new SqlCommand("SELECT * FROM STATUS"));
         }
 
         private static bool GetStatus(out List<Status> statusList, SqlCommand command)
         {
             statusList = new List<Status>();
-            using (SqlConnection connection = DatabaseConnection.GetConnection())
+
+            try
             {
-                connection.Open();
-                using (command)
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
                 {
-                    command.Connection = connection;
-                    using (SqlDataReader myReader = command.ExecuteReader())
+                    connection.Open();
+                    using (command)
                     {
-                        if (myReader != null)
+                        command.Connection = connection;
+                        using (SqlDataReader myReader = command.ExecuteReader())
                         {
-                            while (myReader.Read())
+                            if (myReader != null)
                             {
-                                statusList.Add(new Status()
+                                while (myReader.Read())
                                 {
-                                    StatusId = myReader.GetInt32(myReader.GetOrdinal("StatusId")),
-                                    StatusName = myReader.GetString(myReader.GetOrdinal("Status"))
-                                });
+                                    statusList.Add(new Status()
+                                    {
+                                        StatusId = Convert.ToInt32(myReader["StatusId"]),
+                                        StatusName = Convert.ToString(myReader["Status"])
+                                    });
+                                }
                             }
-                        }
-                        else
-                        {
-                            return false;
+                            else
+                            {
+                                return false;
+                            }
                         }
                     }
                 }
             }
+            catch(Exception)
+            {
+                return false;
+            }
+
             return true;
         }
     }

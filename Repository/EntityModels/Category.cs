@@ -18,8 +18,8 @@ namespace Repository.EntityModels
         public static bool GetCategories(out Category category, int categoryId)
         {
             category = null;
-            SqlCommand command = new SqlCommand("SELECT * from dbo.CATEGORY WHERE CategoryId = @CategoryId");
-            command.Parameters.AddWithValue("CategoryId", categoryId);
+            SqlCommand command = new SqlCommand("SELECT * from CATEGORY WHERE CategoryId = @CategoryId");
+            command.Parameters.AddWithValue("@CategoryId", categoryId);
 
             List<Category> categoryList;
 
@@ -35,42 +35,49 @@ namespace Repository.EntityModels
 
         public static bool GetCategories(out List<Category> categoryList)
         {
-            categoryList = new List<Category>();
-
-            return GetCategories(out categoryList, new SqlCommand("SELECT * FROM dbo.CATEGORY"));
+            return GetCategories(out categoryList, new SqlCommand("SELECT * FROM CATEGORY"));
         }
 
         private static bool GetCategories(out List<Category> categoryList, SqlCommand command)
         {
             categoryList = new List<Category>();
-            using (SqlConnection connection = DatabaseConnection.GetConnection())
+
+            try
             {
-                connection.Open();
-                using (command)
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
                 {
-                    command.Connection = connection;
-                    using (SqlDataReader myReader = command.ExecuteReader())
+                    connection.Open();
+                    using (command)
                     {
-                        if (myReader != null)
+                        command.Connection = connection;
+                        using (SqlDataReader myReader = command.ExecuteReader())
                         {
-                            while (myReader.Read())
+                            if (myReader != null)
                             {
-                                categoryList.Add(new Category()
+                                while (myReader.Read())
                                 {
-                                    CategoryName = myReader.GetString(myReader.GetOrdinal("Category")),
-                                    CategoryId = myReader.GetInt32(myReader.GetOrdinal("CategoryId")),
-                                    PenaltyPerDay = myReader.GetInt32(myReader.GetOrdinal("PenaltyPerDay")),
-                                    Period = myReader.GetInt32(myReader.GetOrdinal("Period"))
-                                });
+                                    categoryList.Add(new Category()
+                                    {
+                                        CategoryName = Convert.ToString(myReader["Category"]),
+                                        CategoryId = Convert.ToInt32(myReader["CategoryId"]),
+                                        PenaltyPerDay = Convert.ToInt32(myReader["PenaltyPerDay"]),
+                                        Period = Convert.ToInt32(myReader["Period"])
+                                    });
+                                }
                             }
-                        }
-                        else
-                        {
-                            return false;
+                            else
+                            {
+                                return false;
+                            }
                         }
                     }
                 }
             }
+            catch(Exception)
+            {
+                return false;
+            }
+
             return true;
         }
     }

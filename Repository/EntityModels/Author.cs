@@ -19,7 +19,7 @@ namespace Repository.EntityModels
         {
             author = null;
             SqlCommand command = new SqlCommand("SELECT * from AUTHOR WHERE Aid = @Aid");
-            command.Parameters.AddWithValue("Aid", Aid);
+            command.Parameters.AddWithValue("@Aid", Aid);
 
             List<Author> authorList;
             bool result = GetAuthors(out authorList, command);
@@ -34,7 +34,6 @@ namespace Repository.EntityModels
 
         static public bool GetAuthors(out List<Author> authorList)
         {
-            authorList = new List<Author>();
             return GetAuthors(out authorList, new SqlCommand("SELECT * from AUTHOR"));
         }
 
@@ -42,34 +41,42 @@ namespace Repository.EntityModels
         {
             authorList = new List<Author>();
 
-            using (SqlConnection connection = DatabaseConnection.GetConnection())
+            try
             {
-                connection.Open();
-                using (command)
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
                 {
-                    command.Connection = connection;
-                    using (SqlDataReader myReader = command.ExecuteReader())
+                    connection.Open();
+                    using (command)
                     {
-                        if (myReader != null)
+                        command.Connection = connection;
+                        using (SqlDataReader myReader = command.ExecuteReader())
                         {
-                            while (myReader.Read())
+                            if (myReader != null)
                             {
-                                authorList.Add(new Author()
+                                while (myReader.Read())
                                 {
-                                    Aid = Convert.ToInt32(myReader["Aid"]),
-                                    FirstName = Convert.ToString(myReader["FirstName"]),
-                                    LastName = Convert.ToString(myReader["LastName"]),
-                                    BirthYear = Convert.ToString(myReader["Birthyear"])
-                                });
+                                    authorList.Add(new Author()
+                                    {
+                                        Aid = Convert.ToInt32(myReader["Aid"]),
+                                        FirstName = Convert.ToString(myReader["FirstName"]),
+                                        LastName = Convert.ToString(myReader["LastName"]),
+                                        BirthYear = Convert.ToString(myReader["Birthyear"])
+                                    });
+                                }
                             }
-                        }
-                        else
-                        {
-                            return false;
+                            else
+                            {
+                                return false;
+                            }
                         }
                     }
                 }
             }
+            catch(Exception)
+            {
+                return false;
+            }
+
             return true;
         }
     }

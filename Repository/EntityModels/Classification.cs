@@ -17,7 +17,7 @@ namespace Repository.EntityModels
         public static bool GetClassifications(out Classification classification, int SignId)
         {
             classification = null;
-            SqlCommand command = new SqlCommand("SELECT * from dbo.CLASSIFICATION WHERE SignId = @SignId");
+            SqlCommand command = new SqlCommand("SELECT * from CLASSIFICATION WHERE SignId = @SignId");
             command.Parameters.AddWithValue("SignId", SignId);
 
             List<Classification> classificationList;
@@ -34,40 +34,46 @@ namespace Repository.EntityModels
 
         public static bool GetClassifications(out List<Classification> classificationList)
         {
-            classificationList = new List<Classification>();
-
-            return GetClassifications(out classificationList, new SqlCommand("SELECT * FROM dbo.CLASSIFICATION"));
+            return GetClassifications(out classificationList, new SqlCommand("SELECT * FROM CLASSIFICATION"));
         }
 
         private static bool GetClassifications(out List<Classification> classificationList, SqlCommand command)
         {
             classificationList = new List<Classification>();
-            using (SqlConnection connection = DatabaseConnection.GetConnection())
+
+            try
             {
-                connection.Open();
-                using (command)
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
                 {
-                    command.Connection = connection;
-                    using (SqlDataReader myReader = command.ExecuteReader())
+                    connection.Open();
+                    using (command)
                     {
-                        if (myReader != null)
+                        command.Connection = connection;
+                        using (SqlDataReader myReader = command.ExecuteReader())
                         {
-                            while (myReader.Read())
+                            if (myReader != null)
                             {
-                                classificationList.Add(new Classification()
+                                while (myReader.Read())
                                 {
-                                    SignId = Convert.ToInt32(myReader["SignId"]),
-                                    Signum = myReader["Signum"].ToString(),
-                                    Description = myReader["Description"].ToString()
-                                });
+                                    classificationList.Add(new Classification()
+                                    {
+                                        SignId = Convert.ToInt32(myReader["SignId"]),
+                                        Signum = Convert.ToString(myReader["Signum"]),
+                                        Description = Convert.ToString(myReader["Description"])
+                                    });
+                                }
                             }
-                        }
-                        else
-                        {
-                            return false;
+                            else
+                            {
+                                return false;
+                            }
                         }
                     }
                 }
+            }
+            catch(Exception)
+            {
+                return false;
             }
             return true;
         }

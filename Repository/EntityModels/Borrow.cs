@@ -18,53 +18,59 @@ namespace Repository.EntityModels
 
         static public bool GetBorrows(out List<Borrow> borrowList, string searchParameter)
         {
-            borrowList = new List<Borrow>();
-            SqlCommand command = new SqlCommand("SELECT * from dbo.BORROW WHERE Barcode = @Barcode OR PersonId = @PersonId");
-            command.Parameters.AddWithValue("Barcode", searchParameter);
-            command.Parameters.AddWithValue("PersonId", searchParameter);
+            SqlCommand command = new SqlCommand("SELECT * from BORROW WHERE Barcode = @Barcode OR PersonId = @PersonId");
+            command.Parameters.AddWithValue("@Barcode", searchParameter);
+            command.Parameters.AddWithValue("@PersonId", searchParameter);
 
             return GetBorrows(out borrowList, command);
         }
 
         static public bool GetBorrows(out List<Borrow> borrowList)
         {
-            borrowList = new List<Borrow>();
-            return GetBorrows(out borrowList, new SqlCommand("SELECT * from dbo.BORROW"));
+            return GetBorrows(out borrowList, new SqlCommand("SELECT * from BORROW"));
         }
 
         static private bool GetBorrows(out List<Borrow> borrowList, SqlCommand command)
         {
             borrowList = new List<Borrow>();
 
-            using (SqlConnection connection = DatabaseConnection.GetConnection())
+            try
             {
-                connection.Open();
-                using (command)
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
                 {
-                    command.Connection = connection;
-                    using (SqlDataReader myReader = command.ExecuteReader())
+                    connection.Open();
+                    using (command)
                     {
-                        if (myReader != null)
+                        command.Connection = connection;
+                        using (SqlDataReader myReader = command.ExecuteReader())
                         {
-                            while (myReader.Read())
+                            if (myReader != null)
                             {
-                                borrowList.Add(new Borrow()
+                                while (myReader.Read())
                                 {
-                                    Barcode = myReader.GetString(myReader.GetOrdinal("Barcode")),
-                                    PersonId = myReader.GetString(myReader.GetOrdinal("PersonId")),
-                                    BorrowDate = myReader.GetDateTime(myReader.GetOrdinal("BorrowDate")),
-                                    ReturnDate = myReader.GetDateTime(myReader.GetOrdinal("ReturnDate")),
-                                    ToBeReturnedDate = myReader.GetDateTime(myReader.GetOrdinal("ToBeReturnedDate"))
-                                });
+                                    borrowList.Add(new Borrow()
+                                    {
+                                        Barcode = Convert.ToString(myReader["Barcode"]),
+                                        PersonId = Convert.ToString(myReader["PersonId"]),
+                                        BorrowDate = Convert.ToDateTime(myReader["BorrowDate"]),
+                                        ReturnDate = Convert.ToDateTime(myReader["ReturnDate"]),
+                                        ToBeReturnedDate = Convert.ToDateTime(myReader["ToBeReturnedDate"])
+                                    });
+                                }
                             }
-                        }
-                        else
-                        {
-                            return false;
+                            else
+                            {
+                                return false;
+                            }
                         }
                     }
                 }
             }
+            catch(Exception)
+            {
+                return false;
+            }
+
             return true;
         }
     }

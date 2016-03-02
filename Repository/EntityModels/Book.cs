@@ -21,7 +21,7 @@ namespace Repository.EntityModels
         {
             book = null;
             SqlCommand command = new SqlCommand("SELECT * from BOOK WHERE ISBN = @ISBN");
-            command.Parameters.AddWithValue("ISBN", isbn);
+            command.Parameters.AddWithValue("@ISBN", isbn);
 
             List<Book> bookList;
             bool result = GetBooks(out bookList, command);
@@ -42,35 +42,44 @@ namespace Repository.EntityModels
         private static bool GetBooks(out List<Book> bookList, SqlCommand command)
         {
             bookList = new List<Book>();
-            using (SqlConnection connection = DatabaseConnection.GetConnection())
+
+            try
             {
-                connection.Open();
-                using (command)
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
                 {
-                    command.Connection = connection;
-                    using (SqlDataReader myReader = command.ExecuteReader())
+                    connection.Open();
+                    using (command)
                     {
-                        if (myReader != null)
+                        command.Connection = connection;
+                        using (SqlDataReader myReader = command.ExecuteReader())
                         {
-                            while (myReader.Read())
+                            if (myReader != null)
                             {
-                                bookList.Add(new Book()
+                                while (myReader.Read())
                                 {
-                                    ISBN = Convert.ToString(myReader["ISBN"]),
-                                    Title = Convert.ToString(myReader["Title"]),
-                                    PublicationInfo = Convert.ToString(myReader["PublicationInfo"]),
-                                    PublicationYear = Convert.ToString(myReader["PublicationYear"]),
-                                    Pages = Convert.ToInt32(myReader["Pages"])
-                                });
+                                    bookList.Add(new Book()
+                                    {
+                                        ISBN = Convert.ToString(myReader["ISBN"]),
+                                        Title = Convert.ToString(myReader["Title"]),
+                                        PublicationInfo = Convert.ToString(myReader["PublicationInfo"]),
+                                        PublicationYear = Convert.ToString(myReader["PublicationYear"]),
+                                        Pages = Convert.ToInt32(myReader["Pages"])
+                                    });
+                                }
                             }
-                        }
-                        else
-                        {
-                            return false;
+                            else
+                            {
+                                return false;
+                            }
                         }
                     }
                 }
             }
+            catch(Exception)
+            {
+                return false;
+            }
+
             return true;
         }
     }

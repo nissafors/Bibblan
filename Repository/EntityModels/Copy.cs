@@ -18,8 +18,8 @@ namespace Repository.EntityModels
 
         public static bool GetCopies(out List<Copy> copies, string isbn)
         {
-            SqlCommand command = new SqlCommand("SELECT * from dbo.COPY WHERE ISBN = @ISBN");
-            command.Parameters.AddWithValue("ISBN", isbn);
+            SqlCommand command = new SqlCommand("SELECT * from COPY WHERE ISBN = @ISBN");
+            command.Parameters.AddWithValue("@ISBN", isbn);
             return getCopies(out copies, command);
         }
 
@@ -27,35 +27,43 @@ namespace Repository.EntityModels
         {
             copies = new List<Copy>();
 
-            using (SqlConnection connection = DatabaseConnection.GetConnection())
+            try
             {
-                connection.Open();
-                using (command)
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
                 {
-                    command.Connection = connection;
-                    using (SqlDataReader myReader = command.ExecuteReader())
+                    connection.Open();
+                    using (command)
                     {
-                        if (myReader != null)
+                        command.Connection = connection;
+                        using (SqlDataReader myReader = command.ExecuteReader())
                         {
-                            while (myReader.Read())
+                            if (myReader != null)
                             {
-                                copies.Add(new Copy()
+                                while (myReader.Read())
                                 {
-                                    Barcode = myReader.GetString(myReader.GetOrdinal("Barcode")),
-                                    ISBN = myReader.GetString(myReader.GetOrdinal("ISBN")),
-                                    Location = myReader.GetString(myReader.GetOrdinal("Location")),
-                                    Library = myReader.GetString(myReader.GetOrdinal("Library")),
-                                    StatusId = myReader.GetInt32(myReader.GetOrdinal("StatusId"))
-                                });
+                                    copies.Add(new Copy()
+                                    {
+                                        Barcode = Convert.ToString(myReader["Barcode"]),
+                                        ISBN = Convert.ToString(myReader["ISBN"]),
+                                        Location = Convert.ToString(myReader["Location"]),
+                                        Library = Convert.ToString(myReader["Library"]),
+                                        StatusId = Convert.ToInt32(myReader["StatusId"])
+                                    });
+                                }
                             }
-                        }
-                        else
-                        {
-                            return false;
+                            else
+                            {
+                                return false;
+                            }
                         }
                     }
                 }
             }
+            catch(Exception)
+            {
+                return false;
+            }
+
             return true;
         }
     }
