@@ -103,6 +103,9 @@ namespace Services.Services
             Classification classification = null;
             List<BookAuthor> bookAuthorList;
 
+            List<Classification> classList;
+            Classification.GetClassifications(out classList);
+
             if(Book.GetBook(out book, isbn) && 
                 BookAuthor.GetBookAuthors(out bookAuthorList, book.ISBN) &&
                 Classification.GetClassification(out classification, book.SignId))

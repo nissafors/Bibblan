@@ -19,11 +19,11 @@ namespace Bibblan.Controllers
                 BookViewModel viewModel = BookServices.GetBookDetails(isbn);
                 if (viewModel != null)
                 {
-                    return View(viewModel);
+                    ViewBag.Book = viewModel;
                 }
             }
 
-            return RedirectToAction("Book", "Search");
+            return View();
         }
 	}
 }

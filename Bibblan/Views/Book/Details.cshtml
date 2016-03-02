@@ -4,34 +4,44 @@
 	ViewBag.Title = "Details";
 }
 
+@if (ViewBag.Book != null)
+{
 <div class="row">
 	<div class="col-xs-6">
-		<h1>@Html.DisplayFor(model => model.Title)</h1>
+		<h1>@ViewBag.Book.Title</h1>
 	</div>
 	<div class="col-xs-3 col-sm-offset-3 text-right">
-		<button class="btn btn-default">Förnya</button>
+		<button class="btn btn-default">Redigera</button>
 	</div>
 </div>
 <div class="row">
 	<div class="col-md-6">
 		<dl class="dl-horizontal">
 			<dt>Författare:</dt>
-            @foreach (var item in Model.Authors)
-            { 
-			<dd>@Html.Display(item.Value)</dd>
+            @foreach (var item in ViewBag.Book.Authors)
+            {
+			<dd>@item.Value</dd>
             }
 			<dt>ISBN:</dt>
-			<dd>@Html.DisplayFor(model => model.ISBN)</dd>
+			<dd>@ViewBag.Book.ISBN</dd>
 			<dt>Klassifikation:</dt>
-			<dd>@Html.DisplayFor(model => model.Classification)</dd>
+			<dd>@ViewBag.Book.Classification</dd>
 			<dt>Publikationsår:</dt>
-			<dd>@Html.DisplayFor(model => model.PublicationYear)</dd>
+			<dd>@ViewBag.Book.PublicationYear</dd>
 			<dt>Antal sidor:</dt> 
-			<dd>@Html.DisplayFor(model => model.Pages)</dd>
+			<dd>@ViewBag.Book.Pages</dd>
 		</dl>
 	</div>
 	<div class="col-md-6">
 		<img src="https://s-media-cache-ak0.pinimg.com/564x/46/73/fd/4673fdf9d7821422efbec22771a25c68.jpg" alt="" class="img-rounded img-responsive" />
 	</div>
 </div>
-
+}
+else
+{
+    <div class="row">
+        <div class="col-xs-6">
+            <h1>Kunde inte hitta boken</h1>
+        </div>
+    </div>
+}

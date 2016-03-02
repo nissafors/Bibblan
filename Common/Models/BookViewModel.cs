@@ -16,5 +16,10 @@ namespace Common.Models
         public string PublicationInfo { get; set; }
         public int Pages { get; set; }
         public Dictionary<int, string> Authors { get; set; }
+
+        public BookViewModel()
+        {
+            this.Authors = new Dictionary<int, string>();
+        }
     }
 }

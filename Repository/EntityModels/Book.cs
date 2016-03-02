@@ -63,7 +63,8 @@ namespace Repository.EntityModels
                                         Title = Convert.ToString(myReader["Title"]),
                                         PublicationInfo = Convert.ToString(myReader["PublicationInfo"]),
                                         PublicationYear = Convert.ToString(myReader["PublicationYear"]),
-                                        Pages = Convert.ToInt32(myReader["Pages"])
+                                        Pages = Convert.ToInt32(myReader["Pages"]),
+                                        SignId = Convert.ToInt32(myReader["SignId"])
                                     });
                                 }
                             }

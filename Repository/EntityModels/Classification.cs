@@ -17,8 +17,8 @@ namespace Repository.EntityModels
         public static bool GetClassification(out Classification classification, int SignId)
         {
             classification = null;
-            SqlCommand command = new SqlCommand("SELECT * from CLASSIFICATION WHERE SignId = @SignId");
-            command.Parameters.AddWithValue("SignId", SignId);
+            SqlCommand command = new SqlCommand("SELECT * from CLASSIFICATION WHERE SignId = 1");
+            command.Parameters.AddWithValue("@SignId", SignId.ToString());
 
             List<Classification> classificationList;
 
