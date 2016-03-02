@@ -22,14 +22,14 @@ namespace Repository.EntityModels
 
         public static bool GetBookAuthors(out List<BookAuthor> bookAuthorList, string ISBN)
         {
-            SqlCommand command = new SqlCommand("SELECT * from dbo.BOOKAUTHOR WHERE ISBN = @ISBN");
-            command.Parameters.AddWithValue("ISBN", ISBN);
+            SqlCommand command = new SqlCommand("SELECT * from dbo.BOOK_AUTHOR WHERE ISBN = @ISBN");
+            command.Parameters.AddWithValue("@ISBN", ISBN);
             return getBookAuthors(out bookAuthorList, command);
         }
 
         public static bool GetBookAuthors(out List<BookAuthor> bookAuthorList)
         {
-            SqlCommand command = new SqlCommand("SELECT * from dbo.BOOKAUTHOR");
+            SqlCommand command = new SqlCommand("SELECT * from dbo.BOOK_AUTHOR");
             return getBookAuthors(out bookAuthorList, command);
         }
 

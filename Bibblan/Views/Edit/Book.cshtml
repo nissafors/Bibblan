@@ -1,4 +1,4 @@
-﻿@model Bibblan.Models.EditBookViewModel
+﻿@model Common.Models.EditBookViewModel
 
 @{
     ViewBag.Title = "Redigera bok";
@@ -14,7 +14,6 @@
         <div class="col-md-6">
             <div class="form-group">
                 @Html.LabelFor(model => model.ISBN)
-                @{IDictionary<String, Object) attr = Model.ISBN != null ? new IDictionary<String, Object) { @class = "form-control", @readonly = "readonly" } : new { @class = "form-control" }; }
                 @if (Model.ISBN != null)
                 {
                     @Html.TextBoxFor(model => model.ISBN, new { @class = "form-control", @readonly = "readonly" })
@@ -36,7 +35,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 @Html.LabelFor(model => model.ClassificationId)
-                @Html.DropDownListFor(model => model.ClassificationId, Model.classifications, new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.ClassificationId, Model.Classifications, new { @class = "form-control" })
             </div>
         </div>
         <div class="col-md-6">
@@ -62,7 +61,7 @@
     </div>
     <div class="form-group">
         @Html.LabelFor(model => model.AuthorIds)
-        @Html.ListBoxFor(model => model.AuthorIds, Model.authors, new { @class = "form-control" })
+        @Html.ListBoxFor(model => model.AuthorIds, Model.Authors, new { @class = "form-control" })
     </div>
 
     <input type="submit" class="btn btn-lg btn-primary btn-block" value="Spara" />

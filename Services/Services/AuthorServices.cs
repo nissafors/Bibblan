@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Common.Models;
 using Repository.EntityModels;
+
 namespace Services.Services
 {
     public class AuthorServices
@@ -30,26 +31,19 @@ namespace Services.Services
             return authors;
 
         }
-        /*
-        public Author GetAuthorById(int id)
+
+        public static Dictionary<int, string> GetAuthorsAsDictionary()
         {
-            return Mockup.Mockup.authors[id - 1];
-        }
+            var dic = new Dictionary<int, string>();
+            List<Author> al;
 
-        public static List<Author> GetAuthors(List<int> ids)
+            if (Author.GetAuthors(out al))
         {
-            var authors = new List<Author>();
-
-            if (ids == null)
-                return authors;
-
-            foreach(Author author in Mockup.Mockup.authors)
-            {
-                if (ids.Contains(author.Id))
-                    authors.Add(author);
+                foreach (Author a in al)
+                    dic.Add(a.Aid, a.FirstName + " " + a.LastName);
             }
 
-            return authors;
+            return dic;
         }
 
         public List<Author> GetAuthors()
@@ -61,6 +55,5 @@ namespace Services.Services
         {
             return false;
         }
-        */
     }
 }

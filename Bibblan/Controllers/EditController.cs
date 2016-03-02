@@ -4,7 +4,6 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Common.Models;
-using Services.Mockup;
 using Services.Services;
 
 namespace Bibblan.Controllers
@@ -24,7 +23,13 @@ namespace Bibblan.Controllers
         [HttpGet]
         public ActionResult Book(string isbn)
         {
-            EditBookViewModel bookInfo = BookServices.GetEditBookViewModel(isbn);
+            isbn = "0078815037";
+            EditBookViewModel bookInfo = isbn == null ? new EditBookViewModel() : BookServices.GetEditBookViewModel(isbn);
+
+            var classDic = ClassificationServices.GetClassificationsAsDictionary();
+            var authorDic = AuthorServices.GetAuthorsAsDictionary();
+            bookInfo.Classifications = new SelectList(classDic.OrderBy(x => x.Value), "Key", "Value");
+            bookInfo.Authors = new SelectList(authorDic.OrderBy(x => x.Value), "Key", "Value");
 
             return View(bookInfo);
         }

@@ -48,14 +48,14 @@ namespace Repository.EntityModels
             return true;
         }
 
-        static public bool GetAuthor(out List<Author> authorList)
+        static public bool GetAuthors(out List<Author> authorList)
         {
             authorList = new List<Author>();
 
             using (SqlConnection connection = DatabaseConnection.GetConnection())
             {
                 connection.Open();
-                using (SqlCommand command = new SqlCommand("SELECT * from dbo.AUTHOR", connection))
+                using (SqlCommand command = new SqlCommand("SELECT * from dbo.AUTHOR ORDER BY LastName", connection))
                 {
                     using (SqlDataReader myReader = command.ExecuteReader())
                     {
