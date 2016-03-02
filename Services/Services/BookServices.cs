@@ -96,6 +96,41 @@ namespace Services.Services
             return null;
         }
 
+        public static BookViewModel GetBookDetails(string isbn)
+        {
+            Book book = null;
+            BookViewModel bookViewModel = null;
+            Classification classification = null;
+            List<BookAuthor> bookAuthorList;
+
+            if(Book.GetBook(out book, isbn) && 
+                BookAuthor.GetBookAuthors(out bookAuthorList, book.ISBN) &&
+                Classification.GetClassification(out classification, book.SignId))
+            {
+                bookViewModel = new BookViewModel()
+                {
+                    ISBN = book.ISBN,
+                    Title = book.Title,
+                    SignId = book.SignId,
+                    Classification = classification.Signum,
+                    Pages = book.Pages,
+                    PublicationInfo = book.PublicationInfo,
+                    PublicationYear = book.PublicationYear
+                };
+
+                foreach (BookAuthor bookAuthor in bookAuthorList)
+                {
+                    Author author;
+                    if (Author.GetAuthor(out author, bookAuthor.Aid))
+                    {
+                        bookViewModel.Authors.Add(author.Aid, author.LastName + ", " + author.FirstName);
+                    }
+                }
+            }
+
+            return bookViewModel;
+        }
+
         //public 
 
         //public Book GetBookFromCopy(Copy copy)

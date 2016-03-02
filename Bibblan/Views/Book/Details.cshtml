@@ -1,4 +1,4 @@
-﻿@model Common.Models.BookAuthor
+﻿@model Common.Models.BookViewModel
 
 @{
 	ViewBag.Title = "Details";
@@ -6,7 +6,7 @@
 
 <div class="row">
 	<div class="col-xs-6">
-		<h1>@Html.DisplayFor(model => model.Book.Title)</h1>
+		<h1>@Html.DisplayFor(model => model.Title)</h1>
 	</div>
 	<div class="col-xs-3 col-sm-offset-3 text-right">
 		<button class="btn btn-default">Förnya</button>
@@ -16,15 +16,18 @@
 	<div class="col-md-6">
 		<dl class="dl-horizontal">
 			<dt>Författare:</dt>
-			<dd>@Html.DisplayFor(model => model.Author.LastName), @Html.DisplayFor(model => model.Author.FirstName)</dd>
+            @foreach (var item in Model.Authors)
+            { 
+			<dd>@Html.Display(item.Value)</dd>
+            }
 			<dt>ISBN:</dt>
-			<dd>@Html.DisplayFor(model => model.Book.ISBN)</dd>
+			<dd>@Html.DisplayFor(model => model.ISBN)</dd>
 			<dt>Klassifikation:</dt>
-			<dd>@Html.DisplayFor(model => model.Book.Classification.Signum)</dd>
+			<dd>@Html.DisplayFor(model => model.Classification)</dd>
 			<dt>Publikationsår:</dt>
-			<dd>@Html.DisplayFor(model => model.Book.PublicationYear)</dd>
+			<dd>@Html.DisplayFor(model => model.PublicationYear)</dd>
 			<dt>Antal sidor:</dt> 
-			<dd>@Html.DisplayFor(model => model.Book.Pages)</dd>
+			<dd>@Html.DisplayFor(model => model.Pages)</dd>
 		</dl>
 	</div>
 	<div class="col-md-6">

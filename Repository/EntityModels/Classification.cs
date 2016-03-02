@@ -14,7 +14,7 @@ namespace Repository.EntityModels
         public string Signum { get; set; }
         public string Description { get; set; }
 
-        public static bool GetClassifications(out Classification classification, int SignId)
+        public static bool GetClassification(out Classification classification, int SignId)
         {
             classification = null;
             SqlCommand command = new SqlCommand("SELECT * from CLASSIFICATION WHERE SignId = @SignId");

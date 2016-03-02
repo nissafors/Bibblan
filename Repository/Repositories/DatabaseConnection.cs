@@ -9,8 +9,6 @@ namespace Repository.Repositories
 {
     public class DatabaseConnection
     {
-        static SqlConnection connection = new SqlConnection(@"Data Source=dblibrary.ckprwkebxagl.eu-central-1.rds.amazonaws.com;Initial Catalog=BibblanDatabase;User ID=--USERNAME--;Password=--PASSWORD--");
-
         public static SqlConnection GetConnection() 
         {
             return new SqlConnection(@"Data Source=dblibrary.ckprwkebxagl.eu-central-1.rds.amazonaws.com;Initial Catalog=BibblanDatabase;User ID=--USERNAME--;Password=--PASSWORD--");
