@@ -10,12 +10,14 @@
         <h1>Alla författare</h1>
     </div>
     <table class="table table-striped">
+        <thead>
         <tr>
             <th>Efternamn</th>
             <th>Förnamn</th>
             <th>Födelseår</th>
             <th class="col-md-1"></th>
         </tr>
+        </thead>
         @if (@Model != null)
         {
             foreach (var item in Model.Authors)
