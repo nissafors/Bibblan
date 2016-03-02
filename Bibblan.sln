@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bibblan", "Bibblan\Bibblan.csproj", "{06E26F75-EE86-41D1-B8A4-143EC6D1EB36}"
 EndProject
@@ -10,8 +10,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Services", "Services\Services.csproj", "{BCE15014-4F29-4F7C-8DC5-D02423A208A5}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository", "Repository\Repository.csproj", "{E7A5E2F0-9974-449C-AD17-D1F54D1D7146}"
-EndProject
-Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "BibblanDatabase", "BibblanDatabase\BibblanDatabase.sqlproj", "{CDDF8549-C504-4759-9BF9-A0E888501ACF}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -35,12 +33,6 @@ Global
 		{E7A5E2F0-9974-449C-AD17-D1F54D1D7146}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E7A5E2F0-9974-449C-AD17-D1F54D1D7146}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E7A5E2F0-9974-449C-AD17-D1F54D1D7146}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CDDF8549-C504-4759-9BF9-A0E888501ACF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CDDF8549-C504-4759-9BF9-A0E888501ACF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CDDF8549-C504-4759-9BF9-A0E888501ACF}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
-		{CDDF8549-C504-4759-9BF9-A0E888501ACF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CDDF8549-C504-4759-9BF9-A0E888501ACF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CDDF8549-C504-4759-9BF9-A0E888501ACF}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
