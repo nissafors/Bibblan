@@ -18,8 +18,8 @@ namespace Services.Services
         {
             List<Author> authorEntities;
             List<AuthorViewModel> authors = new List<AuthorViewModel>();
-            /*
-            if(Author.GetAuthor(out authorEntities) && authorEntities != null)
+
+            if(Author.GetAuthors(out authorEntities) && authorEntities != null)
             {
                 // build list
                 foreach(var author in authorEntities)
@@ -27,7 +27,7 @@ namespace Services.Services
                     authors.Add(new AuthorViewModel { FirstName = author.FirstName, LastName = author.LastName, BirthYear = author.BirthYear, Id = author.Aid });
                 }
             }
-            */
+
             return authors;
 
         }
