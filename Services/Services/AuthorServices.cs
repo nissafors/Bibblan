@@ -19,7 +19,7 @@ namespace Services.Services
             List<Author> authorEntities;
             List<AuthorViewModel> authors = new List<AuthorViewModel>();
 
-            if(Author.GetAuthor(out authorEntities) && authorEntities != null)
+            if(Author.GetAuthors(out authorEntities) && authorEntities != null)
             {
                 // build list
                 foreach(var author in authorEntities)
@@ -45,12 +45,12 @@ namespace Services.Services
 
             return dic;
         }
-
+        /*
         public List<Author> GetAuthors()
         {
             return Mockup.Mockup.authors;
         }
-
+        */
         static public bool DeleteAuthor(string AuthorID)
         {
             return false;
