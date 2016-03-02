@@ -20,45 +20,34 @@ namespace Repository.EntityModels
         public static bool GetBook(out Book book, string isbn)
         {
             book = null;
+            SqlCommand command = new SqlCommand("SELECT * from BOOK WHERE ISBN = @ISBN");
+            command.Parameters.AddWithValue("ISBN", isbn);
 
-            using (SqlConnection connection = DatabaseConnection.GetConnection())
+            List<Book> bookList;
+            bool result = GetBooks(out bookList, command);
+
+            if (result)
             {
-                connection.Open();
-                using (SqlCommand command = new SqlCommand("SELECT * from dbo.BOOK WHERE ISBN = @ISBN", connection))
-                {
-                    command.Parameters.AddWithValue("@ISBN", isbn);
-                    using (SqlDataReader myReader = command.ExecuteReader())
-                    {
-                        if (myReader != null)
-                        {
-                            myReader.Read();
-                            book = new Book()
-                            {
-                                ISBN = myReader["ISBN"].ToString(),
-                                Title = myReader["Title"].ToString(),
-                                PublicationInfo = myReader["PublicationInfo"].ToString(),
-                                PublicationYear = myReader["PublicationYear"].ToString(),
-                                Pages = Convert.ToInt32(myReader["Pages"])
-                            };
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-                }
+                book = bookList[0];
             }
-            return true;
+
+            return result;
         }
 
         public static bool GetBooks(out List<Book> bookList)
+        {
+            return GetBooks(out bookList, new SqlCommand("SELECT * from BOOK"));
+        }
+
+        private static bool GetBooks(out List<Book> bookList, SqlCommand command)
         {
             bookList = new List<Book>();
             using (SqlConnection connection = DatabaseConnection.GetConnection())
             {
                 connection.Open();
-                using (SqlCommand command = new SqlCommand("SELECT * from dbo.BOOK", connection))
+                using (command)
                 {
+                    command.Connection = connection;
                     using (SqlDataReader myReader = command.ExecuteReader())
                     {
                         if (myReader != null)
@@ -67,10 +56,10 @@ namespace Repository.EntityModels
                             {
                                 bookList.Add(new Book()
                                 {
-                                    ISBN = myReader["ISBN"].ToString(),
-                                    Title = myReader["Title"].ToString(),
-                                    PublicationInfo = myReader["PublicationInfo"].ToString(),
-                                    PublicationYear = myReader["PublicationYear"].ToString(),
+                                    ISBN = Convert.ToString(myReader["ISBN"]),
+                                    Title = Convert.ToString(myReader["Title"]),
+                                    PublicationInfo = Convert.ToString(myReader["PublicationInfo"]),
+                                    PublicationYear = Convert.ToString(myReader["PublicationYear"]),
                                     Pages = Convert.ToInt32(myReader["Pages"])
                                 });
                             }

@@ -18,45 +18,36 @@ namespace Repository.EntityModels
         static public bool GetAuthor(out Author author, int Aid)
         {
             author = null;
+            SqlCommand command = new SqlCommand("SELECT * from AUTHOR WHERE Aid = @Aid");
+            command.Parameters.AddWithValue("Aid", Aid);
 
-            using (SqlConnection connection = DatabaseConnection.GetConnection())
+            List<Author> authorList;
+            bool result = GetAuthors(out authorList, command);
+
+            if(result)
             {
-                connection.Open();
-                using (SqlCommand command = new SqlCommand("SELECT * from dbo.AUTHOR WHERE Aid = @Aid", connection))
-                {
-                    command.Parameters.AddWithValue("Aid", Aid);
-                    using(SqlDataReader myReader = command.ExecuteReader())
-                    {
-                        if (myReader != null)
-                        {
-                            myReader.Read();
-                            author = new Author()
-                            {
-                                Aid = myReader.GetInt32(myReader.GetOrdinal("Aid")),
-                                FirstName = myReader.GetString(myReader.GetOrdinal("FirstName")),
-                                LastName = myReader.GetString(myReader.GetOrdinal("LastName")),
-                                BirthYear = myReader.GetString(myReader.GetOrdinal("Birthyear"))
-                            };
-                        }
-                        else
-                        {
-                            return false;
-                        }
-                    }
-                }
+                author = authorList[0];
             }
-            return true;
+
+            return result;
         }
 
         static public bool GetAuthors(out List<Author> authorList)
+        {
+            authorList = new List<Author>();
+            return GetAuthors(out authorList, new SqlCommand("SELECT * from AUTHOR"));
+        }
+
+        static private bool GetAuthors(out List<Author> authorList, SqlCommand command)
         {
             authorList = new List<Author>();
 
             using (SqlConnection connection = DatabaseConnection.GetConnection())
             {
                 connection.Open();
-                using (SqlCommand command = new SqlCommand("SELECT * from dbo.AUTHOR ORDER BY LastName", connection))
+                using (command)
                 {
+                    command.Connection = connection;
                     using (SqlDataReader myReader = command.ExecuteReader())
                     {
                         if (myReader != null)
@@ -66,9 +57,9 @@ namespace Repository.EntityModels
                                 authorList.Add(new Author()
                                 {
                                     Aid = Convert.ToInt32(myReader["Aid"]),
-                                    FirstName = myReader["FirstName"].ToString(),
-                                    LastName = myReader["LastName"].ToString(),
-                                    BirthYear = myReader["BirthYear"].ToString()
+                                    FirstName = Convert.ToString(myReader["FirstName"]),
+                                    LastName = Convert.ToString(myReader["LastName"]),
+                                    BirthYear = Convert.ToString(myReader["Birthyear"])
                                 });
                             }
                         }
