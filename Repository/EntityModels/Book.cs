@@ -36,7 +36,7 @@ namespace Repository.EntityModels
 
         public static bool GetBooks(out List<Book> bookList)
         {
-            return GetBooks(out bookList, new SqlCommand("SELECT * from BOOK"));
+            return GetBooks(out bookList, new SqlCommand("SELECT * from BOOK ORDER BY Title ASC"));
         }
 
         private static bool GetBooks(out List<Book> bookList, SqlCommand command)

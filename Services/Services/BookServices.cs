@@ -67,14 +67,7 @@ namespace Services.Services
                 List<BookViewModel> bookViewModelList = new List<BookViewModel>();
                 foreach(Book book in bookList)
                 {
-                    bookViewModelList.Add(new BookViewModel()
-                    {
-                        ISBN = book.ISBN,
-                        Title = book.Title,
-                        Pages = book.Pages,
-                        PublicationInfo = book.PublicationInfo,
-                        PublicationYear = book.PublicationYear,
-                    });
+                    bookViewModelList.Add(Mapper.Map<BookViewModel>(book));
                 }
                 return bookViewModelList;
             }

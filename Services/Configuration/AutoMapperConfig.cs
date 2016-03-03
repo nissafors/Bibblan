@@ -13,10 +13,13 @@ namespace Services.Configuration
     {
         public static void Configure()
         {
-            Mapper.CreateMap<Author, AuthorViewModel>();
-            Mapper.CreateMap<Book, BookViewModel>();
-            Mapper.CreateMap<Borrower, BorrowerViewModel>();
-            Mapper.CreateMap<Copy, CopyViewModel>();
+            Mapper.Initialize(x =>
+                {
+                    x.CreateMap<Author, AuthorViewModel>();
+                    x.CreateMap<Book, BookViewModel>();
+                    x.CreateMap<Borrower, BorrowerViewModel>();
+                    x.CreateMap<Copy, CopyViewModel>();
+                });
         }
     }
 }
