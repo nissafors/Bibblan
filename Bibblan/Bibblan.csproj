@@ -225,6 +225,7 @@
     <Content Include="Views\Search\PartialResult.cshtml" />
     <Content Include="Views\Edit\Book.cshtml" />
     <Content Include="Views\Edit\Copy.cshtml" />
+    <Content Include="Views\Account\TestPage.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

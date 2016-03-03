@@ -13,6 +13,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Repository", "Repository\Re
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "BibblanDatabase", "BibblanDatabase\BibblanDatabase.sqlproj", "{CDDF8549-C504-4759-9BF9-A0E888501ACF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestHashing", "TestHashing\TestHashing.csproj", "{9359033A-9420-41DE-B8D0-0FE4D485602C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -41,6 +43,10 @@ Global
 		{CDDF8549-C504-4759-9BF9-A0E888501ACF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CDDF8549-C504-4759-9BF9-A0E888501ACF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CDDF8549-C504-4759-9BF9-A0E888501ACF}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{9359033A-9420-41DE-B8D0-0FE4D485602C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9359033A-9420-41DE-B8D0-0FE4D485602C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9359033A-9420-41DE-B8D0-0FE4D485602C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9359033A-9420-41DE-B8D0-0FE4D485602C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
