@@ -6,27 +6,12 @@ using System.Threading.Tasks;
 using Common.Models;
 using Repository.EntityModels;
 using Repository.Repositories;
+using AutoMapper;
 
 namespace Services.Services
 {
     public class BookServices
     {
-        public static List<BookViewModel> GetBookViewModels(string search)
-        {
-            /* TODO: EVERYTHING
-            List<Book> books;
-            List<BookViewModel> models;
-            if(Book.GetBooks(out books) && books != null)
-            {
-                var model = new BookViewModel();
-                List<Author> authors;
-                Author.GetAuthor(;
-                model.Authors = 
-            }*/
-            return null;
-
-        }
-
         public static EditBookViewModel GetEditBookViewModel(string isbn)
         {
             EditBookViewModel ebvm = new EditBookViewModel();
@@ -96,31 +81,25 @@ namespace Services.Services
             return null;
         }
 
+        /// <summary>
+        /// Gets all details for the specified book and returns it as a BookViewModel
+        /// </summary>
+        /// <param name="isbn">ISBN of the book to get details on</param>
+        /// <returns>A BookViewModel containing all the details</returns>
         public static BookViewModel GetBookDetails(string isbn)
         {
-            Book book = null;
+            
             BookViewModel bookViewModel = null;
-            Classification classification = null;
+            Book book;
+            Classification classification;
             List<BookAuthor> bookAuthorList;
-
-            List<Classification> classList;
-            Classification.GetClassifications(out classList);
 
             if(Book.GetBook(out book, isbn) && 
                 BookAuthor.GetBookAuthors(out bookAuthorList, book.ISBN) &&
                 Classification.GetClassification(out classification, book.SignId))
             {
-                bookViewModel = new BookViewModel()
-                {
-                    ISBN = book.ISBN,
-                    Title = book.Title,
-                    SignId = book.SignId,
-                    Classification = classification.Signum,
-                    Pages = book.Pages,
-                    PublicationInfo = book.PublicationInfo,
-                    PublicationYear = book.PublicationYear
-                };
-
+                bookViewModel = Mapper.Map<BookViewModel>(book);
+                bookViewModel.Classification = classification.Signum;
                 foreach (BookAuthor bookAuthor in bookAuthorList)
                 {
                     Author author;

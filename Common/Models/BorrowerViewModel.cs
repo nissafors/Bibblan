@@ -18,7 +18,7 @@ namespace Common.Models
         [Display(Name = "Adress")]
         public string Adress { get; set; }
         [Display(Name = "Telefonnummer")]
-        public string TelephoneNumber { get; set; }
+        public string TelNo { get; set; }
 
         [Display(Name = "Kategori")]
         public SelectList Category { get; set; }

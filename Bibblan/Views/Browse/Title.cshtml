@@ -16,8 +16,8 @@
 		<tr>
 			<th>ISBN</th>
 			<th>Titel</th>
-			<th>Klassifikation</th>
 			<th>Utgivningsår</th>
+            <th>Antal sidor</th>
 			<th class="col-md-1"></th>
 		</tr>
 	</thead>
@@ -28,8 +28,9 @@
 			{
 				<tr>
 					<td>@item.ISBN</td>
-					<td>@item.Title</td>
+					<td><a href=@("../book/details/" + @item.ISBN)> @item.Title</a></td>
 					<td>@item.PublicationYear</td>
+                    <td>@item.Pages</td>
 					<!--TODO: ADMIN KONTROLL -->
 					<td><a href=@("../edit/book/" + item.ISBN) class="btn btn-xs btn-warning">Redigera bok</a></td>
 				</tr>

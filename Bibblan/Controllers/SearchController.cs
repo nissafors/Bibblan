@@ -72,7 +72,7 @@ namespace Bibblan.Controllers
             else
             {
                 ResultViewModel model = new ResultViewModel();
-                model.Books = BookServices.GetBookViewModels(search);
+                //model.Books = BookServices.GetBookViewModels(search);
                 ViewBag.result = model;
             }
 

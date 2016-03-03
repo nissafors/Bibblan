@@ -11,7 +11,7 @@ namespace Repository.Repositories
     {
         public static SqlConnection GetConnection() 
         {
-            return new SqlConnection(@"Data Source=libinstance.ckprwkebxagl.eu-central-1.rds.amazonaws.com;Initial Catalog=BibblanDatabase;User ID=-USERNAME-;Password=-PASSWORD-");
+            return new SqlConnection(@"Data Source=libinstance.ckprwkebxagl.eu-central-1.rds.amazonaws.com;Initial Catalog=BibblanDatabase;User ID=USERNAME;Password=PASSWORD");
         }
     }
 }
