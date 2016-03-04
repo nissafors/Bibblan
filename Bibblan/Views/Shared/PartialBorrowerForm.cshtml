@@ -1,4 +1,4 @@
-﻿@model Bibblan.Models.BorrowerViewModel
+﻿@model Common.Models.BorrowerViewModel
            
 @{
     string controller = ViewBag.Controller;               
@@ -39,14 +39,14 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                @Html.LabelFor(model => model.TelephoneNumber)
-                @Html.TextBoxFor(model => model.TelephoneNumber, new { @class = "form-control" })
+                @Html.LabelFor(model => model.TelNo)
+                @Html.TextBoxFor(model => model.TelNo, new { @class = "form-control" })
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
                 @Html.LabelFor(model => model.Category)
-                @Html.DropDownListFor(model => model.SelectedCategory, Model.Category, new { @class = "form-control" })
+                @Html.DropDownListFor(model => model.CategoryId, Model.Category, new { @class = "form-control" })
             </div>
         </div>
     </div>

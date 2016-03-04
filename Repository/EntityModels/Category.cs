@@ -60,7 +60,7 @@ namespace Repository.EntityModels
                                     {
                                         CategoryName = Convert.ToString(myReader["Category"]),
                                         CategoryId = Convert.ToInt32(myReader["CategoryId"]),
-                                        PenaltyPerDay = Convert.ToInt32(myReader["PenaltyPerDay"]),
+                                        PenaltyPerDay = Convert.ToInt32(myReader["Penaltyperday"]),
                                         Period = Convert.ToInt32(myReader["Period"])
                                     });
                                 }

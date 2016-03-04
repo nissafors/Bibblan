@@ -74,19 +74,17 @@ namespace Bibblan.Controllers
         [HttpGet]
         public ActionResult Borrower(string PersonId)
         {
-            /*
-            Borrower borrower = BorrowerServices.GetBorrowerById(PersonId);
-
-            if (borrower != null)
+            BorrowerViewModel borrower = null;
+            if (PersonId == null)
             {
-                return View(new BorrowerViewModel(borrower));
+                borrower = BorrowerServices.GetEmptyBorrower();
             }
             else
             {
-                return View(new BorrowerViewModel());
+                borrower = BorrowerServices.GetBorrower(PersonId);
             }
-            */
-            return View();
+
+            return View(borrower);
         }
 
         [HttpPost]

@@ -22,18 +22,14 @@ namespace Common.Models
 
         [Display(Name = "Kategori")]
         public SelectList Category { get; set; }
-        public int SelectedCategory { get; set; }
+        public int CategoryId { get; set; }
+        [Display(Name = "Kategori")]
         public string CategoryName 
         { 
             get 
             { 
-                return Category.Where(p => p.Value == SelectedCategory.ToString()).First().Text; 
+                return Category.Where(p => p.Value == CategoryId.ToString()).First().Text; 
             } 
         }
-
-        //public BorrowerViewModel(Dictionary<int, string> categoryList)
-        //{
-        //    this.Category = new SelectList(categoryList.OrderBy(x => x.Value), "Key", "Value");
-        //}
     }
 }
