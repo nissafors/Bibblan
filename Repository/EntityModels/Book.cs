@@ -91,6 +91,7 @@ namespace Repository.EntityModels
                 using (SqlConnection connection = DatabaseConnection.GetConnection())
                 {
                     connection.Open();
+                    // Update BOOK
                     using (SqlCommand command = new SqlCommand("EXEC UpsertBook @ISBN, @Title, @SignId, @PublicationYear, @PublicationInfo, @Pages"))
                     {
                         command.Connection = connection;
@@ -106,9 +107,34 @@ namespace Repository.EntityModels
                             return false;
                         }
                     }
-                    foreach(int aid in authorIdList)
+
+                    // Get current authorId's coupled with this isbn
+                    var bookAuthors = new List<BookAuthor>();
+                    var deleteAuthorIds = new List<int>();
+                    var addAuthorIds = new List<int>();
+                    if (BookAuthor.GetBookAuthors(out bookAuthors, book.ISBN))
+                    {
+                        List<int> dbIdList = bookAuthors.Select(ba => ba.Aid).ToList();
+                        addAuthorIds = (from id in authorIdList where !dbIdList.Contains(id) select id).ToList();
+                        deleteAuthorIds = (from id in dbIdList where !authorIdList.Contains(id) select id).ToList();
+                    }
+
+                    // Add new authors
+                    foreach(int aid in addAuthorIds)
                     {
                         using (SqlCommand command = new SqlCommand("INSERT INTO BOOK_AUTHOR(ISBN, Aid) VALUES(@ISBN, @Aid)"))
+                        {
+                            command.Connection = connection;
+                            command.Parameters.AddWithValue("@ISBN", book.ISBN);
+                            command.Parameters.AddWithValue("@Aid", aid);
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                    
+                    // Delete "unused" author ids
+                    foreach (int aid in deleteAuthorIds)
+                    {
+                        using (SqlCommand command = new SqlCommand("DELETE FROM BOOK_AUTHOR WHERE ISBN = @ISBN AND Aid = @Aid"))
                         {
                             command.Connection = connection;
                             command.Parameters.AddWithValue("@ISBN", book.ISBN);

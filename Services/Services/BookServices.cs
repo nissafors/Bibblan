@@ -1,17 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 using Common.Models;
 using Repository.EntityModels;
-using Repository.Repositories;
 using AutoMapper;
 
 namespace Services.Services
 {
     public class BookServices
     {
+        /// <summary>
+        /// Get an EditBookViewModel object from given isbn.
+        /// If no book can be found, return an empty EditBookViewModel.
+        /// </summary>
+        /// <remarks>
+        /// Does not fill out the Copies property!
+        /// </remarks>
+        /// <param name="isbn">ISBN as a string.</param>
+        /// <returns>EditBookViewModel</returns>
         public static EditBookViewModel GetEditBookViewModel(string isbn)
         {
             EditBookViewModel ebvm = new EditBookViewModel();
@@ -22,37 +26,14 @@ namespace Services.Services
             {
                 var bookAuthors = new List<BookAuthor>();
 
+                ebvm = Mapper.Map<EditBookViewModel>(book);
+
                 if (BookAuthor.GetBookAuthors(out bookAuthors, book.ISBN))
                 {
                     foreach(BookAuthor ba in bookAuthors)
                         authorIds.Add(ba.Aid);
                 }
 
-                List<Copy> copies;
-                if (Copy.GetCopies(out copies, isbn))
-                {
-                    var cvms = ebvm.Copies;
-                    foreach (Copy copy in copies)
-                    {
-                        cvms.Add(new CopyViewModel()
-                        {
-                            BarCode = copy.Barcode,
-                            Location = copy.Location,
-                            StatusId = copy.StatusId,
-                            ISBN = copy.ISBN,
-                            Library = copy.Library
-                        });
-                    }
-
-                    ebvm.Copies = cvms;
-                }
-
-                ebvm.ISBN = book.ISBN;
-                ebvm.Title = book.Title;
-                ebvm.ClassificationId = book.SignId;
-                ebvm.PublicationYear = book.PublicationYear;
-                ebvm.PublicationInfo = book.PublicationInfo;
-                ebvm.Pages = book.Pages;
                 ebvm.AuthorIds = authorIds;
             }
 
@@ -106,10 +87,10 @@ namespace Services.Services
             return bookViewModel;
         }
 
-        public static bool Upsert(EditBookViewModel editBookModel)
+        public static bool Upsert(EditBookViewModel editBookViewModel)
         {
-            Book book = Mapper.Map<Book>(editBookModel);
-            return Book.Upsert(book, editBookModel.AuthorIds);
+            Book book = Mapper.Map<Book>(editBookViewModel);
+            return Book.Upsert(book, editBookViewModel.AuthorIds);
         }
 
         //public 

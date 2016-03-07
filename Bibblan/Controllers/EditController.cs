@@ -24,12 +24,9 @@ namespace Bibblan.Controllers
         public ActionResult Book(string isbn)
         {
             isbn = "0078815037";
-            EditBookViewModel bookInfo = isbn == null ? new EditBookViewModel() : BookServices.GetEditBookViewModel(isbn);
 
-            var classDic = ClassificationServices.GetClassificationsAsDictionary();
-            var authorDic = AuthorServices.GetAuthorsAsDictionary();
-            bookInfo.Classifications = new SelectList(classDic.OrderBy(x => x.Value), "Key", "Value");
-            bookInfo.Authors = new SelectList(authorDic.OrderBy(x => x.Value), "Key", "Value");
+            EditBookViewModel bookInfo = BookServices.GetEditBookViewModel(isbn);
+            setBookViewLists(bookInfo);
 
             return View(bookInfo);
         }
@@ -37,10 +34,21 @@ namespace Bibblan.Controllers
         [HttpPost]
         public ActionResult Book(EditBookViewModel bookInfo)
         {
-            // TODO:
-            // Write bookInfo to db via service
+            BookServices.Upsert(bookInfo);
+            setBookViewLists(bookInfo);
 
             return View(bookInfo);
+        }
+
+        // Helper for the Book methods
+        private void setBookViewLists(EditBookViewModel ebvm)
+        {
+            ebvm.Copies = CopyServices.getCopyViewModels(ebvm.ISBN);
+
+            var classDic = ClassificationServices.GetClassificationsAsDictionary();
+            var authorDic = AuthorServices.GetAuthorsAsDictionary();
+            ebvm.Classifications = new SelectList(classDic.OrderBy(x => x.Value), "Key", "Value");
+            ebvm.Authors = new SelectList(authorDic.OrderBy(x => x.Value), "Key", "Value");
         }
 
         [HttpGet]
