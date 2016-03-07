@@ -23,8 +23,6 @@ namespace Bibblan.Controllers
         [HttpGet]
         public ActionResult Book(string isbn)
         {
-            isbn = "0078815037";
-
             EditBookViewModel bookInfo = BookServices.GetEditBookViewModel(isbn);
             setBookViewLists(bookInfo);
 
@@ -38,7 +36,6 @@ namespace Bibblan.Controllers
             setBookViewLists(bookInfo);
 
             return View(bookInfo);
-        }
         }
 
         // Helper for the Book methods
