@@ -13,12 +13,14 @@ namespace Services.Configuration
     {
         public static void Configure()
         {
-            Mapper.Initialize(x =>
+            Mapper.Initialize(mapping =>
                 {
-                    x.CreateMap<Author, AuthorViewModel>();
-                    x.CreateMap<Book, BookViewModel>();
-                    x.CreateMap<Borrower, BorrowerViewModel>();
-                    x.CreateMap<Copy, CopyViewModel>();
+                    mapping.CreateMap<Author, AuthorViewModel>();
+                    mapping.CreateMap<Book, BookViewModel>();
+                    mapping.CreateMap<Borrower, BorrowerViewModel>();
+                    mapping.CreateMap<Copy, CopyViewModel>();
+                    mapping.CreateMap<EditBookViewModel, Book>()
+                        .ForMember(c => c.SignId, op => op.MapFrom(v => v.ClassificationId));
                 });
         }
     }

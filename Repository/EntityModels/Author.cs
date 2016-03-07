@@ -79,5 +79,35 @@ namespace Repository.EntityModels
 
             return true;
         }
+
+        static public bool Upsert(Author author)
+        {
+            try
+            {
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand("EXEC UpsertAuthor @Aid, @FirstName, @LastName, @BirthYear"))
+                    {
+                        command.Connection = connection;
+                        command.Parameters.AddWithValue("@Aid", author.Aid);
+                        command.Parameters.AddWithValue("@FirstName", author.FirstName);
+                        command.Parameters.AddWithValue("@LastName", author.LastName);
+                        command.Parameters.AddWithValue("@BirthYear", author.BirthYear);
+
+                        if(command.ExecuteNonQuery() != 1)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            catch(Exception)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

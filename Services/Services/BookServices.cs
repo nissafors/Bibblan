@@ -106,6 +106,12 @@ namespace Services.Services
             return bookViewModel;
         }
 
+        public static bool Upsert(EditBookViewModel editBookModel)
+        {
+            Book book = Mapper.Map<Book>(editBookModel);
+            return Book.Upsert(book, editBookModel.AuthorIds);
+        }
+
         //public 
 
         //public Book GetBookFromCopy(Copy copy)

@@ -83,5 +83,47 @@ namespace Repository.EntityModels
 
             return true;
         }
+
+        static public bool Upsert(Book book, List<int> authorIdList)
+        {
+            try
+            {
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand("EXEC UpsertBook @ISBN, @Title, @SignId, @PublicationYear, @PublicationInfo, @Pages"))
+                    {
+                        command.Connection = connection;
+                        command.Parameters.AddWithValue("@ISBN", book.ISBN);
+                        command.Parameters.AddWithValue("@Title", book.Title);
+                        command.Parameters.AddWithValue("@SignId", book.SignId);
+                        command.Parameters.AddWithValue("@PublicationYear", book.PublicationYear);
+                        command.Parameters.AddWithValue("@PublicationInfo", book.PublicationInfo);
+                        command.Parameters.AddWithValue("@Pages", book.Pages);
+                 
+                        if (command.ExecuteNonQuery() != 1)
+                        {
+                            return false;
+                        }
+                    }
+                    foreach(int aid in authorIdList)
+                    {
+                        using (SqlCommand command = new SqlCommand("INSERT INTO BOOK_AUTHOR(ISBN, Aid) VALUES(@ISBN, @Aid)"))
+                        {
+                            command.Connection = connection;
+                            command.Parameters.AddWithValue("@ISBN", book.ISBN);
+                            command.Parameters.AddWithValue("@Aid", aid);
+                            command.ExecuteNonQuery();
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }
