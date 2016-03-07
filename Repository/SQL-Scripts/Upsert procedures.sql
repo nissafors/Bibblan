@@ -11,8 +11,9 @@ AS
 	WHERE ISBN = @ISBN
 	IF @@ROWCOUNT = 0
 		INSERT INTO BOOK(ISBN, Title, SignId, PublicationYear, Pages)
-		VALUES(@ISBN, @Title, @SignId, @PublicationYear, @Pages)
+		VALUES(@ISBN, @Title, @SignId, @PublicationYear, @Pages);
 GO
+		
 /*----------------------*/
 	
 CREATE PROCEDURE UpsertCopy
@@ -27,8 +28,9 @@ AS
 	WHERE Barcode = @Barcode
 	IF @@ROWCOUNT = 0
 		INSERT INTO COPY(Barcode, Location, StatusId, ISBN, Library)
-		VALUES(@Barcode, @Location, @StatusId, @ISBN, @Library)
-GO		
+		VALUES(@Barcode, @Location, @StatusId, @ISBN, @Library);
+GO
+		
 /*----------------------*/
 	
 CREATE PROCEDURE UpsertAuthor
@@ -42,9 +44,9 @@ AS
 	WHERE Aid = @Aid
 	IF @@ROWCOUNT = 0
 		INSERT INTO AUTHOR(Aid, FirstName, LastName, BirthYear)
-		VALUES(@Aid, @FirstName, @LastName, @BirthYear)
+		VALUES(@Aid, @FirstName, @LastName, @BirthYear);
 GO
-
+		
 /*----------------------*/
 	
 CREATE PROCEDURE UpsertBorrower
@@ -60,5 +62,6 @@ AS
 	WHERE PersonId = @PersonId
 	IF @@ROWCOUNT = 0
 		INSERT INTO BORROWER(PersonId, FirstName, LastName, Address, TelNo, CategoryId)
-		VALUES(@PersonId, @FirstName, @LastName, @Address, @TelNo, @CategoryId)
+		VALUES(@PersonId, @FirstName, @LastName, @Address, @TelNo, @CategoryId);
 GO
+		
