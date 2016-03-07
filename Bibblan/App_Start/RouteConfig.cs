@@ -38,6 +38,12 @@ namespace Bibblan
             );
 
             routes.MapRoute(
+                    name: "EditBook",
+                    url: "Edit/Book/{isbn}",
+                    defaults: new { controller = "Edit", action = "Book" }
+            );
+
+            routes.MapRoute(
                 name: "Default",
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }

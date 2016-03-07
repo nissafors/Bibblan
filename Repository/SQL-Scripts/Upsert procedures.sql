@@ -7,11 +7,11 @@ CREATE PROCEDURE UpsertBook
 	@Pages smallint	
 AS
 	UPDATE BOOK
-	SET Title = @Title, SignId = @SignId, PublicationYear = @PublicationYear, Pages = @Pages
+	SET Title = @Title, SignId = @SignId, PublicationYear = @PublicationYear, PublicationInfo = @PublicationInfo,Pages = @Pages
 	WHERE ISBN = @ISBN
 	IF @@ROWCOUNT = 0
-		INSERT INTO BOOK(ISBN, Title, SignId, PublicationYear, Pages)
-		VALUES(@ISBN, @Title, @SignId, @PublicationYear, @Pages);
+		INSERT INTO BOOK(ISBN, Title, SignId, PublicationYear, PublicationInfo, Pages)
+		VALUES(@ISBN, @Title, @SignId, @PublicationYear, @PublicationInfo, @Pages);
 GO
 		
 /*----------------------*/
