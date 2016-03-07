@@ -22,7 +22,8 @@
             <div class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li>@Html.ActionLink("Sök bok", "Book", "Search")</li>
-                    <li>@Html.ActionLink("Sök författare", "Author", "Search")</li>
+                    <li>@Html.ActionLink("Lista böcker", "Title", "Browse")</li>
+                    <li>@Html.ActionLink("Lista författare", "Author", "Browse")</li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <li>@Html.ActionLink("Logga in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
