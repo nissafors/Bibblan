@@ -37,10 +37,18 @@ namespace Bibblan.Controllers
         [HttpPost]
         public ActionResult Book(EditBookViewModel bookInfo)
         {
-            // TODO:
-            // Write bookInfo to db via service
-
-            return View(bookInfo);
+            if (BookServices.Upsert(bookInfo))
+            {
+                return RedirectToAction("Title", "Browse");
+            }
+            else
+            {
+                var classDic = ClassificationServices.GetClassificationsAsDictionary();
+                var authorDic = AuthorServices.GetAuthorsAsDictionary();
+                bookInfo.Classifications = new SelectList(classDic.OrderBy(x => x.Value), "Key", "Value");
+                bookInfo.Authors = new SelectList(authorDic.OrderBy(x => x.Value), "Key", "Value");
+                return View(bookInfo);
+            }
         }
 
         [HttpGet]
