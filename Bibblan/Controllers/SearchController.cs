@@ -71,8 +71,8 @@ namespace Bibblan.Controllers
                 ViewBag.result = null;
             else
             {
-                ResultViewModel model = new ResultViewModel();
-                //model.Books = BookServices.GetBookViewModels(search);
+                List<BookViewModel> model;
+                model = BookServices.SearchBooks(search);
                 ViewBag.result = model;
             }
 

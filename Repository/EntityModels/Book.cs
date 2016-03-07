@@ -151,5 +151,85 @@ namespace Repository.EntityModels
 
             return true;
         }
+
+        static public bool SearchBook(out List<Book> bookList, out List<Tuple<string, string>> isbnAuthorList, string search)
+        {
+            string modifiedSearch = "%";
+            foreach (char character in search)
+            {
+                if (char.IsWhiteSpace(character))
+                {
+                    modifiedSearch += "%";
+                }
+                else
+                {
+                    modifiedSearch += character;
+                }
+            }
+            modifiedSearch += "%";
+
+            bookList = new List<Book>();
+            isbnAuthorList = new List<Tuple<string, string>>();
+
+            try
+            {
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
+                {
+                    connection.Open();
+                    string commandString = "SELECT " +
+                                           "BOOK.ISBN AS ISBN, " +
+                                           "BOOK.Title AS Title, " +
+                                           "Book.Pages AS Pages, " +
+                                           "BOOK.PublicationInfo AS PublicationInfo, " +
+                                           "BOOK.PublicationYear AS PublicationYear, " +
+                                           "BOOK.SignId AS SignId, " +
+                                           "AUTHOR.LastName + ' ' + AUTHOR.FirstName AS Name " +
+                                           "FROM BOOK_AUTHOR " +
+                                           "INNER JOIN BOOK ON BOOK_AUTHOR.ISBN = BOOK.ISBN " +
+                                           "INNER JOIN AUTHOR ON BOOK_AUTHOR.AID = AUTHOR.AID " +
+                                           "WHERE Title + FirstName + LastName LIKE @ModifiedSearch OR " +
+                                           "BOOK.ISBN = @Search";
+                    using (SqlCommand command = new SqlCommand(commandString, connection))
+                    {
+                        command.Parameters.AddWithValue("@Search", search);
+                        command.Parameters.AddWithValue("@ModifiedSearch", modifiedSearch);
+
+                        using (SqlDataReader myReader = command.ExecuteReader())
+                        {
+                            if (myReader != null)
+                            {
+                                while (myReader.Read())
+                                {
+                                    string ISBN = Convert.ToString(myReader["ISBN"]);
+                                    if(!bookList.Exists(x => x.ISBN == ISBN))
+                                    {
+                                        bookList.Add(new Book()
+                                        {
+                                            ISBN = ISBN,
+                                            Title = Convert.ToString(myReader["Title"]),
+                                            PublicationInfo = Convert.ToString(myReader["PublicationInfo"]),
+                                            PublicationYear = Convert.ToString(myReader["PublicationYear"]),
+                                            Pages = Convert.ToInt32(myReader["Pages"]),
+                                            SignId = Convert.ToInt32(myReader["SignId"])
+                                        });
+                                    }
+                                    isbnAuthorList.Add(new Tuple<string,string>(Convert.ToString(myReader["Name"]), ISBN));
+                                }
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }

@@ -39,6 +39,7 @@ namespace Bibblan.Controllers
 
             return View(bookInfo);
         }
+        }
 
         // Helper for the Book methods
         private void setBookViewLists(EditBookViewModel ebvm)
