@@ -157,11 +157,11 @@ namespace Repository.EntityModels
                                            "BOOK.PublicationInfo AS PublicationInfo, " +
                                            "BOOK.PublicationYear AS PublicationYear, " +
                                            "BOOK.SignId AS SignId, " +
-                                           "AUTHOR.LastName + ' ' + AUTHOR.FirstName AS Name " +
+                                           "COALESCE(AUTHOR.LastName, '') + ' ' + COALESCE(AUTHOR.FirstName, '') AS Name " +
                                            "FROM BOOK_AUTHOR " +
                                            "INNER JOIN BOOK ON BOOK_AUTHOR.ISBN = BOOK.ISBN " +
                                            "INNER JOIN AUTHOR ON BOOK_AUTHOR.AID = AUTHOR.AID " +
-                                           "WHERE Title + FirstName + LastName LIKE @ModifiedSearch OR " +
+                                           "WHERE Title + COALESCE(FirstName, '') + COALESCE(LastName, '') LIKE @ModifiedSearch OR " +
                                            "BOOK.ISBN = @Search";
                     using (SqlCommand command = new SqlCommand(commandString, connection))
                     {

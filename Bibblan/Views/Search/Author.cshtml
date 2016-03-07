@@ -1,52 +1,63 @@
-﻿@model Bibblan.Models.SearchAuthorViewModel
+﻿@model Common.Models.SearchAuthorViewModel
 @{
-    ViewBag.Title = "Author";
+    ViewBag.Title = "Författare";
 }
 
 <h1>Sök efter författare</h1>
 
 @using (Html.BeginForm("Author", "Search", FormMethod.Get))
 {
-
     <div class="row">
-        <div class="col-sm-4">
-            <div class="form-group">
-                @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control", @style = "margin: 0px", @placeholder = "Förnamn" })
+        <div class="form-group">
+            <div class="col-md-6">
+                @Html.TextBox("search", "", new
+               {
+                   @class = "form-control",
+                   @id = "input-search",
+                   @placeholder = "Författare / Titel"
+               })
             </div>
-        </div>
-        <div class="col-sm-4">
-            <div class="form-group">
-                @Html.TextBoxFor(model => model.LastName, new { @class = "form-control", @style = "margin: 0px", @placeholder = "Efternamn" })
+            <div class="col-md-6">
+                <input type="submit" class="btn btn-block btn-primary" value="Sök" />
             </div>
-        </div>
-        <div class="col-sm-4">
-            <input type="submit" class="btn btn-primary" value="Sök" />
         </div>
     </div>
 }
-@if(ViewBag.result != null)
+
+@if (ViewBag.result != null)
 {
-    @Html.Partial("PartialResult", ViewBag.result as Bibblan.Models.ResultViewModel);
-/*
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>Titel</th>
-            <th>Författare</th>
-        </tr>
-    </thead>
-    <tbody>
-        @if(@ViewBag.books != null)
-        {
-            foreach (var item in @ViewBag.books)
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Förnamn</th>
+                <th>Efternamn</th>
+                <th></th>
+                <th>Utgivningsår</th>
+                <th class="col-md-1"></th>
+                <th>Författare</th>
+                <th class="col-md-1"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in ViewBag.result)
             {
                 <tr>
-                    <td>@item.Book.Title @Html.ActionLink("Redigera", "EDIT")</td>
-                    <td>@item.Author.LastName, @item.Author.FirstName @Html.ActionLink("Redigera", "EDIT")</td>
+                    <td>@item.FirstName</td>
+                    <td><a href=@("../Book/Details/" + item.ISBN)>@item.Title</a></td>
+                    <td>@item.Last</td>
+                    <td>@item.PublicationYear</td>
+                    <td class="col-md-1"></td>
+                    <td>
+                        @foreach (var author in item.Authors)
+                        {
+                            @author.Value <br />
+                        }
+                    </td>
+
+                    <!--TODO: ADMIN KONTROLL -->
+                    <td><a href=@("../edit/book/" + item.ISBN) class="btn btn-xs btn-warning">Redigera bok</a></td>
                 </tr>
             }
-        }
-    </tbody>
-</table>
-*/
+        </tbody>
+    </table>
 }
