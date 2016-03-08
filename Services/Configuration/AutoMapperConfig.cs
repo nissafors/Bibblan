@@ -24,6 +24,7 @@ namespace Services.Configuration
                         .ForMember(c => c.ClassificationId, op => op.MapFrom(v => v.SignId));
                     mapping.CreateMap<EditBookViewModel, Book>()
                         .ForMember(c => c.SignId, op => op.MapFrom(v => v.ClassificationId));
+                    mapping.CreateMap<Account, AccountViewModel>();
                 });
         }
     }
