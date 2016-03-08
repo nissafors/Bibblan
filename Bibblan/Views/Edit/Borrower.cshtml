@@ -92,10 +92,15 @@
                     <td>@borrow.Barcode</td>
                     <td>@borrow.BorrowDate.ToShortDateString()</td>
                     <td>@borrow.ToBeReturnedDate.ToShortDateString()</td>
-                    @if (borrow.ReturnDate == null)
+                    @if (borrow.ReturnDate.Year == 1)
                     {
                     @* TODO: Renew *@
-                        <td>Förnya</td>
+                        <td>@Html.ActionLink("Förnya", "Renew", new { Barcode = borrow.Barcode,
+                                                                      PersonId = borrow.PersonId,
+                                                                      BorrowDate = borrow.BorrowDate,
+                                                                      ToBeReturnedDate = borrow.ToBeReturnedDate,
+                                                                      ReturnDate = borrow.ReturnDate
+                       })</td>
                     }
                     else
                     {
