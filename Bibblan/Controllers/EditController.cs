@@ -96,6 +96,12 @@ namespace Bibblan.Controllers
             return View(borrower);
         }
 
+        public ActionResult Renew(BorrowViewModel borrowViewModel)
+        {
+            BorrowServices.Renew(borrowViewModel);
+            return Redirect(Request.UrlReferrer.ToString());
+        }
+
         public ActionResult Delete(string Type, string Id)
         {
             switch(Type)

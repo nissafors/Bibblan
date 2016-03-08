@@ -9,7 +9,7 @@ using AutoMapper;
 
 namespace Services.Services
 {
-    class BorrowServices
+    public class BorrowServices
     {
         public static bool Renew(BorrowViewModel borrow)
         {
