@@ -63,8 +63,21 @@
         @Html.LabelFor(model => model.AuthorIds)
         @Html.ListBoxFor(model => model.AuthorIds, Model.Authors, new { @class = "form-control" })
     </div>
-
-    <input type="submit" class="btn btn-lg btn-primary btn-block" value="Spara" />
+    <div class="row">
+        <div class="col-md-6">
+            <input type="submit" class="btn btn-lg btn-primary btn-block" value="Spara" />
+        </div>
+        <div class="col-md-6">
+        @if (Model.ISBN != null)
+        {
+            @Html.ActionLink("Ta bort", "Delete", new { Type = "Book", Id = Model.ISBN }, new { @class = "btn btn-lg btn-danger btn-block" })
+        }
+        else
+        {
+            @Html.ActionLink("Ta bort", "Delete", new { Type = "Book", Id = Model.ISBN }, new { @class = "btn btn-lg btn-danger btn-block disabled" })
+        }
+        </div>
+    </div>
     
     if (Model.ISBN != null)
     {
@@ -85,11 +98,11 @@
                     <td>@copy.BarCode</td>
                     <td>@copy.Location</td>
                     <td>@copy.Library</td>
-                    <td>@Html.ActionLink("Redigera", "Copy", "Edit", new { Id = copy.BarCode }, new { @class = "btn btn-xs btn-warning" })</td>
+                    <td>@Html.ActionLink("Redigera", "Copy", new { isbn = Model.ISBN, barcode = copy.BarCode }, new { @class = "btn btn-xs btn-warning" })</td>
                 </tr>
             }
             </tbody>
         </table>
-        <a href="copy" class="btn btn-success">Lägg till exemplar</a>
+        @Html.ActionLink("Lägg till exemplar", "Copy", new { isbn = Model.ISBN }, new { @class = "btn btn-success" })
     }
 }
