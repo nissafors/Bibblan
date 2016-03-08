@@ -63,7 +63,7 @@ namespace Bibblan.Controllers
         {
             Session.Clear();
             Session.Abandon();
-            string returnUrl = Request.ServerVariables["http_referer"];
+            string returnUrl = Request.UrlReferrer.ToString();
             return Redirect(returnUrl);
         }
 
