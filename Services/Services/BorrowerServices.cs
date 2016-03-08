@@ -86,9 +86,9 @@ namespace Services.Services
             return Borrower.Upsert(Mapper.Map<Borrower>(model));
         }
         
-        static public bool Delete(BorrowerViewModel model)
+        static public bool Delete(string PersonId)
         {
-            return false;
+            return Borrower.Delete(PersonId);
         }
     }
 }

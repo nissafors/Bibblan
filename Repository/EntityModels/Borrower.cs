@@ -126,5 +126,38 @@ namespace Repository.EntityModels
             }
             return true;
         }
+
+        public static bool Delete(string PersonId)
+        {
+            try
+            {
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand("DELETE FROM BORROW WHERE PersonId = @PersonId", connection))
+                    {
+                        command.Parameters.AddWithValue("@PersonId", PersonId);
+
+                        command.ExecuteNonQuery();
+                    }
+
+                    using (SqlCommand command = new SqlCommand("DELETE FROM BORROWER WHERE PersonId = @PersonId", connection))
+                    {
+                        command.Parameters.AddWithValue("@PersonId", PersonId);
+
+                        if (command.ExecuteNonQuery() != 1)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
+        }
     }
 }
