@@ -1,4 +1,4 @@
-﻿@model Bibblan.Models.EditCopyViewModel
+﻿@model Common.Models.CopyViewModel
 
 @{
     ViewBag.Title = "View";
@@ -6,6 +6,7 @@
 
 <div class="page-header">
     <h1>Redigera Exemplar</h1>
+    <h3>@Model.Title</h3>
 </div>
 
 @using (Html.BeginForm("Copy", "Edit"))
@@ -54,7 +55,7 @@
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <a href="#" class="btn btn-lg btn-block btn-danger">Ta Bort</a>
+                @Html.ActionLink("Ta Bort", "Delete", new { Type = "Copy", Id = Model.BarCode }, new { @class = "btn btn-lg btn-block btn-danger" })
             </div>
         </div>
     </div>

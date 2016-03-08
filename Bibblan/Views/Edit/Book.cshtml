@@ -79,15 +79,15 @@
                 </tr>
             </thead>
             <tbody>
+            @foreach (var copy in Model.Copies)
+            {
                 <tr>
-                    @foreach (var copy in Model.Copies)
-                    {
-                        <td>@copy.BarCode</td>
-                        <td>@copy.Location</td>
-                        <td>@copy.Library</td>
-                        <td><a href="copy/@copy.BarCode" class="btn btn-xs btn-warning">Redigera</a></td>
-                    }
+                    <td>@copy.BarCode</td>
+                    <td>@copy.Location</td>
+                    <td>@copy.Library</td>
+                    <td>@Html.ActionLink("Redigera", "Copy", "Edit", new { Id = copy.BarCode }, new { @class = "btn btn-xs btn-warning" })</td>
                 </tr>
+            }
             </tbody>
         </table>
         <a href="copy" class="btn btn-success">Lägg till exemplar</a>

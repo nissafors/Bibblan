@@ -49,7 +49,6 @@
     <Compile Include="Models\BrowserAuthorViewModel.cs" />
     <Compile Include="Models\CopyViewModel.cs" />
     <Compile Include="Models\EditBookViewModel.cs" />
-    <Compile Include="Models\EditCopyViewModel.cs" />
     <Compile Include="Models\ResultViewModel.cs" />
     <Compile Include="Models\SearchViewModels.cs" />
     <Compile Include="Models\ViewHelper.cs" />

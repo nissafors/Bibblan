@@ -23,6 +23,48 @@ namespace Repository.EntityModels
             return getCopies(out copies, command);
         }
 
+        public static bool GetCopy(out Copy copy, string barCode)
+        {
+            SqlCommand command = new SqlCommand("SELECT * from COPY WHERE Barcode = @Barcode");
+            command.Parameters.AddWithValue("@Barcode", barCode);
+            var copies = new List<Copy>();
+            var result = getCopies(out copies, command);
+            copy = result ? copies[0] : null;
+            return result;
+        }
+
+        static public bool Upsert(Copy copy)
+        {
+            try
+            {
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand("EXEC UpsertCopy @Barcode, @Location, @StatusId, @ISBN, @Library"))
+                    {
+                        command.Connection = connection;
+                        command.Parameters.AddWithValue("@Barcode", copy.Barcode);
+                        command.Parameters.AddWithValue("@Location", copy.Location);
+                        command.Parameters.AddWithValue("@StatusId", copy.StatusId);
+                        command.Parameters.AddWithValue("@ISBN", copy.ISBN);
+                        command.Parameters.AddWithValue("@Library", copy.Library);
+
+                        if (command.ExecuteNonQuery() != 1)
+                        {
+                            return false;
+                        }
+                    }
+
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         private static bool getCopies(out List<Copy> copies, SqlCommand command)
         {
             copies = new List<Copy>();

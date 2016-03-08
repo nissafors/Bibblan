@@ -21,7 +21,7 @@ namespace Repository.EntityModels
 
             List<Status> statusList;
 
-            bool result = GetStatus(out statusList, command);
+            bool result = GetStatuses(out statusList, command);
 
             if (statusList.Count > 0)
             {
@@ -31,12 +31,12 @@ namespace Repository.EntityModels
             return result;
         }
 
-        public static bool GetStatus(out List<Status> statusList)
+        public static bool GetStatuses(out List<Status> statusList)
         {
-            return GetStatus(out statusList, new SqlCommand("SELECT * FROM STATUS"));
+            return GetStatuses(out statusList, new SqlCommand("SELECT * FROM STATUS"));
         }
 
-        private static bool GetStatus(out List<Status> statusList, SqlCommand command)
+        private static bool GetStatuses(out List<Status> statusList, SqlCommand command)
         {
             statusList = new List<Status>();
 
