@@ -38,7 +38,14 @@ namespace Bibblan.Controllers
             return View(bookInfo);
         }
 
-        // Helper for the Book methods
+        [HttpPost]
+        public ActionResult Copy(CopyViewModel copyInfo)
+        {
+            CopyServices.Upsert(copyInfo);
+            return RedirectToAction("Book", new { copyInfo.ISBN });
+        }
+
+        // Helper for the Book ActionResult's.
         private void setBookViewLists(EditBookViewModel ebvm)
         {
             ebvm.Copies = CopyServices.getCopyViewModels(ebvm.ISBN);
@@ -52,29 +59,13 @@ namespace Bibblan.Controllers
         [HttpGet]
         public ActionResult Copy(string barCode)
         {
-            /*
-            Copy copy = CopyServices.GetCopy(barCode);
-            EditCopyViewModel copyInfo;
+            var cvm = CopyServices.GetCopyViewModel(barCode);
 
-            if (copy != null)
-                copyInfo = new EditCopyViewModel(copy);
-            else
-                copyInfo = new EditCopyViewModel();
-            */
-            return View();
-        }
+            var statusDic = StatusServices.GetStatusesAsDictionary();
+            cvm.Statuses = new SelectList(statusDic.OrderBy(x => x.Value), "Key", "Value");
+            cvm.Title = BookServices.GetBookDetails(cvm.ISBN).Title;
 
-        [HttpPost]
-        public ActionResult Copy(EditCopyViewModel copyInfo)
-        {/*
-            Copy copy = copyInfo.ToCopy();
-            // TODO:
-            // Write copyInfo to db
-            */
-            /*
-            return RedirectToAction("Book", copy.Book);
-            */
-            return View();
+            return View(cvm);
         }
 
         [HttpGet]
@@ -96,46 +87,39 @@ namespace Bibblan.Controllers
         [HttpPost]
         public ActionResult Borrower(BorrowerViewModel borrower)
         {
-            /*
-            if(BorrowerServices.AddBorrower(borrower.ToBorrower()))
+            if(BorrowerServices.Upsert(borrower))
             {
-                return RedirectToAction("Borrower", "Search");
+                // TODO: Handle succesfull or unsuccesfull 
+                // TODO: Set history so back button works
             }
-            else
-            {
-                return View(borrower);
-            }
-            */
-            return View();
+            borrower = BorrowerServices.GetBorrower(borrower.PersonId);
+            return View(borrower);
         }
 
         public ActionResult Delete(string Type, string Id)
         {
-            /*
             switch(Type)
             {
                 case "Borrower":
-                    BorrowerServices.DeleteBorrower(Id);
+                    BorrowerServices.Delete(Id);
                     return RedirectToAction("Borrower", "Search");
 
                 case "Author":
-                    AuthorServices.DeleteAuthor(Id);
+                    //AuthorServices.DeleteAuthor(Id);
                     return RedirectToAction("Author", "Search");
 
                 case "Book":
-                    BookServices.DeleteBook(Id);
+                    //BookServices.DeleteBook(Id);
                     return RedirectToAction("Book", "Search");
 
                 case "Copy":
-                    CopyServices.DeleteCopy(Id);
-                    return RedirectToAction("Book", "Edit", CopyServices.GetCopy(Id).Book);
+                    //CopyServices.DeleteCopy(Id);
+                    //return RedirectToAction("Book", "Edit", CopyServices.GetCopy(Id).Book);
 
                 default:
                     return RedirectToAction("Index", "Home");
 
             }
-            */
-            return View();
         }
 
         public ActionResult Author(int id)

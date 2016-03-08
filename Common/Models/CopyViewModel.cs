@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace Common.Models
 {
@@ -13,5 +14,8 @@ namespace Common.Models
         public int StatusId { get; set; }
         public string ISBN { get; set; }
         public string Library { get; set; }
+
+        public SelectList Statuses { get; set; }
+        public string Title { get; set; }
     }
 }

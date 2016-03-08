@@ -19,6 +19,8 @@ namespace Common.Models
         public string Adress { get; set; }
         [Display(Name = "Telefonnummer")]
         public string TelNo { get; set; }
+        [Display(Name = "Lån")]
+        public List<BorrowViewModel> Borrows { get; set; }
 
         [Display(Name = "Kategori")]
         public SelectList Category { get; set; }
@@ -30,6 +32,11 @@ namespace Common.Models
             { 
                 return Category.Where(p => p.Value == CategoryId.ToString()).First().Text; 
             } 
+        }
+
+        public BorrowerViewModel()
+        {
+            Borrows = new List<BorrowViewModel>();
         }
     }
 }

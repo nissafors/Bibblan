@@ -30,30 +30,28 @@ namespace Services.Services
 
             return cvms;
         }
-        /*
-        public static Copy GetCopy(string barcode)
-        {
-            Copy returnCopy = null;
 
-            foreach(Copy copy in Mockup.Mockup.copies)
+        public static CopyViewModel GetCopyViewModel(string barCode)
+        {
+            var cvm = new CopyViewModel();
+            var copy = new Copy();
+            if (Copy.GetCopy(out copy, barCode))
             {
-                if(copy.BarCode == barcode)
-                {
-                    returnCopy = copy;
-                    break;
-                }
+                cvm = Mapper.Map<CopyViewModel>(copy);
             }
 
-            if (returnCopy != null)
-                returnCopy.Book = Mockup.Mockup.books[2];
+            return cvm;
+        }
 
-            return returnCopy;
+        public static bool Upsert(CopyViewModel copyViewModel)
+        {
+            Copy copy = Mapper.Map<Copy>(copyViewModel);
+            return Copy.Upsert(copy);
         }
 
         public static bool DeleteCopy(string BarCode)
         {
             return false;
         }
-        */
     }
 }

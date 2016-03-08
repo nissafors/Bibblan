@@ -15,7 +15,7 @@ namespace Repository.EntityModels
         public int Period { get; set; }
         public int PenaltyPerDay { get; set; }
 
-        public static bool GetCategories(out Category category, int categoryId)
+        public static bool GetCategory(out Category category, int categoryId)
         {
             category = null;
             SqlCommand command = new SqlCommand("SELECT * from CATEGORY WHERE CategoryId = @CategoryId");
