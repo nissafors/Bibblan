@@ -13,12 +13,6 @@ namespace Bibblan.Controllers
         private AuthorServices authorService = new AuthorServices();
         private BorrowerServices borrowerService = new BorrowerServices();
 
-        // GET: Edit
-        public ActionResult Index()
-        {
-            return View();
-        }
-
         // GET: edit/book
         [HttpGet]
         public ActionResult Book(string isbn)
@@ -128,14 +122,22 @@ namespace Bibblan.Controllers
             }
         }
 
-        public ActionResult Author(int id)
+        [HttpGet]
+        public ActionResult Author(int? authorid)
         {
-            /*
-            //Common.Models.Author author = Services.Mockup.Mockup.authors[0];
-            Author author = authorService.GetAuthorById(id);
-            if(author != null)
-                return View(author);
-            */
+            AuthorViewModel author = new AuthorViewModel();
+            if (authorid != null)
+            {
+                author = AuthorServices.GetAuthor((int)authorid);
+            }
+
+            return View(author);
+        }
+        
+        [HttpPost]
+        public ActionResult Author(AuthorViewModel authorViewModel)
+        {
+
             return View();
         }
     }

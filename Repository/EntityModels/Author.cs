@@ -37,6 +37,14 @@ namespace Repository.EntityModels
             return GetAuthors(out authorList, new SqlCommand("SELECT * from AUTHOR"));
         }
 
+        static public bool GetAuthors(out List<Author> authorList, string search)
+        {
+            search = HelperFunctions.SetupSearchString(search);
+            SqlCommand command = new SqlCommand("SELECT * from AUTHOR WHERE COALESCE(FirstName + LastName, FirstName, LastName) LIKE @Search");
+            command.Parameters.AddWithValue("@Search", search);
+            return GetAuthors(out authorList, command);
+        }
+
         static private bool GetAuthors(out List<Author> authorList, SqlCommand command)
         {
             authorList = new List<Author>();
@@ -108,6 +116,11 @@ namespace Repository.EntityModels
             }
 
             return true;
+        }
+
+        static public bool Delete(int Aid)
+        {
+            return false;
         }
     }
 }
