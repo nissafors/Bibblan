@@ -2,7 +2,7 @@
     ViewBag.Title = "AdminPage";
 }
 
-<h1>Välkommen {DITT NAMN}</h1>
+<h1>Välkommen @Session["username"]</h1>
 <div class="row">
     <div style="margin-top: 16px;" class="col-md-6">
         <a class="btn btn-block btn-lg btn-primary" href="../Search/Book">Redigera bok</a>

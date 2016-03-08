@@ -25,8 +25,27 @@
                     <li>@Html.ActionLink("Lista böcker", "Title", "Browse")</li>
                     <li>@Html.ActionLink("Lista författare", "Author", "Browse")</li>
                 </ul>
+                
                 <ul class="nav navbar-nav navbar-right">
-                    <li>@Html.ActionLink("Logga in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+                    @* If a user is logged in this changes*@
+                    @if (Session["username"] == null)
+                    {
+                        <li>@Html.ActionLink("Logga in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+                    }
+                    else
+                    {
+                        int role = Convert.ToInt32(Session["roleId"]);
+                        switch(role)
+                        {
+                            case 0:
+                                <li>@Html.ActionLink("Administrera", "AdminPage", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+                                break;
+                                case 1:
+                                <li>@Html.ActionLink("Mina lån", "UserPage", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+                                break;
+                        }
+                        <li>@Html.ActionLink("Logga ut", "Logout", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+                    }
                 </ul>
             </div>
         </div>

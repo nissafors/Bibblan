@@ -39,6 +39,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EntityModels\Account.cs" />
     <Compile Include="EntityModels\Author.cs" />
     <Compile Include="EntityModels\Book.cs" />
     <Compile Include="EntityModels\BookAuthor.cs" />
@@ -49,6 +50,7 @@
     <Compile Include="EntityModels\Borrow.cs" />
     <Compile Include="EntityModels\HelperFunctions.cs" />
     <Compile Include="EntityModels\Status.cs" />
+    <Compile Include="EntityModels\UserRole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\DatabaseConnection.cs" />
   </ItemGroup>
