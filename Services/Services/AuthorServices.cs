@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Common.Models;
 using Repository.EntityModels;
+using AutoMapper;
 
 namespace Services.Services
 {
@@ -24,12 +25,39 @@ namespace Services.Services
                 // build list
                 foreach(var author in authorEntities)
                 {
-                    authors.Add(new AuthorViewModel { FirstName = author.FirstName, LastName = author.LastName, BirthYear = author.BirthYear, Id = author.Aid });
+                    authors.Add(new AuthorViewModel { FirstName = author.FirstName, LastName = author.LastName, BirthYear = author.BirthYear, Aid = author.Aid });
                 }
             }
 
             return authors;
+        }
 
+        public static AuthorViewModel GetAuthor(int authorId)
+        {
+            Author author;
+
+            if(Author.GetAuthor(out author, authorId)
+                && author != null)
+            {
+                return Mapper.Map<AuthorViewModel>(author);
+            }
+            return null;
+        }
+
+        public static List<AuthorViewModel> SearchAuthors(string search)
+        {
+            List<Author> authorList;
+            if(Author.GetAuthors(out authorList, search))
+            {
+                List<AuthorViewModel> authorViewModelList = new List<AuthorViewModel>();
+                foreach(Author author in authorList)
+                {
+                    authorViewModelList.Add(Mapper.Map<AuthorViewModel>(author));
+                }
+
+                return authorViewModelList;
+            }
+            return null;
         }
 
         public static Dictionary<int, string> GetAuthorsAsDictionary()
@@ -45,14 +73,21 @@ namespace Services.Services
 
             return dic;
         }
-        /*
-        public List<Author> GetAuthors()
+
+        public static bool Upsert(AuthorViewModel authorViewModel)
         {
-            return Mockup.Mockup.authors;
+            return false;
         }
-        */
-        static public bool DeleteAuthor(string AuthorID)
+
+        public static bool DeleteAuthor(string AuthorID)
         {
+            int Aid;
+
+            if (int.TryParse(AuthorID, out Aid))
+            {
+                return Author.Delete(Aid);
+            }
+
             return false;
         }
     }

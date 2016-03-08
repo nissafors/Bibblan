@@ -13,12 +13,6 @@ namespace Bibblan.Controllers
         private AuthorServices authorService = new AuthorServices();
         private BorrowerServices borrowerService = new BorrowerServices();
 
-        // GET: Edit
-        public ActionResult Index()
-        {
-            return View();
-        }
-
         // GET: edit/book
         [HttpGet]
         public ActionResult Book(string isbn)
@@ -57,9 +51,10 @@ namespace Bibblan.Controllers
         }
 
         [HttpGet]
-        public ActionResult Copy(string barCode)
+        public ActionResult Copy(string isbn, string barcode)
         {
-            var cvm = CopyServices.GetCopyViewModel(barCode);
+            var cvm = CopyServices.GetCopyViewModel(barcode);
+            cvm.ISBN = isbn;
 
             var statusDic = StatusServices.GetStatusesAsDictionary();
             cvm.Statuses = new SelectList(statusDic.OrderBy(x => x.Value), "Key", "Value");
@@ -111,16 +106,17 @@ namespace Bibblan.Controllers
                     return RedirectToAction("Borrower", "Search");
 
                 case "Author":
-                    //AuthorServices.DeleteAuthor(Id);
+                    AuthorServices.DeleteAuthor(Id);
                     return RedirectToAction("Author", "Search");
 
                 case "Book":
-                    //BookServices.DeleteBook(Id);
+                    BookServices.Delete(Id);
                     return RedirectToAction("Book", "Search");
 
                 case "Copy":
-                    //CopyServices.DeleteCopy(Id);
-                    //return RedirectToAction("Book", "Edit", CopyServices.GetCopy(Id).Book);
+                    var isbn = CopyServices.GetCopyViewModel(Id).ISBN;
+                    CopyServices.DeleteCopy(Id);
+                    return RedirectToAction("Book", new { isbn });
 
                 default:
                     return RedirectToAction("Index", "Home");
@@ -128,15 +124,24 @@ namespace Bibblan.Controllers
             }
         }
 
-        public ActionResult Author(int id)
+        [HttpGet]
+        public ActionResult Author(int? authorid)
         {
-            /*
-            //Common.Models.Author author = Services.Mockup.Mockup.authors[0];
-            Author author = authorService.GetAuthorById(id);
-            if(author != null)
-                return View(author);
-            */
-            return View();
+            AuthorViewModel author = new AuthorViewModel();
+            if (authorid != null)
+            {
+                author = AuthorServices.GetAuthor((int)authorid);
+            }
+
+            return View(author);
+        }
+        
+        [HttpPost]
+        public ActionResult Author(AuthorViewModel authorViewModel)
+        {
+            AuthorServices.Upsert(authorViewModel);
+            // TODO: Handle success/fail
+            return View(authorViewModel);
         }
     }
 }

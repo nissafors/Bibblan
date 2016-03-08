@@ -18,6 +18,12 @@ namespace Bibblan
                     url: "Book/Details/{isbn}",
                     defaults: new { controller = "Book", action = "Details" }
             );
+  
+            routes.MapRoute(
+                    name: "DeleteObject",
+                    url: "Edit/Delete/{Type}/{Id}",
+                    defaults: new { controller = "Edit", action = "Delete" }
+            );
 
             routes.MapRoute(
                     name: "EditBorrower",
@@ -26,21 +32,21 @@ namespace Bibblan
             );
 
             routes.MapRoute(
-                    name: "DeleteObject",
-                    url: "Edit/Delete/{Type}/{Id}",
-                    defaults: new { controller = "Edit", action = "Delete" }
-            );
-
-            routes.MapRoute(
                     name: "EditCopy",
-                    url: "Edit/Copy/{barCode}",
-                    defaults: new { controller = "Edit", action = "Copy" }
+                    url: "Edit/Copy/{isbn}/{barcode}",
+                    defaults: new { controller = "Edit", action = "Copy", barcode = UrlParameter.Optional }
             );
 
             routes.MapRoute(
                     name: "EditBook",
                     url: "Edit/Book/{isbn}",
                     defaults: new { controller = "Edit", action = "Book" }
+            );
+
+            routes.MapRoute(
+                    name: "EditAuthor",
+                    url: "Edit/Author/{authorid}",
+                    defaults: new { controller = "Edit", action = "Author" }
             );
 
             routes.MapRoute(

@@ -14,7 +14,7 @@
                {
                    @class = "form-control",
                    @id = "input-search",
-                   @placeholder = "Författare / Titel"
+                   @placeholder = "Författare"
                })
             </div>
             <div class="col-md-6">
@@ -29,12 +29,8 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Förnamn</th>
                 <th>Efternamn</th>
-                <th></th>
-                <th>Utgivningsår</th>
-                <th class="col-md-1"></th>
-                <th>Författare</th>
+                <th>Förnamn</th>
                 <th class="col-md-1"></th>
             </tr>
         </thead>
@@ -42,20 +38,9 @@
             @foreach (var item in ViewBag.result)
             {
                 <tr>
+                    <td>@item.LastName</td>
                     <td>@item.FirstName</td>
-                    <td><a href=@("../Book/Details/" + item.ISBN)>@item.Title</a></td>
-                    <td>@item.Last</td>
-                    <td>@item.PublicationYear</td>
-                    <td class="col-md-1"></td>
-                    <td>
-                        @foreach (var author in item.Authors)
-                        {
-                            @author.Value <br />
-                        }
-                    </td>
-
-                    <!--TODO: ADMIN KONTROLL -->
-                    <td><a href=@("../edit/book/" + item.ISBN) class="btn btn-xs btn-warning">Redigera bok</a></td>
+                    <td><a href=@("../edit/author/" + item.Aid) class="btn btn-xs btn-warning">Redigera författare</a></td>
                 </tr>
             }
         </tbody>

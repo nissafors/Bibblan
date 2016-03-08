@@ -65,6 +65,30 @@ namespace Repository.EntityModels
             return true;
         }
 
+        public static bool Delete(string barcode)
+        {
+            try
+            {
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand("DELETE FROM COPY WHERE Barcode = @Barcode"))
+                    {
+                        command.Connection = connection;
+                        command.Parameters.AddWithValue("@Barcode", barcode);
+                        command.ExecuteNonQuery();
+                    }
+
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         private static bool getCopies(out List<Copy> copies, SqlCommand command)
         {
             copies = new List<Copy>();

@@ -24,7 +24,7 @@ namespace Repository.EntityModels
             command.Parameters.AddWithValue("@ISBN", isbn);
 
             List<Book> bookList;
-            bool result = GetBooks(out bookList, command);
+            bool result = getBooks(out bookList, command);
 
             if (result)
             {
@@ -36,10 +36,10 @@ namespace Repository.EntityModels
 
         public static bool GetBooks(out List<Book> bookList)
         {
-            return GetBooks(out bookList, new SqlCommand("SELECT * from BOOK ORDER BY Title ASC"));
+            return getBooks(out bookList, new SqlCommand("SELECT * from BOOK ORDER BY Title ASC"));
         }
 
-        private static bool GetBooks(out List<Book> bookList, SqlCommand command)
+        private static bool getBooks(out List<Book> bookList, SqlCommand command)
         {
             bookList = new List<Book>();
 
@@ -84,7 +84,7 @@ namespace Repository.EntityModels
             return true;
         }
 
-        static public bool Upsert(Book book, List<int> authorIdList)
+        public static bool Upsert(Book book, List<int> authorIdList)
         {
             try
             {
@@ -152,7 +152,48 @@ namespace Repository.EntityModels
             return true;
         }
 
-        static public bool SearchBook(out List<Book> bookList, out List<Tuple<string, string>> isbnAuthorList, string search)
+        public static bool Delete(string isbn)
+        {
+            try
+            {
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
+                {
+                    connection.Open();
+                    // Delete copies
+                    using (SqlCommand command = new SqlCommand("DELETE FROM COPY WHERE ISBN = @ISBN"))
+                    {
+                        command.Connection = connection;
+                        command.Parameters.AddWithValue("@ISBN", isbn);
+                        command.ExecuteNonQuery();
+                    }
+                    
+                    // Delete from BookAuthor
+                    using (SqlCommand command = new SqlCommand("DELETE FROM BOOK_AUTHOR WHERE ISBN = @ISBN"))
+                    {
+                        command.Connection = connection;
+                        command.Parameters.AddWithValue("@ISBN", isbn);
+                        command.ExecuteNonQuery();
+                    }
+
+                    // Delete book
+                    using (SqlCommand command = new SqlCommand("DELETE FROM BOOK WHERE ISBN = @ISBN"))
+                    {
+                        command.Connection = connection;
+                        command.Parameters.AddWithValue("@ISBN", isbn);
+                        command.ExecuteNonQuery();
+                    }
+
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public static bool SearchBook(out List<Book> bookList, out List<Tuple<string, string>> isbnAuthorList, string search)
         {
             string modifiedSearch = HelperFunctions.SetupSearchString(search);
 

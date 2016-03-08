@@ -1,4 +1,4 @@
-﻿@model Common.Models.Author
+﻿@model Common.Models.AuthorViewModel
 
 @{
     ViewBag.Title = "Author";
@@ -11,18 +11,21 @@
 @using (Html.BeginForm("Author", "Edit"))
 {
     <div class="form-group">
-        <label for="FirstName">Förnamn</label>
+        @Html.LabelFor(model => model.FirstName)
         @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control"})
     </div>
     <div class="form-group">
-        <label for="LastName">Efternamn</label>
+        @Html.LabelFor(model => model.LastName)
         @Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
     </div>
     <div class="form-group">
-        <label for="BirthYear">Födelseår</label>
+        @Html.LabelFor(model => model.BirthYear)
         @Html.TextBoxFor(model => model.BirthYear, new { @class = "form-control" })
     </div>
-    <div class="text-center">
-        <input type="submit" class="btn btn-lg btn-primary" value="Bekräfta" style="width: 40%" />
+    <div class="col-md-6">
+        <input type="submit" class="btn btn-block btn-primary" value="Bekräfta" />
+    </div>
+   <div class="col-md-6">
+        <a href=@("../Delete/Author/" + Model.Aid) class="form-control btn btn-block btn-danger @(Model.Aid != 0 ? "": "disabled")">Ta bort</a>
     </div>
 }

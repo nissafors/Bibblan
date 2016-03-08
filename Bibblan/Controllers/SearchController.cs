@@ -70,6 +70,20 @@ namespace Bibblan.Controllers
 
             return View();
         }
+
+        public ActionResult Author(string search)
+        {
+            if (search == null)
+                ViewBag.result = null;
+            else
+            {
+                List<AuthorViewModel> model;
+                model = AuthorServices.SearchAuthors(search);
+                ViewBag.result = model;
+            }
+
+            return View();
+        }
         /*
         [HttpPost]
         public ActionResult Book(SearchBookViewModel model)
