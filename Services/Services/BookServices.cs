@@ -94,6 +94,11 @@ namespace Services.Services
             return Book.Upsert(book, editBookViewModel.AuthorIds);
         }
 
+        public static bool Delete(string isbn)
+        {
+            return Book.Delete(isbn);
+        }
+
         public static List<BookViewModel> SearchBooks(string search)
         {
             List<Book> bookList = null;

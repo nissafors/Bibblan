@@ -116,7 +116,7 @@ namespace Bibblan.Controllers
                     return RedirectToAction("Author", "Search");
 
                 case "Book":
-                    //BookServices.DeleteBook(Id);
+                    BookServices.Delete(Id);
                     return RedirectToAction("Book", "Search");
 
                 case "Copy":

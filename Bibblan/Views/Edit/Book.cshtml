@@ -63,8 +63,21 @@
         @Html.LabelFor(model => model.AuthorIds)
         @Html.ListBoxFor(model => model.AuthorIds, Model.Authors, new { @class = "form-control" })
     </div>
-
-    <input type="submit" class="btn btn-lg btn-primary btn-block" value="Spara" />
+    <div class="row">
+        <div class="col-md-6">
+            <input type="submit" class="btn btn-lg btn-primary btn-block" value="Spara" />
+        </div>
+        <div class="col-md-6">
+        @if (Model.ISBN != null)
+        {
+            @Html.ActionLink("Ta bort", "Delete", new { Type = "Book", Id = Model.ISBN }, new { @class = "btn btn-lg btn-danger btn-block" })
+        }
+        else
+        {
+            @Html.ActionLink("Ta bort", "Delete", new { Type = "Book", Id = Model.ISBN }, new { @class = "btn btn-lg btn-danger btn-block disabled" })
+        }
+        </div>
+    </div>
     
     if (Model.ISBN != null)
     {
