@@ -7,11 +7,12 @@
 <div class="page-header">
     @if (Model.PersonId != null)
     {
-        <h1>Redigera @(Model.LastName), @(Model.FirstName)</h1>
+        <h1>Redigera låntagare</h1>
+        <h3>@(Model.LastName), @(Model.FirstName) </h3>
     }
     else
     {
-        <h1>Lägg till ny lånetagare</h1>
+        <h1>Lägg till ny låntagare</h1>
     }
 </div>
 
@@ -62,12 +63,48 @@
         </div>
     </div>
 
-        <div class="row">
-            <div class="col-md-6">
-                <input type="submit" class="btn btn-block btn-primary" value="Bekräfta" />
-            </div>
-            <div class="col-md-6">
-                <a href=@("../Delete/Borrower/" + Model.PersonId) class="form-control btn btn-block btn-danger @(Model.PersonId != null ? "": "disabled")">Ta bort</a>
-            </div>
+    <div class="row">
+        <div class="col-md-6">
+            <input type="submit" class="btn btn-block btn-primary" value="Bekräfta" />
         </div>
+        <div class="col-md-6">
+            <a href=@("../Delete/Borrower/" + Model.PersonId) class="form-control btn btn-block btn-danger @(Model.PersonId != null ? "": "disabled")">Ta bort</a>
+        </div>
+    </div>
+    
+    if (Model.PersonId != null)
+    {
+    <h2>Lån</h2>
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Streckkod</th>
+                <th>Låndatum</th>
+                <th>Returdatum</th>
+                <th>Återlämnad</th>
+                <th class="col-md-1"></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var borrow in Model.Borrows)
+            {
+                <tr>
+                    <td>@borrow.Barcode</td>
+                    <td>@borrow.BorrowDate.ToShortDateString()</td>
+                    <td>@borrow.ToBeReturnedDate.ToShortDateString()</td>
+                    @if (borrow.ReturnDate == null)
+                    {
+                    @* TODO: Renew *@
+                        <td>Förnya</td>
+                    }
+                    else
+                    {
+                        <td>@borrow.ReturnDate.ToShortDateString()</td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
+    }
 }
+

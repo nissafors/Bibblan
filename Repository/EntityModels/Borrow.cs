@@ -16,7 +16,7 @@ namespace Repository.EntityModels
         public DateTime ToBeReturnedDate { get; set; }
         public DateTime ReturnDate { get; set; }
 
-        static public bool GetBorrows(out List<Borrow> borrowList, string searchParameter)
+        public static bool GetBorrows(out List<Borrow> borrowList, string searchParameter)
         {
             SqlCommand command = new SqlCommand("SELECT * from BORROW WHERE Barcode = @Barcode OR PersonId = @PersonId");
             command.Parameters.AddWithValue("@Barcode", searchParameter);
@@ -25,12 +25,12 @@ namespace Repository.EntityModels
             return GetBorrows(out borrowList, command);
         }
 
-        static public bool GetBorrows(out List<Borrow> borrowList)
+        public static bool GetBorrows(out List<Borrow> borrowList)
         {
             return GetBorrows(out borrowList, new SqlCommand("SELECT * from BORROW"));
         }
 
-        static private bool GetBorrows(out List<Borrow> borrowList, SqlCommand command)
+        private static bool GetBorrows(out List<Borrow> borrowList, SqlCommand command)
         {
             borrowList = new List<Borrow>();
 
@@ -72,6 +72,32 @@ namespace Repository.EntityModels
             }
 
             return true;
+        }
+
+        public static bool Renew(Borrow borrow)
+        {
+            try
+            {
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand("UPDATE SET ToBeReturnedDate = @ToBeReturnedDate WHERE Barcode = @Barcode AND PersonId = @PersonId", connection))
+                    {
+                        command.Parameters.AddWithValue("@Barcode", borrow.Barcode);
+                        command.Parameters.AddWithValue("@PersonId", borrow.PersonId);
+                        
+                        if(command.ExecuteNonQuery() != 1)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            catch(Exception)
+            {
+                return false;
+            }
+            return false;
         }
     }
 }

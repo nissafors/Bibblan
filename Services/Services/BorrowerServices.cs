@@ -22,13 +22,20 @@ namespace Services.Services
         {
             Borrower borrower;
             List<Category> categoryList;
+            List<Borrow> borrowList;
             BorrowerViewModel borrowerViewModel = null;
             if (Borrower.GetBorrower(out borrower, personId) &&
                 borrower != null &&
-                Category.GetCategories(out categoryList))
+                Category.GetCategories(out categoryList) &&
+                Borrow.GetBorrows(out borrowList))
             {
                 borrowerViewModel = Mapper.Map<BorrowerViewModel>(borrower);
                 borrowerViewModel.Category = new SelectList(categoryList.OrderBy(x => x.CategoryName), "CategoryId", "CategoryName");
+                
+                foreach(Borrow borrow in borrowList)
+                {
+                    borrowerViewModel.Borrows.Add(Mapper.Map<BorrowViewModel>(borrow));
+                }
             }
 
             return borrowerViewModel;
