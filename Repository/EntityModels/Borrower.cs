@@ -38,8 +38,8 @@ namespace Repository.EntityModels
 
         public static bool GetBorrowers(out List<Borrower> borrowerList, string searchParameter)
         {
-            // TODO: Search by index
-            SqlCommand command = new SqlCommand("SELECT * from BORROWER WHERE PersonId = @SearchParameter");
+            searchParameter = HelperFunctions.SetupSearchString(searchParameter);
+            SqlCommand command = new SqlCommand("SELECT * from BORROWER WHERE PersonId + FirstName + LastName LIKE @SearchParameter");
             command.Parameters.AddWithValue("@SearchParameter", searchParameter);
 
             return GetBorrowers(out borrowerList, command);
@@ -73,7 +73,7 @@ namespace Repository.EntityModels
                                         PersonId = Convert.ToString(myReader["PersonId"]),
                                         FirstName = Convert.ToString(myReader["FirstName"]),
                                         LastName = Convert.ToString(myReader["LastName"]),
-                                        Adress = Convert.ToString(myReader["Adress"]),
+                                        Adress = Convert.ToString(myReader["Address"]),
                                         CategoryId = Convert.ToInt32(myReader["CategoryId"]),
                                         TelNo = Convert.ToString(myReader["TelNo"])
                                     });

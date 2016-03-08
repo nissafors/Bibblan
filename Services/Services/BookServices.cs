@@ -104,18 +104,18 @@ namespace Services.Services
                 // Convert all books into bookviewmodels
                 foreach (Book book in bookList)
                 {
-                    bookViewModelList.Add(Mapper.Map<BookViewModel>(book));
+                    BookViewModel bookView = Mapper.Map<BookViewModel>(book);
                     int i = 0;
-
                     // Add authors 
                     foreach(var item in bookAuthorList)
                     {
-                        if(book.ISBN == item.Item2)
+                        if(bookView.ISBN == item.Item2)
                         {
-                            bookViewModelList[bookViewModelList.Count - 1].Authors.Add(i, item.Item1);
+                            bookView.Authors.Add(i, item.Item1);
                         }
                         ++i;
                     }
+                    bookViewModelList.Add(bookView);
                 }
                 return bookViewModelList;
             }

@@ -44,6 +44,28 @@ namespace Services.Services
             
         }
 
+        static public List<BorrowerViewModel> SearchBorrowers(string search)
+        {
+            List<Borrower> borrowerList;
+            List<Category> categoryList = CategoryServices.GetAllCategories();
+            if (Borrower.GetBorrowers(out borrowerList, search) &&
+                categoryList != null)
+            {
+                List<BorrowerViewModel> borrowerViewList = new List<BorrowerViewModel>();
+                
+                foreach (Borrower borrower in borrowerList)
+                {
+                    BorrowerViewModel borrowerView = Mapper.Map<BorrowerViewModel>(borrower);
+                    borrowerView.Category = new SelectList(categoryList.OrderBy(x => x.CategoryName), "CategoryId", "CategoryName");
+                    borrowerViewList.Add(borrowerView);
+                }
+
+                return borrowerViewList;
+            }
+
+            return null;
+        }
+
         static public bool AddBorrower(BorrowerViewModel model)
         {
             // TODO:
