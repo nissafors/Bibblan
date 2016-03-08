@@ -28,6 +28,19 @@ namespace Services.Services
             Account.getUserRole(username, out role);
             return role.Id;
         }
+
+        public List<RoleViewModel> getUserRoles()
+        {
+            List<UserRole> roles;
+            UserRole.getUserRoles(out roles);
+            var models = new List<RoleViewModel>();
+            foreach(var role in roles)
+            {
+                models.Add(Mapper.Map<RoleViewModel>(role));
+            }
+            return models;
+
+        }
         /*
         public List<Loan> GetLoans(Borrower user)
         {

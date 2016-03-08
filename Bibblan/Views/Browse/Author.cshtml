@@ -26,8 +26,11 @@
                     <td>@item.LastName</td>
                     <td>@item.FirstName</td>
                     <td>@item.BirthYear</td>
-                    <!--TODO: ADMIN KONTROLL -->
-                    <td><a href=@("../edit/author/" + item.Id) class="btn btn-xs btn-warning">Redigera Författare</a></td>
+                    @if(ViewBag.isAdmin)
+                    {
+                         <td><a href=@("../edit/author/" + item.Id) class="btn btn-xs btn-warning">Redigera Författare</a></td>
+                    }
+                       
                 </tr>
             }
         }

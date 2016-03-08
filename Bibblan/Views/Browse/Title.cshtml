@@ -31,8 +31,11 @@
 					<td><a href=@("../book/details/" + @item.ISBN)> @item.Title</a></td>
 					<td>@item.PublicationYear</td>
                     <td>@item.Pages</td>
-					<!--TODO: ADMIN KONTROLL -->
-					<td><a href=@("../edit/book/" + item.ISBN) class="btn btn-xs btn-warning">Redigera bok</a></td>
+					@if (ViewBag.isAdmin)
+                    {
+                        <td><a href=@("../edit/book/" + item.ISBN) class="btn btn-xs btn-warning">Redigera bok</a></td>
+                    }
+					    
 				</tr>
 			}
 		}

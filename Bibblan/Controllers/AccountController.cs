@@ -19,16 +19,12 @@ namespace Bibblan.Controllers
 
         public ActionResult Login()
         {
-            if(Session["username"] != null)
+            if(AccountHelper.isLoggedIn(this.Session))
             {
-                int role = Convert.ToInt32(Session["roleId"]);
-                switch(role)
-                {
-                    case 0:
-                        return RedirectToAction("AdminPage");
-                    case 1:
-                        return RedirectToAction("UserPage");
-                }
+                if (AccountHelper.HasAccess(this.Session, AccountHelper.Role.Admin))
+                    return RedirectToAction("AdminPage");
+                else if (AccountHelper.HasAccess(this.Session, AccountHelper.Role.User))
+                    return RedirectToAction("UserPage");
             }
             return View();
         }
@@ -46,13 +42,10 @@ namespace Bibblan.Controllers
                 Session["username"] = m.Username;
                 // This should not be relied upon when doing actions !!!
                 Session["roleId"] = m.RoleId;
-                switch(m.RoleId)
-                {
-                    case 0:
+                if(AccountHelper.HasAccess(this.Session, AccountHelper.Role.Admin))
                         return RedirectToAction("AdminPage");
-                    case 1:
+                else if(AccountHelper.HasAccess(this.Session, AccountHelper.Role.User))
                         return RedirectToAction("UserPage");
-                }
             }
             ViewBag.userNotFound = true;
             return View();
@@ -63,8 +56,10 @@ namespace Bibblan.Controllers
         {
             Session.Clear();
             Session.Abandon();
-            string returnUrl = Request.UrlReferrer.ToString();
-            return Redirect(returnUrl);
+            if (Request.UrlReferrer != null)
+                return Redirect(Request.UrlReferrer.ToString());
+            else
+                return RedirectToAction("Index", "Home");
         }
 
         public ActionResult AdminPage()
@@ -81,10 +76,9 @@ namespace Bibblan.Controllers
         {
             // Do not rely on session for roleId, because we list User details (Loans)
             // Instead check Database if we still have the right access
-            if (Session["username"] == null)
+            if (!AccountHelper.isLoggedIn(this.Session))
                 return RedirectToAction("Login");
-            int roleId = AccountServices.getRoleId(Session["username"].ToString());
-            if (roleId == 1)
+            else if (AccountHelper.HasAccess(this.Session, AccountHelper.Role.User))
                 return View();
             return RedirectToAction("Login");
         }

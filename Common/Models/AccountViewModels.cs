@@ -13,4 +13,10 @@ namespace Common.Models
         public int RoleId { get; set; }
         public string PersonId { get; set; }
     }
+
+    public class RoleViewModel
+    {
+        public int Id { get; set; }
+        public string Role { get; set; }
+    }
 }

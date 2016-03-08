@@ -30,6 +30,7 @@ namespace Services.Configuration
                     mapping.CreateMap<EditBookViewModel, Book>()
                         .ForMember(c => c.SignId, op => op.MapFrom(v => v.ClassificationId));
                     mapping.CreateMap<Account, AccountViewModel>();
+                    mapping.CreateMap<UserRole, RoleViewModel>();
                 });
         }
     }

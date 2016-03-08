@@ -55,8 +55,10 @@
                         }
                     </td>
 
-                    <!--TODO: ADMIN KONTROLL -->
-                    <td><a href=@("../edit/book/" + item.ISBN) class="btn btn-xs btn-warning">Redigera bok</a></td>
+                    @if (ViewBag.isAdmin)
+                    {
+                       <td><a href=@("../edit/book/" + item.ISBN) class="btn btn-xs btn-warning">Redigera bok</a></td> 
+                    }
                 </tr>
             }
         </tbody>

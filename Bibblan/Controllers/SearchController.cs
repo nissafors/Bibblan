@@ -14,6 +14,14 @@ namespace Bibblan.Controllers
         // Update or add borrower
         public ActionResult Borrower(string search)
         {
+            if(!AccountHelper.HasAccess(this.Session, AccountHelper.Role.Admin))
+            {
+                if(Request.UrlReferrer != null)
+                    return Redirect(Request.UrlReferrer.ToString());
+                else
+                    return RedirectToAction("Index", "Home");
+            }
+
             if (search != null)
             {
                 ViewBag.result = BorrowerServices.SearchBorrowers(search);
@@ -55,6 +63,10 @@ namespace Bibblan.Controllers
                 model = BookServices.SearchBooks(search);
                 ViewBag.result = model;
             }
+            if (AccountHelper.HasAccess(this.Session, AccountHelper.Role.Admin))
+                ViewBag.isAdmin = true;
+            else
+                ViewBag.isAdmin = false;
 
             return View();
         }
