@@ -96,17 +96,13 @@ namespace Bibblan.Controllers
         [HttpPost]
         public ActionResult Borrower(BorrowerViewModel borrower)
         {
-            /*
-            if(BorrowerServices.AddBorrower(borrower.ToBorrower()))
+            if(BorrowerServices.Upsert(borrower))
             {
-                return RedirectToAction("Borrower", "Search");
+                // TODO: Handle succesfull or unsuccesfull 
+                // TODO: Set history so back button works
             }
-            else
-            {
-                return View(borrower);
-            }
-            */
-            return View();
+            borrower = BorrowerServices.GetBorrower(borrower.PersonId);
+            return View(borrower);
         }
 
         public ActionResult Delete(string Type, string Id)

@@ -19,20 +19,6 @@ namespace Bibblan.Controllers
                 ViewBag.result = BorrowerServices.SearchBorrowers(search);
             }
             return View();
-            
-            /*
-            //List<Borrower> borrowerList = BorrowerServices.GetBorrowers(borrower.ToBorrower());
-            //List<BorrowerViewModel> viewModelList = new List<BorrowerViewModel>();
-            //
-            //foreach(Borrower borrowerItem in borrowerList)
-            //{
-            //    viewModelList.Add(new BorrowerViewModel(borrowerItem));
-            //}
-
-            ViewBag.Results = BorrowerServices.GetBorrowers(borrower);
-
-            return View(borrower);
-            */
         }
         
 

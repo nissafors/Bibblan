@@ -17,7 +17,7 @@ namespace Repository.EntityModels
         public string TelNo { get; set; }
         public int CategoryId { get; set; }
 
-        static public bool GetBorrower(out Borrower borrower, string PersonId)
+        public static bool GetBorrower(out Borrower borrower, string PersonId)
         {
             borrower = null;
             
@@ -45,7 +45,7 @@ namespace Repository.EntityModels
             return GetBorrowers(out borrowerList, command);
         }
 
-        public bool GetBorrowers(out List<Borrower> borrowerList)
+        public static bool GetBorrowers(out List<Borrower> borrowerList)
         {
             return GetBorrowers(out borrowerList, new SqlCommand("SELECT * from BORROWER"));
         }
@@ -92,6 +92,38 @@ namespace Repository.EntityModels
                 return false;
             }
 
+            return true;
+        }
+
+        public static bool Upsert(Borrower borrower)
+        {
+            try
+            {
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
+                {
+                    connection.Open();
+                    // Update BOOK
+                    using (SqlCommand command = new SqlCommand("EXEC UpsertBorrower @PersonId, @FirstName, @LastName, @Address, @Telno, @CategoryId"))
+                    {
+                        command.Connection = connection;
+                        command.Parameters.AddWithValue("@PersonId", borrower.PersonId);
+                        command.Parameters.AddWithValue("@FirstName", borrower.FirstName);
+                        command.Parameters.AddWithValue("@LastName", borrower.LastName);
+                        command.Parameters.AddWithValue("@Address", borrower.Adress);
+                        command.Parameters.AddWithValue("@Telno", borrower.TelNo);
+                        command.Parameters.AddWithValue("@CategoryId", borrower.CategoryId);
+
+                        if (command.ExecuteNonQuery() != 1)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            catch(Exception)
+            {
+                return false;
+            }
             return true;
         }
     }

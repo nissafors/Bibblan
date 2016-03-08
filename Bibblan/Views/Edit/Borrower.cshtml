@@ -2,7 +2,6 @@
 
 @{
     ViewBag.Title = "Redigera lånetagare";
-    ViewBag.Controller = "Edit";
 }
 
 <div class="page-header">
@@ -16,4 +15,59 @@
     }
 </div>
 
-@Html.Partial("../Shared/PartialBorrowerForm")
+@using (Html.BeginForm("Borrower", "Edit"))
+{
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.FirstName)
+                @Html.TextBoxFor(model => model.FirstName, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.LastName)
+                @Html.TextBoxFor(model => model.LastName, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.PersonId)
+                @Html.TextBoxFor(model => model.PersonId, Model.PersonId != null ? (object)new { @class = "form-control", @readonly = "readonly" } : new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Adress)
+                @Html.TextBoxFor(model => model.Adress, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.TelNo)
+                @Html.TextBoxFor(model => model.TelNo, new { @class = "form-control" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.LabelFor(model => model.Category)
+                @Html.DropDownListFor(model => model.CategoryId, Model.Category, new { @class = "form-control" })
+            </div>
+        </div>
+    </div>
+
+        <div class="row">
+            <div class="col-md-6">
+                <input type="submit" class="btn btn-block btn-primary" value="Bekräfta" />
+            </div>
+            <div class="col-md-6">
+                <a href=@("../Delete/Borrower/" + Model.PersonId) class="form-control btn btn-block btn-danger @(Model.PersonId != null ? "": "disabled")">Ta bort</a>
+            </div>
+        </div>
+}
