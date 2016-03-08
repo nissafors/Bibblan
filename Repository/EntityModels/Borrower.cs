@@ -17,7 +17,7 @@ namespace Repository.EntityModels
         public string TelNo { get; set; }
         public int CategoryId { get; set; }
 
-        static public bool GetBorrower(out Borrower borrower, string PersonId)
+        public static bool GetBorrower(out Borrower borrower, string PersonId)
         {
             borrower = null;
             
@@ -38,14 +38,14 @@ namespace Repository.EntityModels
 
         public static bool GetBorrowers(out List<Borrower> borrowerList, string searchParameter)
         {
-            // TODO: Search by index
-            SqlCommand command = new SqlCommand("SELECT * from BORROWER WHERE PersonId = @SearchParameter");
+            searchParameter = HelperFunctions.SetupSearchString(searchParameter);
+            SqlCommand command = new SqlCommand("SELECT * from BORROWER WHERE PersonId + FirstName + LastName LIKE @SearchParameter");
             command.Parameters.AddWithValue("@SearchParameter", searchParameter);
 
             return GetBorrowers(out borrowerList, command);
         }
 
-        public bool GetBorrowers(out List<Borrower> borrowerList)
+        public static bool GetBorrowers(out List<Borrower> borrowerList)
         {
             return GetBorrowers(out borrowerList, new SqlCommand("SELECT * from BORROWER"));
         }
@@ -73,7 +73,7 @@ namespace Repository.EntityModels
                                         PersonId = Convert.ToString(myReader["PersonId"]),
                                         FirstName = Convert.ToString(myReader["FirstName"]),
                                         LastName = Convert.ToString(myReader["LastName"]),
-                                        Adress = Convert.ToString(myReader["Adress"]),
+                                        Adress = Convert.ToString(myReader["Address"]),
                                         CategoryId = Convert.ToInt32(myReader["CategoryId"]),
                                         TelNo = Convert.ToString(myReader["TelNo"])
                                     });
@@ -88,6 +88,71 @@ namespace Repository.EntityModels
                 }
             }
             catch(Exception)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        public static bool Upsert(Borrower borrower)
+        {
+            try
+            {
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
+                {
+                    connection.Open();
+                    // Update BOOK
+                    using (SqlCommand command = new SqlCommand("EXEC UpsertBorrower @PersonId, @FirstName, @LastName, @Address, @Telno, @CategoryId"))
+                    {
+                        command.Connection = connection;
+                        command.Parameters.AddWithValue("@PersonId", borrower.PersonId);
+                        command.Parameters.AddWithValue("@FirstName", borrower.FirstName);
+                        command.Parameters.AddWithValue("@LastName", borrower.LastName);
+                        command.Parameters.AddWithValue("@Address", borrower.Adress);
+                        command.Parameters.AddWithValue("@Telno", borrower.TelNo);
+                        command.Parameters.AddWithValue("@CategoryId", borrower.CategoryId);
+
+                        if (command.ExecuteNonQuery() != 1)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            catch(Exception)
+            {
+                return false;
+            }
+            return true;
+        }
+
+        public static bool Delete(string PersonId)
+        {
+            try
+            {
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand("DELETE FROM BORROW WHERE PersonId = @PersonId", connection))
+                    {
+                        command.Parameters.AddWithValue("@PersonId", PersonId);
+
+                        command.ExecuteNonQuery();
+                    }
+
+                    using (SqlCommand command = new SqlCommand("DELETE FROM BORROWER WHERE PersonId = @PersonId", connection))
+                    {
+                        command.Parameters.AddWithValue("@PersonId", PersonId);
+
+                        if (command.ExecuteNonQuery() != 1)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
             {
                 return false;
             }

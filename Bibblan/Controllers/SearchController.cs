@@ -11,34 +11,14 @@ namespace Bibblan.Controllers
 {
     public class SearchController : Controller
     {
-
-        // Show borrower
-        [HttpGet]
-        public ActionResult Borrower(string personId)
-        {
-            BorrowerViewModel model = BorrowerServices.GetBorrower(personId);
-            return model == null ? View(new BorrowerViewModel()) : View(model);
-        }
-
         // Update or add borrower
-        [HttpPost]
-        public ActionResult Borrower(BorrowerViewModel model)
+        public ActionResult Borrower(string search)
         {
-            return View(model);
-            
-            /*
-            //List<Borrower> borrowerList = BorrowerServices.GetBorrowers(borrower.ToBorrower());
-            //List<BorrowerViewModel> viewModelList = new List<BorrowerViewModel>();
-            //
-            //foreach(Borrower borrowerItem in borrowerList)
-            //{
-            //    viewModelList.Add(new BorrowerViewModel(borrowerItem));
-            //}
-
-            ViewBag.Results = BorrowerServices.GetBorrowers(borrower);
-
-            return View(borrower);
-            */
+            if (search != null)
+            {
+                ViewBag.result = BorrowerServices.SearchBorrowers(search);
+            }
+            return View();
         }
         
 

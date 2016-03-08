@@ -154,19 +154,7 @@ namespace Repository.EntityModels
 
         static public bool SearchBook(out List<Book> bookList, out List<Tuple<string, string>> isbnAuthorList, string search)
         {
-            string modifiedSearch = "%";
-            foreach (char character in search)
-            {
-                if (char.IsWhiteSpace(character))
-                {
-                    modifiedSearch += "%";
-                }
-                else
-                {
-                    modifiedSearch += character;
-                }
-            }
-            modifiedSearch += "%";
+            string modifiedSearch = HelperFunctions.SetupSearchString(search);
 
             bookList = new List<Book>();
             isbnAuthorList = new List<Tuple<string, string>>();
@@ -183,7 +171,7 @@ namespace Repository.EntityModels
                                            "BOOK.PublicationInfo AS PublicationInfo, " +
                                            "BOOK.PublicationYear AS PublicationYear, " +
                                            "BOOK.SignId AS SignId, " +
-                                           "COALESCE(AUTHOR.LastName, '') + ' ' + COALESCE(AUTHOR.FirstName, '') AS Name " +
+                                           "COALESCE(AUTHOR.LastName + ' ' + AUTHOR.FirstName, AUTHOR.LastName, AUTHOR.FirstName) AS Name " +
                                            "FROM BOOK_AUTHOR " +
                                            "INNER JOIN BOOK ON BOOK_AUTHOR.ISBN = BOOK.ISBN " +
                                            "INNER JOIN AUTHOR ON BOOK_AUTHOR.AID = AUTHOR.AID " +

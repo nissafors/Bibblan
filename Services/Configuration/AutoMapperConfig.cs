@@ -16,8 +16,13 @@ namespace Services.Configuration
             Mapper.Initialize(mapping =>
                 {
                     mapping.CreateMap<Author, AuthorViewModel>();
+                    mapping.CreateMap<AuthorViewModel, Author>();
                     mapping.CreateMap<Book, BookViewModel>();
+                    mapping.CreateMap<BookViewModel, Book>();
                     mapping.CreateMap<Borrower, BorrowerViewModel>();
+                    mapping.CreateMap<BorrowerViewModel, Borrower>();
+                    mapping.CreateMap<Borrow, BorrowViewModel>();
+                    mapping.CreateMap<BorrowViewModel, Borrow>();
                     mapping.CreateMap<Copy, CopyViewModel>();
                     mapping.CreateMap<CopyViewModel, Copy>();
                     mapping.CreateMap<Book, EditBookViewModel>()

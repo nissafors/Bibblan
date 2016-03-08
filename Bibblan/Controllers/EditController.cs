@@ -87,46 +87,39 @@ namespace Bibblan.Controllers
         [HttpPost]
         public ActionResult Borrower(BorrowerViewModel borrower)
         {
-            /*
-            if(BorrowerServices.AddBorrower(borrower.ToBorrower()))
+            if(BorrowerServices.Upsert(borrower))
             {
-                return RedirectToAction("Borrower", "Search");
+                // TODO: Handle succesfull or unsuccesfull 
+                // TODO: Set history so back button works
             }
-            else
-            {
-                return View(borrower);
-            }
-            */
-            return View();
+            borrower = BorrowerServices.GetBorrower(borrower.PersonId);
+            return View(borrower);
         }
 
         public ActionResult Delete(string Type, string Id)
         {
-            /*
             switch(Type)
             {
                 case "Borrower":
-                    BorrowerServices.DeleteBorrower(Id);
+                    BorrowerServices.Delete(Id);
                     return RedirectToAction("Borrower", "Search");
 
                 case "Author":
-                    AuthorServices.DeleteAuthor(Id);
+                    //AuthorServices.DeleteAuthor(Id);
                     return RedirectToAction("Author", "Search");
 
                 case "Book":
-                    BookServices.DeleteBook(Id);
+                    //BookServices.DeleteBook(Id);
                     return RedirectToAction("Book", "Search");
 
                 case "Copy":
-                    CopyServices.DeleteCopy(Id);
-                    return RedirectToAction("Book", "Edit", CopyServices.GetCopy(Id).Book);
+                    //CopyServices.DeleteCopy(Id);
+                    //return RedirectToAction("Book", "Edit", CopyServices.GetCopy(Id).Book);
 
                 default:
                     return RedirectToAction("Index", "Home");
 
             }
-            */
-            return View();
         }
 
         public ActionResult Author(int id)

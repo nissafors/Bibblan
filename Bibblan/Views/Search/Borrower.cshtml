@@ -9,8 +9,25 @@
     <h1>Sök efter Låntagare</h1>
 </div>
 
-@Html.Partial("../Shared/PartialBorrowerForm")
-@if (ViewBag.Results != null)
+@using (Html.BeginForm("Borrower", "Search"))
+{
+    <div class="row">
+        <div class="form-group">
+            <div class="col-md-6">
+                @Html.TextBox("search", "", new
+       {
+           @class = "form-control",
+           @id = "input-search",
+           @placeholder = "Lånetagare"
+       })
+            </div>
+            <div class="col-md-6">
+                <input type="submit" class="btn btn-block btn-primary" value="Sök" />
+            </div>
+        </div>
+    </div>
+}
+@if (ViewBag.result != null)
 {
 <h2>Resultat</h2>
 <table class="table table-striped">
@@ -27,14 +44,14 @@
     </thead>
     <tbody>
          
-        @foreach (var item in ViewBag.Results)
+        @foreach (var item in ViewBag.result)
         { 
            <tr>
                <td>@item.FirstName</td>
                <td>@item.LastName</td>
                <td>@item.PersonId</td>
                <td>@item.Adress</td>
-               <td>@item.TelephoneNumber</td>
+               <td>@item.TelNo</td>
                <td>@item.CategoryName</td>
                <td><a href="../Edit/Borrower/@(item.PersonId)" class="btn btn-xs btn-warning">Redigera</a></td>
            </tr>
