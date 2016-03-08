@@ -38,7 +38,14 @@ namespace Bibblan.Controllers
             return View(bookInfo);
         }
 
-        // Helper for the Book methods
+        [HttpPost]
+        public ActionResult Copy(CopyViewModel copyInfo)
+        {
+            CopyServices.Upsert(copyInfo);
+            return RedirectToAction("Book", new { copyInfo.ISBN });
+        }
+
+        // Helper for the Book ActionResult's.
         private void setBookViewLists(EditBookViewModel ebvm)
         {
             ebvm.Copies = CopyServices.getCopyViewModels(ebvm.ISBN);
@@ -52,29 +59,13 @@ namespace Bibblan.Controllers
         [HttpGet]
         public ActionResult Copy(string barCode)
         {
-            /*
-            Copy copy = CopyServices.GetCopy(barCode);
-            EditCopyViewModel copyInfo;
+            var cvm = CopyServices.GetCopyViewModel(barCode);
 
-            if (copy != null)
-                copyInfo = new EditCopyViewModel(copy);
-            else
-                copyInfo = new EditCopyViewModel();
-            */
-            return View();
-        }
+            var statusDic = StatusServices.GetStatusesAsDictionary();
+            cvm.Statuses = new SelectList(statusDic.OrderBy(x => x.Value), "Key", "Value");
+            cvm.Title = BookServices.GetBookDetails(cvm.ISBN).Title;
 
-        [HttpPost]
-        public ActionResult Copy(EditCopyViewModel copyInfo)
-        {/*
-            Copy copy = copyInfo.ToCopy();
-            // TODO:
-            // Write copyInfo to db
-            */
-            /*
-            return RedirectToAction("Book", copy.Book);
-            */
-            return View();
+            return View(cvm);
         }
 
         [HttpGet]
