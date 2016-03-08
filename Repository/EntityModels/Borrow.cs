@@ -14,7 +14,7 @@ namespace Repository.EntityModels
         public string PersonId { get; set; }
         public DateTime BorrowDate { get; set; }
         public DateTime ToBeReturnedDate { get; set; }
-        public DateTime ReturnDate { get; set; }
+        public DateTime? ReturnDate { get; set; }
 
         public static bool GetBorrows(out List<Borrow> borrowList, string searchParameter)
         {
@@ -53,7 +53,7 @@ namespace Repository.EntityModels
                                         Barcode = Convert.ToString(myReader["Barcode"]),
                                         PersonId = Convert.ToString(myReader["PersonId"]),
                                         BorrowDate = Convert.ToDateTime(myReader["BorrowDate"]),
-                                        ReturnDate = Convert.ToDateTime(myReader["ReturnDate"]),
+                                        ReturnDate = myReader["ReturnDate"] as DateTime?,
                                         ToBeReturnedDate = Convert.ToDateTime(myReader["ToBeReturnedDate"])
                                     });
                                 }
@@ -74,7 +74,7 @@ namespace Repository.EntityModels
             return true;
         }
 
-        public static bool Renew(Borrow borrow)
+        public static bool UpdateReturnDate(Borrow borrow)
         {
             try
             {

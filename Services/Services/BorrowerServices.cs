@@ -27,7 +27,7 @@ namespace Services.Services
             if (Borrower.GetBorrower(out borrower, personId) &&
                 borrower != null &&
                 Category.GetCategories(out categoryList) &&
-                Borrow.GetBorrows(out borrowList))
+                Borrow.GetBorrows(out borrowList, borrower.PersonId))
             {
                 borrowerViewModel = Mapper.Map<BorrowerViewModel>(borrower);
                 borrowerViewModel.Category = new SelectList(categoryList.OrderBy(x => x.CategoryName), "CategoryId", "CategoryName");

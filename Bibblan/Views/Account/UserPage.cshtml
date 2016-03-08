@@ -1,5 +1,4 @@
-﻿@model List<Tuple<Common.Models.Loan, Common.Models.Book>>
-@{
+﻿@{
    ViewBag.Title = "Mina lån";
 }
 
@@ -14,25 +13,8 @@
         </tr>
     </thead>
     <tbody>
-        @{
-            foreach(var tuple in Model)
-            {
-          <tr>
-            <td>@tuple.Item2.Title</td>
-             <td>@tuple.Item1.BorrowDate.ToShortDateString()</td>
-             <td>@tuple.Item1.ToBeReturnedDate.ToShortDateString()</td>
-             @if(tuple.Item1.ReturnDate == null)
-             {
-                 <td>Ej inlämnad <a href=@("/Account/UserPage/" + tuple.Item2.ISBN) class="btn btn-xs btn-success">Förnya Lån</a></td>
-             }
-             else
-             {
-                 <td>@("Återlämnad : " + tuple.Item1.ReturnDate.Value.ToShortDateString())</td>
-             }
-             
+        <tr>
+            <td>TEST</td>
         </tr>
-        }  
-        }
-        
     </tbody>
 </table>
