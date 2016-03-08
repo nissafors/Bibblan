@@ -49,9 +49,9 @@ namespace Services.Services
             return Copy.Upsert(copy);
         }
 
-        public static bool DeleteCopy(string BarCode)
+        public static bool DeleteCopy(string barcode)
         {
-            return false;
+            return Copy.Delete(barcode);
         }
     }
 }

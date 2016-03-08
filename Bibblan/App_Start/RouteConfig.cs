@@ -33,8 +33,8 @@ namespace Bibblan
 
             routes.MapRoute(
                     name: "EditCopy",
-                    url: "Edit/Copy/{barCode}",
-                    defaults: new { controller = "Edit", action = "Copy" }
+                    url: "Edit/Copy/{isbn}/{barcode}",
+                    defaults: new { controller = "Edit", action = "Copy", barcode = UrlParameter.Optional }
             );
 
             routes.MapRoute(

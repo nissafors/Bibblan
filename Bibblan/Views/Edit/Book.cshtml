@@ -85,11 +85,11 @@
                     <td>@copy.BarCode</td>
                     <td>@copy.Location</td>
                     <td>@copy.Library</td>
-                    <td>@Html.ActionLink("Redigera", "Copy", "Edit", new { Id = copy.BarCode }, new { @class = "btn btn-xs btn-warning" })</td>
+                    <td>@Html.ActionLink("Redigera", "Copy", new { isbn = Model.ISBN, barcode = copy.BarCode }, new { @class = "btn btn-xs btn-warning" })</td>
                 </tr>
             }
             </tbody>
         </table>
-        <a href="copy" class="btn btn-success">Lägg till exemplar</a>
+        @Html.ActionLink("Lägg till exemplar", "Copy", new { isbn = Model.ISBN }, new { @class = "btn btn-success" })
     }
 }
