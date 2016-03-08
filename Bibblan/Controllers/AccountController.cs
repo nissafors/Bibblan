@@ -81,8 +81,12 @@ namespace Bibblan.Controllers
         {
             // Do not rely on session for roleId, because we list User details (Loans)
             // Instead check Database if we still have the right access
-
-            return View();
+            if (Session["username"] == null)
+                return RedirectToAction("Login");
+            int roleId = AccountServices.getRoleId(Session["username"].ToString());
+            if (roleId == 1)
+                return View();
+            return RedirectToAction("Login");
         }
     }
 }

@@ -45,9 +45,11 @@ namespace Repository.EntityModels
             {
                 if (a.Username == username)
                 {
-                    role = a.RoleId;
+                    UserRole.getRole(out role, a.RoleId);
+                    return true;
                 }
             }
+            return false;
         }
     }
 }

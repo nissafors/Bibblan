@@ -22,9 +22,11 @@ namespace Services.Services
            return Mapper.Map<AccountViewModel>(account);
         }
 
-        public static int getRole(string username)
+        public static int getRoleId(string username)
         {
-            
+            UserRole role;
+            Account.getUserRole(username, out role);
+            return role.Id;
         }
         /*
         public List<Loan> GetLoans(Borrower user)
