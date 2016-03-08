@@ -106,7 +106,7 @@ namespace Bibblan.Controllers
                     return RedirectToAction("Borrower", "Search");
 
                 case "Author":
-                    //AuthorServices.DeleteAuthor(Id);
+                    AuthorServices.DeleteAuthor(Id);
                     return RedirectToAction("Author", "Search");
 
                 case "Book":
@@ -139,8 +139,9 @@ namespace Bibblan.Controllers
         [HttpPost]
         public ActionResult Author(AuthorViewModel authorViewModel)
         {
-
-            return View();
+            AuthorServices.Upsert(authorViewModel);
+            // TODO: Handle success/fail
+            return View(authorViewModel);
         }
     }
 }

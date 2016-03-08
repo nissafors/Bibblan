@@ -74,7 +74,12 @@ namespace Services.Services
             return dic;
         }
 
-        static public bool DeleteAuthor(string AuthorID)
+        public static bool Upsert(AuthorViewModel authorViewModel)
+        {
+            return false;
+        }
+
+        public static bool DeleteAuthor(string AuthorID)
         {
             int Aid;
 
