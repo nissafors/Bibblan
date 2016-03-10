@@ -18,7 +18,7 @@ namespace Bibblan.Controllers
         public ActionResult Book(string isbn)
         {
             EditBookViewModel bookInfo = BookServices.GetEditBookViewModel(isbn);
-            bookInfo.NewBook = isbn == null ? true : false;
+            bookInfo.Update = isbn == null ? true : false;
             setBookViewLists(bookInfo);
 
             return View(bookInfo);
@@ -30,7 +30,9 @@ namespace Bibblan.Controllers
             setBookViewLists(bookInfo);
 
             if (ModelState.IsValid)
-                BookServices.Upsert(bookInfo);
+            {
+                BookServices.Upsert(bookInfo, bookInfo.Update);
+            }
 
             return View(bookInfo);
         }

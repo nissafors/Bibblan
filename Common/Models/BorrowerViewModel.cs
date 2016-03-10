@@ -9,6 +9,7 @@ namespace Common.Models
 {
     public class BorrowerViewModel
     {
+        [Required(ErrorMessage="Ett personnummer krävs")]
         [Display(Name = "Personnummer")]
         public string PersonId { get; set; }
         [Display(Name = "Förnamn")]
