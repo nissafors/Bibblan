@@ -5,6 +5,7 @@ using System.Web;
 using System.Web.Mvc;
 using Common.Models;
 using Services.Services;
+using Services.Exceptions;
 
 namespace Bibblan.Controllers
 {
@@ -102,28 +103,47 @@ namespace Bibblan.Controllers
 
         public ActionResult Delete(string Type, string Id)
         {
-            switch(Type)
+            try
             {
-                case "Borrower":
-                    BorrowerServices.Delete(Id);
-                    return RedirectToAction("Borrower", "Search");
+                switch (Type)
+                {
+                    case "Borrower":
+                        BorrowerServices.Delete(Id);
+                        return RedirectToAction("Borrower", "Search");
 
-                case "Author":
-                    AuthorServices.DeleteAuthor(Id);
-                    return RedirectToAction("Author", "Search");
+                    case "Author":
+                        AuthorServices.DeleteAuthor(Id);
+                        return RedirectToAction("Author", "Search");
 
-                case "Book":
-                    BookServices.Delete(Id);
-                    return RedirectToAction("Book", "Search");
+                    case "Book":
+                        BookServices.Delete(Id);
+                        return RedirectToAction("Book", "Search");
 
-                case "Copy":
-                    var isbn = CopyServices.GetCopyViewModel(Id).ISBN;
-                    CopyServices.DeleteCopy(Id);
-                    return RedirectToAction("Book", new { isbn });
+                    case "Copy":
+                        var isbn = CopyServices.GetCopyViewModel(Id).ISBN;
+                        CopyServices.DeleteCopy(Id);
+                        return RedirectToAction("Book", new { isbn });
 
-                default:
+                    default:
+                        return RedirectToAction("Index", "Home");
+
+                }
+            }
+            catch(AuthorHasBooksException)
+            {
+                //TODO: Handle author having books
+                return Redirect(Request.UrlReferrer.ToString());
+            }
+            catch(Exception)
+            {
+                if(Request.UrlReferrer != null)
+                {
+                    return Redirect(Request.UrlReferrer.ToString());
+                }
+                else
+                {
                     return RedirectToAction("Index", "Home");
-
+                }
             }
         }
 

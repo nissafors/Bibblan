@@ -82,9 +82,12 @@ namespace Services.Services
         public static bool DeleteAuthor(string AuthorID)
         {
             int Aid;
-
-            if (int.TryParse(AuthorID, out Aid))
+            List<BookAuthor> bookAuthorList;
+            if (int.TryParse(AuthorID, out Aid) &&
+                BookAuthor.GetBookAuthors(out bookAuthorList, Aid) &&
+                bookAuthorList.Count == 0)
             {
+                // TODO: Error handling. 
                 return Author.Delete(Aid);
             }
 
