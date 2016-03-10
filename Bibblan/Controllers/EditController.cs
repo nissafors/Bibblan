@@ -18,6 +18,7 @@ namespace Bibblan.Controllers
         public ActionResult Book(string isbn)
         {
             EditBookViewModel bookInfo = BookServices.GetEditBookViewModel(isbn);
+            bookInfo.NewBook = isbn == null ? true : false;
             setBookViewLists(bookInfo);
 
             return View(bookInfo);
@@ -26,17 +27,12 @@ namespace Bibblan.Controllers
         [HttpPost]
         public ActionResult Book(EditBookViewModel bookInfo)
         {
-            BookServices.Upsert(bookInfo);
             setBookViewLists(bookInfo);
 
-            return View(bookInfo);
-        }
+            if (ModelState.IsValid)
+                BookServices.Upsert(bookInfo);
 
-        [HttpPost]
-        public ActionResult Copy(CopyViewModel copyInfo)
-        {
-            CopyServices.Upsert(copyInfo);
-            return RedirectToAction("Book", new { copyInfo.ISBN });
+            return View(bookInfo);
         }
 
         // Helper for the Book ActionResult's.
@@ -61,6 +57,19 @@ namespace Bibblan.Controllers
             cvm.Title = BookServices.GetBookDetails(cvm.ISBN).Title;
 
             return View(cvm);
+        }
+
+        [HttpPost]
+        public ActionResult Copy(CopyViewModel copyInfo)
+        {
+            if (!ModelState.IsValid) {
+                var statusDic = StatusServices.GetStatusesAsDictionary();
+                copyInfo.Statuses = new SelectList(statusDic.OrderBy(x => x.Value), "Key", "Value");
+                return View(copyInfo);
+            }
+
+            CopyServices.Upsert(copyInfo);
+            return RedirectToAction("Book", new { copyInfo.ISBN });
         }
 
         [HttpGet]
