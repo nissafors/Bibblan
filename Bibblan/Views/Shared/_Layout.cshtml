@@ -28,12 +28,21 @@
                 
                 <ul class="nav navbar-nav navbar-right">
                     @* If a user is logged in this changes*@
-                    @if (Session["username"] == null)
+                    @if (!Bibblan.Helpers.AccountHelper.isLoggedIn(Session))
                     {
                         <li>@Html.ActionLink("Logga in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
                     }
                     else
                     {
+                        if(Bibblan.Helpers.AccountHelper.HasAccess(Session, Bibblan.Helpers.AccountHelper.Role.Admin))
+                        {
+                            <li>@Html.ActionLink("Administrera", "AdminPage", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+                        }
+                        else if (Bibblan.Helpers.AccountHelper.HasAccess(Session, Bibblan.Helpers.AccountHelper.Role.User))
+                        {
+                            <li>@Html.ActionLink("Mina lån", "UserPage", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
+                        }
+                        /*
                         int role = Convert.ToInt32(Session["roleId"]);
                         switch(role)
                         {
@@ -44,6 +53,7 @@
                                 <li>@Html.ActionLink("Mina lån", "UserPage", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
                                 break;
                         }
+                        */
                         <li>@Html.ActionLink("Logga ut", "Logout", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
                     }
                 </ul>

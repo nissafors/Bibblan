@@ -5,7 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using Common.Models;
 using Services.Services;
-
+using Bibblan.Helpers;
+using Bibblan.Filters;
 namespace Bibblan.Controllers
 {
     public class EditController : Controller
@@ -15,6 +16,7 @@ namespace Bibblan.Controllers
 
         // GET: edit/book
         [HttpGet]
+        [RequireLogin(RequiredRole = AccountHelper.Role.Admin)]
         public ActionResult Book(string isbn)
         {
             EditBookViewModel bookInfo = BookServices.GetEditBookViewModel(isbn);
@@ -23,7 +25,10 @@ namespace Bibblan.Controllers
             return View(bookInfo);
         }
 
+        // Always check Actual role against Repository (ForceCheck = true)
+        // When making changes
         [HttpPost]
+        [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
         public ActionResult Book(EditBookViewModel bookInfo)
         {
             BookServices.Upsert(bookInfo);
@@ -33,6 +38,7 @@ namespace Bibblan.Controllers
         }
 
         [HttpPost]
+        [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
         public ActionResult Copy(CopyViewModel copyInfo)
         {
             CopyServices.Upsert(copyInfo);
@@ -51,6 +57,7 @@ namespace Bibblan.Controllers
         }
 
         [HttpGet]
+        [RequireLogin(RequiredRole = AccountHelper.Role.Admin]
         public ActionResult Copy(string isbn, string barcode)
         {
             var cvm = CopyServices.GetCopyViewModel(barcode);
@@ -64,6 +71,7 @@ namespace Bibblan.Controllers
         }
 
         [HttpGet]
+        [RequireLogin(RequiredRole = AccountHelper.Role.Admin)]
         public ActionResult Borrower(string PersonId)
         {
             BorrowerViewModel borrower = null;
@@ -80,6 +88,7 @@ namespace Bibblan.Controllers
         }
 
         [HttpPost]
+        [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
         public ActionResult Borrower(BorrowerViewModel borrower)
         {
             if(BorrowerServices.Upsert(borrower))
@@ -91,12 +100,14 @@ namespace Bibblan.Controllers
             return View(borrower);
         }
 
+        [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
         public ActionResult Renew(BorrowViewModel borrowViewModel)
         {
             BorrowServices.Renew(borrowViewModel);
             return Redirect(Request.UrlReferrer.ToString());
         }
 
+        [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
         public ActionResult Delete(string Type, string Id)
         {
             switch(Type)
@@ -125,6 +136,7 @@ namespace Bibblan.Controllers
         }
 
         [HttpGet]
+        [RequireLogin(RequiredRole = AccountHelper.Role.Admin)]
         public ActionResult Author(int? authorid)
         {
             AuthorViewModel author = new AuthorViewModel();
@@ -137,6 +149,7 @@ namespace Bibblan.Controllers
         }
         
         [HttpPost]
+        [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
         public ActionResult Author(AuthorViewModel authorViewModel)
         {
             AuthorServices.Upsert(authorViewModel);

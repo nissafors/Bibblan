@@ -10,10 +10,11 @@ using Microsoft.AspNet.Identity.EntityFramework;
 using Microsoft.Owin.Security;
 using Common.Models;
 using Services.Services;
+using Bibblan.Helpers;
+using Bibblan.Filters;
 
 namespace Bibblan.Controllers
 {
-    //[Authorize]
     public class AccountController : Controller
     {
 
@@ -23,7 +24,7 @@ namespace Bibblan.Controllers
             {
                 if (AccountHelper.HasAccess(this.Session, AccountHelper.Role.Admin))
                     return RedirectToAction("AdminPage");
-                else if (AccountHelper.HasAccess(this.Session, AccountHelper.Role.User))
+                else if (AccountHelper.HasAccess(this.Session, AccountHelper.Role.User, true))
                     return RedirectToAction("UserPage");
             }
             return View();
@@ -39,12 +40,12 @@ namespace Bibblan.Controllers
             AccountViewModel m = AccountServices.Login(model);
             if(m != null)
             {
-                Session["username"] = m.Username;
-                // This should not be relied upon when doing actions !!!
-                Session["roleId"] = m.RoleId;
-                if(AccountHelper.HasAccess(this.Session, AccountHelper.Role.Admin))
+                // Setups the session indexes
+                AccountHelper.SetupUserSession(Session, m.Username, m.RoleId);
+
+                if(AccountHelper.HasAccess(Session, AccountHelper.Role.Admin))
                         return RedirectToAction("AdminPage");
-                else if(AccountHelper.HasAccess(this.Session, AccountHelper.Role.User))
+                else if(AccountHelper.HasAccess(Session, AccountHelper.Role.User))
                         return RedirectToAction("UserPage");
             }
             ViewBag.userNotFound = true;
@@ -54,33 +55,23 @@ namespace Bibblan.Controllers
 
         public ActionResult Logout()
         {
-            Session.Clear();
-            Session.Abandon();
+            AccountHelper.ClearSession(Session);
             if (Request.UrlReferrer != null)
                 return Redirect(Request.UrlReferrer.ToString());
             else
                 return RedirectToAction("Index", "Home");
         }
 
+        [RequireLogin(RequiredRole=AccountHelper.Role.Admin)]
         public ActionResult AdminPage()
         {
-            int role = Convert.ToInt32(Session["roleId"]);
-            if(Session["roleId"] != null && role == 0)
-            {
-                return View();
-            }
-            return RedirectToAction("Login");
+            return View();
         }
 
+        [RequireLogin(RequiredRole = AccountHelper.Role.User, ForceCheck=true)]
         public ActionResult UserPage()
         {
-            // Do not rely on session for roleId, because we list User details (Loans)
-            // Instead check Database if we still have the right access
-            if (!AccountHelper.isLoggedIn(this.Session))
-                return RedirectToAction("Login");
-            else if (AccountHelper.HasAccess(this.Session, AccountHelper.Role.User))
-                return View();
-            return RedirectToAction("Login");
+            return View();
         }
     }
 }

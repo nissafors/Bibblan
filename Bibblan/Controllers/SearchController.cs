@@ -6,6 +6,8 @@ using System.Web.Mvc;
 using Common.Models;
 using Services.Services;
 using System.Diagnostics;
+using Bibblan.Helpers;
+using Bibblan.Filters;
 
 namespace Bibblan.Controllers
 {
@@ -71,6 +73,7 @@ namespace Bibblan.Controllers
             return View();
         }
 
+        [RequireLogin(RequiredRole = AccountHelper.Role.Admin]
         public ActionResult Author(string search)
         {
             if (search == null)
