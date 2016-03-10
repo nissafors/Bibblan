@@ -26,7 +26,7 @@ namespace Repository.EntityModels
             List<Book> bookList;
             bool result = getBooks(out bookList, command);
 
-            if (result)
+            if (result && bookList.Count > 0)
             {
                 book = bookList[0];
             }

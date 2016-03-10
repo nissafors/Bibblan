@@ -11,11 +11,15 @@ namespace Bibblan.Controllers
 {
     public class EditController : Controller
     {
+        private AuthorServices authorService = new AuthorServices();
+        private BorrowerServices borrowerService = new BorrowerServices();
+
         // GET: edit/book
         [HttpGet]
         public ActionResult Book(string isbn)
         {
             EditBookViewModel bookInfo = BookServices.GetEditBookViewModel(isbn);
+            bookInfo.Update = isbn == null ? true : false;
             setBookViewLists(bookInfo);
 
             return View(bookInfo);
@@ -24,17 +28,14 @@ namespace Bibblan.Controllers
         [HttpPost]
         public ActionResult Book(EditBookViewModel bookInfo)
         {
-            BookServices.Upsert(bookInfo);
             setBookViewLists(bookInfo);
 
-            return View(bookInfo);
-        }
+            if (ModelState.IsValid)
+            {
+                BookServices.Upsert(bookInfo, bookInfo.Update);
+            }
 
-        [HttpPost]
-        public ActionResult Copy(CopyViewModel copyInfo)
-        {
-            CopyServices.Upsert(copyInfo);
-            return RedirectToAction("Book", new { copyInfo.ISBN });
+            return View(bookInfo);
         }
 
         // Helper for the Book ActionResult's.
@@ -61,19 +62,30 @@ namespace Bibblan.Controllers
             return View(cvm);
         }
 
+        [HttpPost]
+        public ActionResult Copy(CopyViewModel copyInfo)
+        {
+            if (!ModelState.IsValid) {
+                var statusDic = StatusServices.GetStatusesAsDictionary();
+                copyInfo.Statuses = new SelectList(statusDic.OrderBy(x => x.Value), "Key", "Value");
+                return View(copyInfo);
+            }
+
+            CopyServices.Upsert(copyInfo);
+            return RedirectToAction("Book", new { copyInfo.ISBN });
+        }
+
         [HttpGet]
         public ActionResult Borrower(string PersonId)
         {
             BorrowerViewModel borrower = null;
-            if (PersonId != null)
+            if (PersonId == null)
+            {
+                borrower = BorrowerServices.GetEmptyBorrower();
+            }
+            else
             {
                 borrower = BorrowerServices.GetBorrower(PersonId);
-            }
-
-            if(borrower == null)
-            {
-                borrower = new BorrowerViewModel();
-                borrower.Category = CategoryServices.CategoriesAsSelectList();
             }
 
             return View(borrower);
@@ -82,16 +94,12 @@ namespace Bibblan.Controllers
         [HttpPost]
         public ActionResult Borrower(BorrowerViewModel borrower)
         {
-            if (ModelState.IsValid)
+            if(BorrowerServices.Upsert(borrower))
             {
-                if (BorrowerServices.Upsert(borrower))
-                {
-                    // TODO: Handle succesfull or unsuccesfull 
-                    // TODO: Set history so back button works
-                }
+                // TODO: Handle succesfull or unsuccesfull 
+                // TODO: Set history so back button works
             }
-
-            borrower.Category = CategoryServices.CategoriesAsSelectList();
+            borrower = BorrowerServices.GetBorrower(borrower.PersonId);
             return View(borrower);
         }
 
