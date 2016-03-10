@@ -10,31 +10,26 @@ namespace Common.Models
     public class EditBookViewModel
     {
         // Properties
-        [Required]
+        [Required(ErrorMessage="ISBN krävs")]
         [Display(Name = "ISBN")]
         public string ISBN { get; set; }
 
-        [Required]
         [Display(Name = "Titel")]
         public string Title { get; set; }
 
-        [Required]
         [Display(Name = "Klassifikation")]
         public int ClassificationId { get; set; }
 
-        [Required]
         [Display(Name = "Publiceringsår")]
         public string PublicationYear { get; set; }
 
-        [Required]
         [Display(Name = "Publiceringsinformation")]
         public string PublicationInfo { get; set; }
 
-        [Required]
         [Display(Name = "Sidantal")]
         public int Pages { get; set; }
 
-        [Required]
+        [Required(ErrorMessage="Minst en författare måste väljas")]
         [Display(Name = "Författare")]
         public List<int> AuthorIds { get; set; }
 
@@ -45,6 +40,8 @@ namespace Common.Models
 
         [Display(Name = "Författare")]
         public SelectList Authors { get; set; }
+
+        public bool Update { get; set; }
 
         /// <summary>
         /// Create a new empty EditBookViewModel

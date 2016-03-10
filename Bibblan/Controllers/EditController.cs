@@ -7,6 +7,8 @@ using Common.Models;
 using Services.Services;
 using Bibblan.Helpers;
 using Bibblan.Filters;
+using Services.Exceptions;
+
 namespace Bibblan.Controllers
 {
     public class EditController : Controller
@@ -20,6 +22,7 @@ namespace Bibblan.Controllers
         public ActionResult Book(string isbn)
         {
             EditBookViewModel bookInfo = BookServices.GetEditBookViewModel(isbn);
+            bookInfo.Update = isbn == null ? true : false;
             setBookViewLists(bookInfo);
 
             return View(bookInfo);
@@ -31,18 +34,14 @@ namespace Bibblan.Controllers
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
         public ActionResult Book(EditBookViewModel bookInfo)
         {
-            BookServices.Upsert(bookInfo);
             setBookViewLists(bookInfo);
 
-            return View(bookInfo);
+            if (ModelState.IsValid)
+            {
+                BookServices.Upsert(bookInfo, bookInfo.Update);
         }
 
-        [HttpPost]
-        [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
-        public ActionResult Copy(CopyViewModel copyInfo)
-        {
-            CopyServices.Upsert(copyInfo);
-            return RedirectToAction("Book", new { copyInfo.ISBN });
+            return View(bookInfo);
         }
 
         // Helper for the Book ActionResult's.
@@ -68,6 +67,19 @@ namespace Bibblan.Controllers
             cvm.Title = BookServices.GetBookDetails(cvm.ISBN).Title;
 
             return View(cvm);
+        }
+
+        [HttpPost]
+        public ActionResult Copy(CopyViewModel copyInfo)
+        {
+            if (!ModelState.IsValid) {
+                var statusDic = StatusServices.GetStatusesAsDictionary();
+                copyInfo.Statuses = new SelectList(statusDic.OrderBy(x => x.Value), "Key", "Value");
+                return View(copyInfo);
+            }
+
+            CopyServices.Upsert(copyInfo);
+            return RedirectToAction("Book", new { copyInfo.ISBN });
         }
 
         [HttpGet]
@@ -110,8 +122,10 @@ namespace Bibblan.Controllers
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
         public ActionResult Delete(string Type, string Id)
         {
-            switch(Type)
+            try
             {
+                switch (Type)
+                {
                 case "Borrower":
                     BorrowerServices.Delete(Id);
                     return RedirectToAction("Borrower", "Search");
@@ -132,6 +146,23 @@ namespace Bibblan.Controllers
                 default:
                     return RedirectToAction("Index", "Home");
 
+            }
+        }
+            catch(AuthorHasBooksException)
+            {
+                //TODO: Handle author having books
+                return Redirect(Request.UrlReferrer.ToString());
+            }
+            catch(Exception)
+            {
+                if(Request.UrlReferrer != null)
+                {
+                    return Redirect(Request.UrlReferrer.ToString());
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
             }
         }
 

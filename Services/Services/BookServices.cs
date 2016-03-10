@@ -88,8 +88,18 @@ namespace Services.Services
             return bookViewModel;
         }
 
-        public static bool Upsert(EditBookViewModel editBookViewModel)
+        public static bool Upsert(EditBookViewModel editBookViewModel, bool overwriteExisting)
         {
+            if (!overwriteExisting)
+            {
+                Book tmp;
+                Book.GetBook(out tmp, editBookViewModel.ISBN);
+                if (tmp != null)
+                {
+                    // throw new exception
+                }
+            }
+
             Book book = Mapper.Map<Book>(editBookViewModel);
             return Book.Upsert(book, editBookViewModel.AuthorIds);
         }

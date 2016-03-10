@@ -14,7 +14,7 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                <label for="BarCode">Streckkod</label>
+                @Html.LabelFor(model => model.BarCode)
                 @if (Model.BarCode != null)
                 {
                     @Html.TextBoxFor(model => model.BarCode , new { @class = "form-control", @readonly="readonly" })
@@ -22,12 +22,13 @@
                 else
                 {
                     @Html.TextBoxFor(model => model.BarCode , new { @class = "form-control" })
+                    @Html.ValidationMessageFor(model => model.BarCode, null, new { @class = "text-danger" })
                 }
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <label for="Location">Plats</label>
+                @Html.LabelFor(model => model.Location)
                 @Html.TextBoxFor(model => model.Location, new { @class = "form-control" })
             </div>
         </div>
@@ -35,13 +36,13 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                <label for="Library">Bibliotek</label>
+                @Html.LabelFor(model => model.Library)
                 @Html.TextBoxFor(model => model.Library, new { @class = "form-control" })
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                <label for="Status">Klassifikation</label>
+                @Html.LabelFor(model => model.StatusId)
                 @Html.DropDownListFor(model => model.StatusId, Model.Statuses, new { @class = "form-control" })
             </div>
         </div>

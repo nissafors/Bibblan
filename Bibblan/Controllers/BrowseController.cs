@@ -20,7 +20,6 @@ namespace Bibblan.Controllers
             return View();
         }
 
-        //
         // GET: /Browse/Author
         public ActionResult Author()
         {

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Common.Models;
 using Repository.EntityModels;
+using System.Web.Mvc;
 
 namespace Services.Services
 {
@@ -20,11 +21,11 @@ namespace Services.Services
             
             return null;
         }
-        /*
-        static public Category GetCategory(int id)
+
+        static public SelectList CategoriesAsSelectList()
         {
-            return Mockup.Mockup.categories[0];
+            List<Category> categoryList = GetAllCategories();
+            return new SelectList(categoryList.OrderBy(x => x.CategoryName), "CategoryId", "CategoryName");
         }
-        */
     }
 }
