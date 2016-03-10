@@ -10,9 +10,6 @@ namespace Bibblan.Controllers
 {
     public class EditController : Controller
     {
-        private AuthorServices authorService = new AuthorServices();
-        private BorrowerServices borrowerService = new BorrowerServices();
-
         // GET: edit/book
         [HttpGet]
         public ActionResult Book(string isbn)
@@ -67,13 +64,15 @@ namespace Bibblan.Controllers
         public ActionResult Borrower(string PersonId)
         {
             BorrowerViewModel borrower = null;
-            if (PersonId == null)
-            {
-                borrower = BorrowerServices.GetEmptyBorrower();
-            }
-            else
+            if (PersonId != null)
             {
                 borrower = BorrowerServices.GetBorrower(PersonId);
+            }
+
+            if(borrower == null)
+            {
+                borrower = new BorrowerViewModel();
+                borrower.Category = CategoryServices.CategoriesAsSelectList();
             }
 
             return View(borrower);
@@ -82,12 +81,16 @@ namespace Bibblan.Controllers
         [HttpPost]
         public ActionResult Borrower(BorrowerViewModel borrower)
         {
-            if(BorrowerServices.Upsert(borrower))
+            if (ModelState.IsValid)
             {
-                // TODO: Handle succesfull or unsuccesfull 
-                // TODO: Set history so back button works
+                if (BorrowerServices.Upsert(borrower))
+                {
+                    // TODO: Handle succesfull or unsuccesfull 
+                    // TODO: Set history so back button works
+                }
             }
-            borrower = BorrowerServices.GetBorrower(borrower.PersonId);
+
+            borrower.Category = CategoryServices.CategoriesAsSelectList();
             return View(borrower);
         }
 
