@@ -49,7 +49,6 @@
     <Compile Include="EntityModels\Copy.cs" />
     <Compile Include="EntityModels\Borrow.cs" />
     <Compile Include="EntityModels\HelperFunctions.cs" />
-    <Compile Include="EntityModels\Loan.cs" />
     <Compile Include="EntityModels\Status.cs" />
     <Compile Include="EntityModels\UserRole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

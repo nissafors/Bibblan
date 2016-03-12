@@ -8,6 +8,7 @@ namespace Common.Models
 {
     public class UserPageViewModel
     {
+        public BorrowerViewModel Borrower { get; set; }
 
     }
 }
