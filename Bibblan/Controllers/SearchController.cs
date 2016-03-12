@@ -73,7 +73,7 @@ namespace Bibblan.Controllers
             return View();
         }
 
-        [RequireLogin(RequiredRole = AccountHelper.Role.Admin]
+        [RequireLogin(RequiredRole = AccountHelper.Role.Admin)]
         public ActionResult Author(string search)
         {
             if (search == null)

@@ -87,11 +87,12 @@ namespace Services.Services
                 BookAuthor.GetBookAuthors(out bookAuthorList, Aid) &&
                 bookAuthorList.Count == 0)
             {
-                // TODO: Error handling. 
                 return Author.Delete(Aid);
             }
-
-            return false;
+            else
+            {
+                throw new Exceptions.AuthorException.HasBooksException("Författaren kan inte tas bort då han eller hon har böcker.");
+            }
         }
     }
 }

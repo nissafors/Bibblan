@@ -7,15 +7,11 @@ using Common.Models;
 using Services.Services;
 using Bibblan.Helpers;
 using Bibblan.Filters;
-using Services.Exceptions;
 
 namespace Bibblan.Controllers
 {
     public class EditController : Controller
     {
-        private AuthorServices authorService = new AuthorServices();
-        private BorrowerServices borrowerService = new BorrowerServices();
-
         // GET: edit/book
         [HttpGet]
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin)]
@@ -39,7 +35,7 @@ namespace Bibblan.Controllers
             if (ModelState.IsValid)
             {
                 BookServices.Upsert(bookInfo, bookInfo.Update);
-        }
+            }
 
             return View(bookInfo);
         }
@@ -56,7 +52,7 @@ namespace Bibblan.Controllers
         }
 
         [HttpGet]
-        [RequireLogin(RequiredRole = AccountHelper.Role.Admin]
+        [RequireLogin(RequiredRole = AccountHelper.Role.Admin)]
         public ActionResult Copy(string isbn, string barcode)
         {
             var cvm = CopyServices.GetCopyViewModel(barcode);
@@ -72,7 +68,8 @@ namespace Bibblan.Controllers
         [HttpPost]
         public ActionResult Copy(CopyViewModel copyInfo)
         {
-            if (!ModelState.IsValid) {
+            if (!ModelState.IsValid)
+            {
                 var statusDic = StatusServices.GetStatusesAsDictionary();
                 copyInfo.Statuses = new SelectList(statusDic.OrderBy(x => x.Value), "Key", "Value");
                 return View(copyInfo);
@@ -103,7 +100,7 @@ namespace Bibblan.Controllers
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
         public ActionResult Borrower(BorrowerViewModel borrower)
         {
-            if(BorrowerServices.Upsert(borrower))
+            if (BorrowerServices.Upsert(borrower))
             {
                 // TODO: Handle succesfull or unsuccesfull 
                 // TODO: Set history so back button works
@@ -126,36 +123,39 @@ namespace Bibblan.Controllers
             {
                 switch (Type)
                 {
-                case "Borrower":
-                    BorrowerServices.Delete(Id);
-                    return RedirectToAction("Borrower", "Search");
+                    case "Borrower":
+                        BorrowerServices.Delete(Id);
+                        return RedirectToAction("Borrower", "Search");
 
-                case "Author":
-                    AuthorServices.DeleteAuthor(Id);
-                    return RedirectToAction("Author", "Search");
+                    case "Author":
+                        AuthorServices.DeleteAuthor(Id);
+                        return RedirectToAction("Author", "Search");
 
-                case "Book":
-                    BookServices.Delete(Id);
-                    return RedirectToAction("Book", "Search");
+                    case "Book":
+                        BookServices.Delete(Id);
+                        return RedirectToAction("Book", "Search");
 
-                case "Copy":
-                    var isbn = CopyServices.GetCopyViewModel(Id).ISBN;
-                    CopyServices.DeleteCopy(Id);
-                    return RedirectToAction("Book", new { isbn });
+                    case "Copy":
+                        var isbn = CopyServices.GetCopyViewModel(Id).ISBN;
+                        CopyServices.DeleteCopy(Id);
+                        return RedirectToAction("Book", new { isbn });
 
-                default:
-                    return RedirectToAction("Index", "Home");
+                    default:
+                        return RedirectToAction("Index", "Home");
 
+                }
             }
-        }
-            catch(AuthorHasBooksException)
+            catch (Services.Exceptions.AuthorException.HasBooksException e)
             {
                 //TODO: Handle author having books
-                return Redirect(Request.UrlReferrer.ToString());
+
+                string authorId = Id;
+                string error = e.Message;
+                return RedirectToAction("Author", new { authorId, error });
             }
-            catch(Exception)
+            catch (Exception)
             {
-                if(Request.UrlReferrer != null)
+                if (Request.UrlReferrer != null)
                 {
                     return Redirect(Request.UrlReferrer.ToString());
                 }
@@ -168,9 +168,10 @@ namespace Bibblan.Controllers
 
         [HttpGet]
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin)]
-        public ActionResult Author(int? authorid)
+        public ActionResult Author(int? authorid, string error = null)
         {
             AuthorViewModel author = new AuthorViewModel();
+            ViewBag.error = error;
             if (authorid != null)
             {
                 author = AuthorServices.GetAuthor((int)authorid);
@@ -178,10 +179,10 @@ namespace Bibblan.Controllers
 
             return View(author);
         }
-        
+
         [HttpPost]
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
-        public ActionResult Author(AuthorViewModel authorViewModel)
+        public ActionResult Author(AuthorViewModel authorViewModel, Exception e = null)
         {
             AuthorServices.Upsert(authorViewModel);
             // TODO: Handle success/fail
