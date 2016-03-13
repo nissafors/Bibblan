@@ -147,8 +147,6 @@ namespace Bibblan.Controllers
             }
             catch (Services.Exceptions.AuthorException.HasBooksException e)
             {
-                //TODO: Handle author having books
-
                 string authorId = Id;
                 string error = e.Message;
                 return RedirectToAction("Author", new { authorId, error });
@@ -182,10 +180,17 @@ namespace Bibblan.Controllers
 
         [HttpPost]
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
-        public ActionResult Author(AuthorViewModel authorViewModel, Exception e = null)
+        public ActionResult Author(AuthorViewModel authorViewModel)
         {
-            AuthorServices.Upsert(authorViewModel);
-            // TODO: Handle success/fail
+            try
+            {
+                AuthorServices.Upsert(authorViewModel);
+            }
+            catch(Exception e)
+            {
+                ViewBag.error = e.Message;
+            }
+
             return View(authorViewModel);
         }
     }

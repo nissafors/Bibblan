@@ -24,7 +24,7 @@ namespace Repository.EntityModels
             List<Author> authorList;
             bool result = GetAuthors(out authorList, command);
 
-            if(result)
+            if (result)
             {
                 author = authorList[0];
             }
@@ -80,7 +80,7 @@ namespace Repository.EntityModels
                     }
                 }
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return false;
             }
@@ -103,14 +103,14 @@ namespace Repository.EntityModels
                         command.Parameters.AddWithValue("@LastName", author.LastName);
                         command.Parameters.AddWithValue("@BirthYear", author.BirthYear);
 
-                        if(command.ExecuteNonQuery() != 1)
+                        if (command.ExecuteNonQuery() != 1)
                         {
                             return false;
                         }
                     }
                 }
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return false;
             }
@@ -120,7 +120,22 @@ namespace Repository.EntityModels
 
         static public bool Delete(int Aid)
         {
-            return false;
+            using (SqlConnection connection = DatabaseConnection.GetConnection())
+            {
+                connection.Open();
+                // Delete author
+                using (SqlCommand command = new SqlCommand("DELETE FROM AUTHOR WHERE AuthorId = @AuthorId", connection))
+                {
+                    command.Parameters.AddWithValue("@AuthorId", Aid);
+
+                    if(command.ExecuteNonQuery() == 0)
+                    {
+                        // Did not delete
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
     }
 }

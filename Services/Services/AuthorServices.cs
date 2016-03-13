@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Common.Models;
 using Repository.EntityModels;
 using AutoMapper;
+using System.Data.SqlClient;
 
 namespace Services.Services
 {
@@ -20,10 +21,10 @@ namespace Services.Services
             List<Author> authorEntities;
             List<AuthorViewModel> authors = new List<AuthorViewModel>();
 
-            if(Author.GetAuthors(out authorEntities) && authorEntities != null)
+            if (Author.GetAuthors(out authorEntities) && authorEntities != null)
             {
                 // build list
-                foreach(var author in authorEntities)
+                foreach (var author in authorEntities)
                 {
                     authors.Add(new AuthorViewModel { FirstName = author.FirstName, LastName = author.LastName, BirthYear = author.BirthYear, Aid = author.Aid });
                 }
@@ -36,7 +37,7 @@ namespace Services.Services
         {
             Author author;
 
-            if(Author.GetAuthor(out author, authorId)
+            if (Author.GetAuthor(out author, authorId)
                 && author != null)
             {
                 return Mapper.Map<AuthorViewModel>(author);
@@ -47,10 +48,10 @@ namespace Services.Services
         public static List<AuthorViewModel> SearchAuthors(string search)
         {
             List<Author> authorList;
-            if(Author.GetAuthors(out authorList, search))
+            if (Author.GetAuthors(out authorList, search))
             {
                 List<AuthorViewModel> authorViewModelList = new List<AuthorViewModel>();
-                foreach(Author author in authorList)
+                foreach (Author author in authorList)
                 {
                     authorViewModelList.Add(Mapper.Map<AuthorViewModel>(author));
                 }
@@ -66,7 +67,7 @@ namespace Services.Services
             List<Author> al;
 
             if (Author.GetAuthors(out al))
-        {
+            {
                 foreach (Author a in al)
                     dic.Add(a.Aid, a.FirstName + " " + a.LastName);
             }
@@ -76,6 +77,21 @@ namespace Services.Services
 
         public static bool Upsert(AuthorViewModel authorViewModel)
         {
+            Author author = Mapper.Map<Author>(authorViewModel);
+            try
+            {
+                Author existingAuthor = null;
+                if(Author.GetAuthor(out existingAuthor, author.Aid) &&
+                    existingAuthor != null)
+                {
+
+                }
+            }
+            catch(Exception)
+            {
+                throw;
+            }
+
             return false;
         }
 
@@ -83,15 +99,34 @@ namespace Services.Services
         {
             int Aid;
             List<BookAuthor> bookAuthorList;
-            if (int.TryParse(AuthorID, out Aid) &&
-                BookAuthor.GetBookAuthors(out bookAuthorList, Aid) &&
-                bookAuthorList.Count == 0)
+            try
             {
-                return Author.Delete(Aid);
+                if (int.TryParse(AuthorID, out Aid) &&
+                    BookAuthor.GetBookAuthors(out bookAuthorList, Aid))
+                {
+                    if (bookAuthorList.Count == 0)
+                    {
+                        if (Author.Delete(Aid))
+                        {
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        throw new Exceptions.AuthorException.HasBooksException("Författaren kan inte tas bort då han eller hon har böcker.");
+                    }
+                }
+                throw new Exceptions.AuthorException.DoesNotExistException("Författaren som skulle tas bort hittades inte.");
             }
-            else
+            catch (SqlException)
             {
-                throw new Exceptions.AuthorException.HasBooksException("Författaren kan inte tas bort då han eller hon har böcker.");
+                // Database error
+                return false;
+            }
+            catch (Exception)
+            {
+                // Rethrow the exception
+                throw;
             }
         }
     }
