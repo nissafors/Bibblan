@@ -60,6 +60,8 @@ namespace Repository.EntityModels
 
         /// <summary>
         /// Create a cryptographically secure hash with HMAC sha1 as a CSPRNG 
+        /// Returns a two dimenstional string with index 0 being the hashed password
+        /// & index 1 being the salt
         /// </summary>
         /// <param name="password"></param>
         /// <returns></returns>
@@ -71,5 +73,17 @@ namespace Repository.EntityModels
             return new string[] { Convert.ToBase64String(hash), Convert.ToBase64String(pbkdf2.Salt) };
         }
        
+        /// <summary>
+        /// Create a hash using a specified salt
+        /// </summary>
+        /// <param name="password"></param>
+        /// <param name="salt"></param>
+        /// <returns></returns>
+        private static string makeHash(string password, string salt)
+        {
+            Rfc2898DeriveBytes pbkdf2 = new Rfc2898DeriveBytes(password, Convert.FromBase64String(salt));
+            pbkdf2.IterationCount = PBKDFITERATIONS;
+            return Convert.ToBase64String(pbkdf2.GetBytes(20));
+        }
     }
 }
