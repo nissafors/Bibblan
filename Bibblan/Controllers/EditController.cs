@@ -18,7 +18,7 @@ namespace Bibblan.Controllers
         public ActionResult Book(string isbn)
         {
             EditBookViewModel bookInfo = BookServices.GetEditBookViewModel(isbn);
-            bookInfo.Update = isbn == null ? true : false;
+            bookInfo.Update = (isbn != null);
             setBookViewLists(bookInfo);
 
             return View(bookInfo);
@@ -57,26 +57,42 @@ namespace Bibblan.Controllers
         {
             var cvm = CopyServices.GetCopyViewModel(barcode);
             cvm.ISBN = isbn;
+            cvm.Update = (barcode != null);
 
-            var statusDic = StatusServices.GetStatusesAsDictionary();
-            cvm.Statuses = new SelectList(statusDic.OrderBy(x => x.Value), "Key", "Value");
-            cvm.Title = BookServices.GetBookDetails(cvm.ISBN).Title;
+            setCopyViewLists(cvm);
 
             return View(cvm);
         }
 
         [HttpPost]
+        [RequireLogin(RequiredRole = AccountHelper.Role.Admin)]
         public ActionResult Copy(CopyViewModel copyInfo)
         {
             if (!ModelState.IsValid)
             {
-                var statusDic = StatusServices.GetStatusesAsDictionary();
-                copyInfo.Statuses = new SelectList(statusDic.OrderBy(x => x.Value), "Key", "Value");
+                setCopyViewLists(copyInfo);
                 return View(copyInfo);
             }
 
-            CopyServices.Upsert(copyInfo);
-            return RedirectToAction("Book", new { copyInfo.ISBN });
+            try
+            {
+                CopyServices.Upsert(copyInfo, copyInfo.Update);
+                return RedirectToAction("Book", new { copyInfo.ISBN });
+            }
+            catch (Exception e)
+            {
+                ViewBag.error = e.Message;
+                setCopyViewLists(copyInfo);
+                return View(copyInfo);
+            }
+
+        }
+
+        private void setCopyViewLists(CopyViewModel cvm)
+        {
+            var statusDic = StatusServices.GetStatusesAsDictionary();
+            cvm.Statuses = new SelectList(statusDic.OrderBy(x => x.Value), "Key", "Value");
+            cvm.Title = BookServices.GetBookDetails(cvm.ISBN).Title;
         }
 
         [HttpGet]

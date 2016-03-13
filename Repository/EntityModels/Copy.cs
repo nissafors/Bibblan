@@ -29,7 +29,7 @@ namespace Repository.EntityModels
             command.Parameters.AddWithValue("@Barcode", barCode);
             var copies = new List<Copy>();
             var result = getCopies(out copies, command);
-            copy = result ? copies[0] : null;
+            copy = result && copies.Count > 0 ? copies[0] : null;
             return result;
         }
 
