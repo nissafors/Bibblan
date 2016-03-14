@@ -28,7 +28,7 @@
                 
                 <ul class="nav navbar-nav navbar-right">
                     @* If a user is logged in this changes*@
-                    @if (!Bibblan.Helpers.AccountHelper.isLoggedIn(Session))
+                    @if (!Bibblan.Helpers.AccountHelper.IsLoggedIn(Session))
                     {
                         <li>@Html.ActionLink("Logga in", "Login", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
                     }

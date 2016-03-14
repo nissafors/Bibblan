@@ -67,8 +67,7 @@ namespace Repository.EntityModels
         /// <returns></returns>
         private static string[] makeHash(string password)
         {
-            Rfc2898DeriveBytes pbkdf2 = new Rfc2898DeriveBytes(password, RNGLENGHT);
-            pbkdf2.IterationCount = PBKDFITERATIONS;
+            Rfc2898DeriveBytes pbkdf2 = new Rfc2898DeriveBytes(password, RNGLENGHT, PBKDFITERATIONS);
             var hash = pbkdf2.GetBytes(20);
             return new string[] { Convert.ToBase64String(hash), Convert.ToBase64String(pbkdf2.Salt) };
         }

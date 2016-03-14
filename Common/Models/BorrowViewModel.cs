@@ -8,6 +8,7 @@ namespace Common.Models
 {
     public class BorrowViewModel
     {
+        public string Title { get; set; }
         public string Barcode { get; set; }
         public string PersonId { get; set; }
         public DateTime BorrowDate { get; set; }
