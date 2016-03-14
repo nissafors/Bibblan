@@ -111,6 +111,8 @@ namespace Repository.EntityModels
             return true;
         }
 
+
+
         static public bool Insert(Author author)
         {
             using (SqlConnection connection = DatabaseConnection.GetConnection())
@@ -119,9 +121,9 @@ namespace Repository.EntityModels
                 using (SqlCommand command = new SqlCommand("INSERT INTO AUTHOR (FirstName, LastName, BirthYear) VALUES (@FirstName, @LastName, @BirthYear)"))
                 {
                     command.Connection = connection;
-                    command.Parameters.AddWithValue("@FirstName", author.FirstName);
-                    command.Parameters.AddWithValue("@LastName", author.LastName);
-                    command.Parameters.AddWithValue("@BirthYear", author.BirthYear);
+                    command.Parameters.AddWithValue("@FirstName", DBNullHelper.ValueOrDBNull(author.FirstName));
+                    command.Parameters.AddWithValue("@LastName", DBNullHelper.ValueOrDBNull(author.LastName));
+                    command.Parameters.AddWithValue("@BirthYear", DBNullHelper.ValueOrDBNull(author.BirthYear));
 
                     if (command.ExecuteNonQuery() != 1)
                     {
