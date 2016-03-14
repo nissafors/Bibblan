@@ -14,6 +14,7 @@ namespace Common.Models
         [Display(Name = "ISBN")]
         public string ISBN { get; set; }
 
+        [Required(ErrorMessage = "Titel krävs")]
         [Display(Name = "Titel")]
         public string Title { get; set; }
 

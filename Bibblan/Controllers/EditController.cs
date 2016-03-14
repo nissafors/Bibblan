@@ -34,7 +34,15 @@ namespace Bibblan.Controllers
 
             if (ModelState.IsValid)
             {
-                BookServices.Upsert(bookInfo, bookInfo.Update);
+                try
+                {
+                    BookServices.Upsert(bookInfo, bookInfo.Update);
+                    bookInfo.Update = true;
+                }
+                catch (Exception e)
+                {
+                    ViewBag.error = e.Message;
+                }
             }
 
             return View(bookInfo);
@@ -182,13 +190,13 @@ namespace Bibblan.Controllers
 
                 }
             }
-            catch (Services.Exceptions.AuthorException.HasBooksException e)
+            catch (Services.Exceptions.HasBooksException e)
             {
                 string authorId = Id;
                 TempData["error"] = e.Message;
                 return RedirectToAction("Author", new { authorId });
             }
-            catch(Services.Exceptions.AuthorException.DoesNotExistException e)
+            catch(Services.Exceptions.DoesNotExistException e)
             {
                 ViewBag.error = e.Message;
                 
@@ -233,7 +241,7 @@ namespace Bibblan.Controllers
                     author = AuthorServices.GetAuthor((int)authorid);
                 }
             }
-            catch(Services.Exceptions.AuthorException.DoesNotExistException e)
+            catch(Services.Exceptions.DoesNotExistException e)
             {
                 ViewBag.error = e.Message;
             }
@@ -249,7 +257,7 @@ namespace Bibblan.Controllers
             {
                 AuthorServices.Upsert(authorViewModel);
             }
-            catch(Services.Exceptions.AuthorException.DoesNotExistException e)
+            catch(Services.Exceptions.DoesNotExistException e)
             {
                 ViewBag.error = e.Message;
             }

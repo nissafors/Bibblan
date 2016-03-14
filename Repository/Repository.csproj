@@ -65,6 +65,7 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="SQL-Scripts\CreateAuth.sql" />
     <Content Include="SQL-Scripts\CreateDB.sql" />
     <Content Include="SQL-Scripts\DataLoad.sql" />
     <Content Include="SQL-Scripts\Upsert procedures.sql" />

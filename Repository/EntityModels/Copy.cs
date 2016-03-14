@@ -44,10 +44,10 @@ namespace Repository.EntityModels
                     {
                         command.Connection = connection;
                         command.Parameters.AddWithValue("@Barcode", copy.Barcode);
-                        command.Parameters.AddWithValue("@Location", copy.Location);
+                        command.Parameters.AddWithValue("@Location", DBNullHelper.ValueOrDBNull(copy.Location));
                         command.Parameters.AddWithValue("@StatusId", copy.StatusId);
-                        command.Parameters.AddWithValue("@ISBN", copy.ISBN);
-                        command.Parameters.AddWithValue("@Library", copy.Library);
+                        command.Parameters.AddWithValue("@ISBN", DBNullHelper.ValueOrDBNull(copy.ISBN));
+                        command.Parameters.AddWithValue("@Library", DBNullHelper.ValueOrDBNull(copy.Library));
 
                         if (command.ExecuteNonQuery() != 1)
                         {
