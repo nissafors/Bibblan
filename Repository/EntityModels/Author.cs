@@ -130,7 +130,7 @@ namespace Repository.EntityModels
 
                     if(command.ExecuteNonQuery() == 0)
                     {
-                        // Did not delete
+                        // Did not delete anything
                         return false;
                     }
                 }

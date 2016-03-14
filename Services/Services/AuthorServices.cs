@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Common.Models;
 using Repository.EntityModels;
 using AutoMapper;
-using System.Data.SqlClient;
+using Services.Exceptions.AuthorException;
 
 namespace Services.Services
 {
@@ -78,18 +78,14 @@ namespace Services.Services
         public static bool Upsert(AuthorViewModel authorViewModel)
         {
             Author author = Mapper.Map<Author>(authorViewModel);
-            try
-            {
-                Author existingAuthor = null;
-                if(Author.GetAuthor(out existingAuthor, author.Aid) &&
-                    existingAuthor != null)
-                {
 
-                }
-            }
-            catch(Exception)
+            if(author.Aid != 0)
             {
-                throw;
+                // Update author
+            }
+            else
+            {
+                // add new author
             }
 
             return false;
@@ -99,35 +95,23 @@ namespace Services.Services
         {
             int Aid;
             List<BookAuthor> bookAuthorList;
-            try
+
+            if (int.TryParse(AuthorID, out Aid) &&
+                BookAuthor.GetBookAuthors(out bookAuthorList, Aid))
             {
-                if (int.TryParse(AuthorID, out Aid) &&
-                    BookAuthor.GetBookAuthors(out bookAuthorList, Aid))
+                if (bookAuthorList.Count == 0)
                 {
-                    if (bookAuthorList.Count == 0)
+                    if (Author.Delete(Aid))
                     {
-                        if (Author.Delete(Aid))
-                        {
-                            return true;
-                        }
-                    }
-                    else
-                    {
-                        throw new Exceptions.AuthorException.HasBooksException("Författaren kan inte tas bort då han eller hon har böcker.");
+                        return true;
                     }
                 }
-                throw new Exceptions.AuthorException.DoesNotExistException("Författaren som skulle tas bort hittades inte.");
+                else
+                {
+                    throw new HasBooksException("Författaren kan inte tas bort då han eller hon har böcker.");
+                }
             }
-            catch (SqlException)
-            {
-                // Database error
-                return false;
-            }
-            catch (Exception)
-            {
-                // Rethrow the exception
-                throw;
-            }
+            throw new DoesNotExistException("Författaren som skulle tas bort hittades inte.");
         }
     }
 }
