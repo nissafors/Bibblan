@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Common.Models;
 using Repository.EntityModels;
-using System.Web.Mvc;
 
 namespace Services.Services
 {
@@ -22,10 +21,20 @@ namespace Services.Services
             return null;
         }
 
-        static public SelectList CategoriesAsSelectList()
+        public static Dictionary<int, string> GetCategoriesAsDictionary()
         {
-            List<Category> categoryList = GetAllCategories();
-            return new SelectList(categoryList.OrderBy(x => x.CategoryName), "CategoryId", "CategoryName");
+            Dictionary<int, string> categoryDic = new Dictionary<int, string>();
+            List<Category> categoryList;
+
+            if (Category.GetCategories(out categoryList))
+            {
+                foreach (Category category in categoryList)
+                {
+                    categoryDic.Add(category.CategoryId, category.CategoryName);
+                }
+            }
+
+            return categoryDic;
         }
     }
 }

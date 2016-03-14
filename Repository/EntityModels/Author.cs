@@ -49,70 +49,78 @@ namespace Repository.EntityModels
         {
             authorList = new List<Author>();
 
-            try
+            using (SqlConnection connection = DatabaseConnection.GetConnection())
             {
-                using (SqlConnection connection = DatabaseConnection.GetConnection())
+                connection.Open();
+                using (command)
                 {
-                    connection.Open();
-                    using (command)
+                    command.Connection = connection;
+                    using (SqlDataReader myReader = command.ExecuteReader())
                     {
-                        command.Connection = connection;
-                        using (SqlDataReader myReader = command.ExecuteReader())
+                        if (myReader != null)
                         {
-                            if (myReader != null)
+                            while (myReader.Read())
                             {
-                                while (myReader.Read())
+                                authorList.Add(new Author()
                                 {
-                                    authorList.Add(new Author()
-                                    {
-                                        Aid = Convert.ToInt32(myReader["Aid"]),
-                                        FirstName = Convert.ToString(myReader["FirstName"]),
-                                        LastName = Convert.ToString(myReader["LastName"]),
-                                        BirthYear = Convert.ToString(myReader["Birthyear"])
-                                    });
-                                }
-                            }
-                            else
-                            {
-                                return false;
+                                    Aid = Convert.ToInt32(myReader["Aid"]),
+                                    FirstName = Convert.ToString(myReader["FirstName"]),
+                                    LastName = Convert.ToString(myReader["LastName"]),
+                                    BirthYear = Convert.ToString(myReader["Birthyear"])
+                                });
                             }
                         }
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        static public bool Upsert(Author author)
-        {
-            try
-            {
-                using (SqlConnection connection = DatabaseConnection.GetConnection())
-                {
-                    connection.Open();
-                    using (SqlCommand command = new SqlCommand("EXEC UpsertAuthor @Aid, @FirstName, @LastName, @BirthYear"))
-                    {
-                        command.Connection = connection;
-                        command.Parameters.AddWithValue("@Aid", author.Aid);
-                        command.Parameters.AddWithValue("@FirstName", author.FirstName);
-                        command.Parameters.AddWithValue("@LastName", author.LastName);
-                        command.Parameters.AddWithValue("@BirthYear", author.BirthYear);
-
-                        if (command.ExecuteNonQuery() != 1)
+                        else
                         {
                             return false;
                         }
                     }
                 }
             }
-            catch (Exception)
+
+            return true;
+        }
+
+        static public bool Update(Author author)
+        {
+            using (SqlConnection connection = DatabaseConnection.GetConnection())
             {
-                return false;
+                connection.Open();
+                using (SqlCommand command = new SqlCommand("UPDATE AUTHOR SET FirstName=@FirstName, LastName=@LastName, BirthYear=@BirthYear WHERE Aid=@Aid"))
+                {
+                    command.Connection = connection;
+                    command.Parameters.AddWithValue("@Aid", author.Aid);
+                    command.Parameters.AddWithValue("@FirstName", DBNullHelper.ValueOrDBNull(author.FirstName));
+                    command.Parameters.AddWithValue("@LastName", DBNullHelper.ValueOrDBNull(author.LastName));
+                    command.Parameters.AddWithValue("@BirthYear", DBNullHelper.ValueOrDBNull(author.BirthYear));
+
+                    if (command.ExecuteNonQuery() != 1)
+                    {
+                        return false;
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        static public bool Insert(Author author)
+        {
+            using (SqlConnection connection = DatabaseConnection.GetConnection())
+            {
+                connection.Open();
+                using (SqlCommand command = new SqlCommand("INSERT INTO AUTHOR (FirstName, LastName, BirthYear) VALUES (@FirstName, @LastName, @BirthYear)"))
+                {
+                    command.Connection = connection;
+                    command.Parameters.AddWithValue("@FirstName", DBNullHelper.ValueOrDBNull(author.FirstName));
+                    command.Parameters.AddWithValue("@LastName", DBNullHelper.ValueOrDBNull(author.LastName));
+                    command.Parameters.AddWithValue("@BirthYear", DBNullHelper.ValueOrDBNull(author.BirthYear));
+
+                    if (command.ExecuteNonQuery() != 1)
+                    {
+                        return false;
+                    }
+                }
             }
 
             return true;
@@ -124,13 +132,13 @@ namespace Repository.EntityModels
             {
                 connection.Open();
                 // Delete author
-                using (SqlCommand command = new SqlCommand("DELETE FROM AUTHOR WHERE AuthorId = @AuthorId", connection))
+                using (SqlCommand command = new SqlCommand("DELETE FROM AUTHOR WHERE Aid = @Aid", connection))
                 {
-                    command.Parameters.AddWithValue("@AuthorId", Aid);
+                    command.Parameters.AddWithValue("@Aid", Aid);
 
-                    if(command.ExecuteNonQuery() == 0)
+                    if (command.ExecuteNonQuery() == 0)
                     {
-                        // Did not delete
+                        // Did not delete anything
                         return false;
                     }
                 }

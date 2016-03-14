@@ -15,7 +15,7 @@ namespace Repository.EntityModels
 
         public static bool GetBookAuthors(out List<BookAuthor> bookAuthorList, int Aid)
         {
-            SqlCommand command = new SqlCommand("SELECT * from BOOKAUTHOR WHERE Aid = @Aid");
+            SqlCommand command = new SqlCommand("SELECT * from BOOK_AUTHOR WHERE Aid = @Aid");
             command.Parameters.AddWithValue("@Aid", Aid);
             return getBookAuthors(out bookAuthorList, command);
         }

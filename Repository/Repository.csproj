@@ -53,6 +53,7 @@
     <Compile Include="EntityModels\UserRole.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\DatabaseConnection.cs" />
+    <Compile Include="Repositories\DBNullHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Common\Common.csproj">
@@ -64,6 +65,9 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="SQL-Scripts\CreateAuth.sql" />
+    <Content Include="SQL-Scripts\CreateDB.sql" />
+    <Content Include="SQL-Scripts\DataLoad.sql" />
     <Content Include="SQL-Scripts\Upsert procedures.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -43,10 +43,21 @@ namespace Services.Services
             return cvm;
         }
 
-        public static bool Upsert(CopyViewModel copyViewModel)
+        public static void Upsert(CopyViewModel copyViewModel, bool overwriteExisting)
         {
+            Copy tmp;
+            if (!overwriteExisting)
+            {
+                Copy.GetCopy(out tmp, copyViewModel.BarCode);
+                if (tmp != null)
+                    throw new Exceptions.AlreadyExistsException("Har man sett! Ett exemplar med denna streckkod finns redan.");
+            }
+
             Copy copy = Mapper.Map<Copy>(copyViewModel);
-            return Copy.Upsert(copy);
+            if (!Copy.Upsert(copy))
+            {
+                throw new Exceptions.UpsertFailedException("Hoppsan! Något gick galet när ett exemplar skulle skapas eller uppdateras. Kontakta en administratör om problemet kvarstår.");
+            }
         }
 
         public static bool DeleteCopy(string barcode)

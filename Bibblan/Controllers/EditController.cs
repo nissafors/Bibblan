@@ -7,6 +7,7 @@ using Common.Models;
 using Services.Services;
 using Bibblan.Helpers;
 using Bibblan.Filters;
+using Services.Exceptions;
 
 namespace Bibblan.Controllers
 {
@@ -18,7 +19,7 @@ namespace Bibblan.Controllers
         public ActionResult Book(string isbn)
         {
             EditBookViewModel bookInfo = BookServices.GetEditBookViewModel(isbn);
-            bookInfo.Update = isbn == null ? true : false;
+            bookInfo.Update = (isbn != null);
             setBookViewLists(bookInfo);
 
             return View(bookInfo);
@@ -34,7 +35,15 @@ namespace Bibblan.Controllers
 
             if (ModelState.IsValid)
             {
-                BookServices.Upsert(bookInfo, bookInfo.Update);
+                try
+                {
+                    BookServices.Upsert(bookInfo, bookInfo.Update);
+                    bookInfo.Update = true;
+                }
+                catch (Exception e)
+                {
+                    ViewBag.error = e.Message;
+                }
             }
 
             return View(bookInfo);
@@ -57,40 +66,58 @@ namespace Bibblan.Controllers
         {
             var cvm = CopyServices.GetCopyViewModel(barcode);
             cvm.ISBN = isbn;
+            cvm.Update = (barcode != null);
 
-            var statusDic = StatusServices.GetStatusesAsDictionary();
-            cvm.Statuses = new SelectList(statusDic.OrderBy(x => x.Value), "Key", "Value");
-            cvm.Title = BookServices.GetBookDetails(cvm.ISBN).Title;
+            setCopyViewLists(cvm);
 
             return View(cvm);
         }
 
         [HttpPost]
+        [RequireLogin(RequiredRole = AccountHelper.Role.Admin)]
         public ActionResult Copy(CopyViewModel copyInfo)
         {
             if (!ModelState.IsValid)
             {
-                var statusDic = StatusServices.GetStatusesAsDictionary();
-                copyInfo.Statuses = new SelectList(statusDic.OrderBy(x => x.Value), "Key", "Value");
+                setCopyViewLists(copyInfo);
                 return View(copyInfo);
             }
 
-            CopyServices.Upsert(copyInfo);
-            return RedirectToAction("Book", new { copyInfo.ISBN });
+            try
+            {
+                CopyServices.Upsert(copyInfo, copyInfo.Update);
+                return RedirectToAction("Book", new { copyInfo.ISBN });
+            }
+            catch (Exception e)
+            {
+                ViewBag.error = e.Message;
+                setCopyViewLists(copyInfo);
+                return View(copyInfo);
+            }
+
+        }
+
+        private void setCopyViewLists(CopyViewModel cvm)
+        {
+            var statusDic = StatusServices.GetStatusesAsDictionary();
+            cvm.Statuses = new SelectList(statusDic.OrderBy(x => x.Value), "Key", "Value");
+            cvm.Title = BookServices.GetBookDetails(cvm.ISBN).Title;
         }
 
         [HttpGet]
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin)]
         public ActionResult Borrower(string PersonId)
         {
-            BorrowerViewModel borrower = null;
+            BorrowerViewModel borrower = new BorrowerViewModel();
             if (PersonId == null)
             {
-                borrower = BorrowerServices.GetEmptyBorrower();
+                setBorrowerViewLists(borrower);
+                borrower.New = true;
             }
             else
             {
                 borrower = BorrowerServices.GetBorrower(PersonId);
+                borrower.New = false;
             }
 
             return View(borrower);
@@ -100,13 +127,32 @@ namespace Bibblan.Controllers
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
         public ActionResult Borrower(BorrowerViewModel borrower)
         {
-            if (BorrowerServices.Upsert(borrower))
+            try
             {
-                // TODO: Handle succesfull or unsuccesfull 
-                // TODO: Set history so back button works
+                BorrowerServices.Upsert(borrower);
+                borrower.New = false;
             }
-            borrower = BorrowerServices.GetBorrower(borrower.PersonId);
+            catch(Services.Exceptions.AlreadyExistsException e)
+            {
+                ViewBag.error = e.Message;
+            }
+            catch(Services.Exceptions.DoesNotExistException e)
+            {
+                ViewBag.error = e.Message;
+            }
+            catch(Exception)
+            {
+                // TODO: Handle general exception
+            }
+
+            setBorrowerViewLists(borrower);
             return View(borrower);
+        }
+
+        private void setBorrowerViewLists(BorrowerViewModel borrower)
+        {
+            var categoryDic = CategoryServices.GetCategoriesAsDictionary();
+            borrower.Category = new SelectList(categoryDic.OrderBy(x => x.Value), "Key", "Value");
         }
 
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
@@ -145,11 +191,24 @@ namespace Bibblan.Controllers
 
                 }
             }
-            catch (Services.Exceptions.AuthorException.HasBooksException e)
+            catch (HasBooksException e)
             {
                 string authorId = Id;
-                string error = e.Message;
-                return RedirectToAction("Author", new { authorId, error });
+                TempData["error"] = e.Message;
+                return RedirectToAction("Author", new { authorId });
+            }
+            catch(DoesNotExistException e)
+            {
+                ViewBag.error = e.Message;
+                
+                if (Request.UrlReferrer != null)
+                {
+                    return Redirect(Request.UrlReferrer.ToString());
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
             }
             catch (Exception)
             {
@@ -166,13 +225,26 @@ namespace Bibblan.Controllers
 
         [HttpGet]
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin)]
-        public ActionResult Author(int? authorid, string error = null)
+        public ActionResult Author(int? authorid)
         {
             AuthorViewModel author = new AuthorViewModel();
-            ViewBag.error = error;
-            if (authorid != null)
+
+            if (TempData["error"] != null)
             {
-                author = AuthorServices.GetAuthor((int)authorid);
+                ViewBag.error = TempData["error"].ToString();
+                TempData["error"] = null;
+            }
+
+            try
+            {
+                if (authorid != null)
+                {
+                    author = AuthorServices.GetAuthor((int)authorid);
+                }
+            }
+            catch(DoesNotExistException e)
+            {
+                ViewBag.error = e.Message;
             }
 
             return View(author);
@@ -186,11 +258,19 @@ namespace Bibblan.Controllers
             {
                 AuthorServices.Upsert(authorViewModel);
             }
-            catch(Exception e)
+            catch(AlreadyExistsException e)
             {
                 ViewBag.error = e.Message;
             }
-
+            catch(DoesNotExistException e)
+            {
+                ViewBag.error = e.Message;
+            }
+            catch(Exception)
+            {
+                // TODO: Handle general error
+            }
+            
             return View(authorViewModel);
         }
     }

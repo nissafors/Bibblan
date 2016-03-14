@@ -4,26 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Services.Exceptions.AuthorException
+namespace Services.Exceptions.BorrowerException
 {
-    public class HasBooksException : Exception
-    {
-        public HasBooksException()
-        {
-
-        }
-
-        public HasBooksException(string message)
-            : base(message)
-        {
-        }
-
-        public HasBooksException(string message, Exception inner)
-            : base(message, inner)
-        {
-        }
-    }
-
     public class AlreadyExistException : Exception
     {
         public AlreadyExistException()
