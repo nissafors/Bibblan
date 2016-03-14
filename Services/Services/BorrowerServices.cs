@@ -8,6 +8,7 @@ using Repository.EntityModels;
 using System.Data.SqlClient;
 using System.Web.Mvc;
 using AutoMapper;
+using Services.Exceptions;
 
 namespace Services.Services
 {
@@ -88,13 +89,29 @@ namespace Services.Services
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        static public bool Upsert(BorrowerViewModel model)
+        static public void Upsert(BorrowerViewModel viewModel)
         {
-            if(model.New)
-            {
+            Borrower borrower = Mapper.Map<Borrower>(viewModel);
+            Account account = Mapper.Map<Account>(viewModel.Account);
 
+            
+            if (viewModel.New)
+            {
+                Borrower existingBorrower = null;
+                Borrower.GetBorrower(out existingBorrower, borrower.PersonId);
+
+                if(existingBorrower != null)
+                {
+                    throw new AlreadyExistsException("En låntagare med det personnumret finns redan.");
+                }
             }
-            return Borrower.Upsert(Mapper.Map<Borrower>(model));
+            
+            if(!Borrower.Upsert(borrower))
+            {
+                throw new DoesNotExistException("Kunde inte uppdatera låntagaren.");
+            }
+
+            // TODO: Upsert account
         }
         
         static public bool Delete(string PersonId)

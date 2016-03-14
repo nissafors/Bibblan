@@ -7,6 +7,7 @@ using Common.Models;
 using Services.Services;
 using Bibblan.Helpers;
 using Bibblan.Filters;
+using Services.Exceptions;
 
 namespace Bibblan.Controllers
 {
@@ -131,11 +132,11 @@ namespace Bibblan.Controllers
                 BorrowerServices.Upsert(borrower);
                 borrower.New = false;
             }
-            catch(Services.Exceptions.BorrowerException.AlreadyExistException e)
+            catch(Services.Exceptions.AlreadyExistsException e)
             {
                 ViewBag.error = e.Message;
             }
-            catch(Services.Exceptions.BorrowerException.DoesNotExistException e)
+            catch(Services.Exceptions.DoesNotExistException e)
             {
                 ViewBag.error = e.Message;
             }
@@ -190,13 +191,13 @@ namespace Bibblan.Controllers
 
                 }
             }
-            catch (Services.Exceptions.HasBooksException e)
+            catch (HasBooksException e)
             {
                 string authorId = Id;
                 TempData["error"] = e.Message;
                 return RedirectToAction("Author", new { authorId });
             }
-            catch(Services.Exceptions.DoesNotExistException e)
+            catch(DoesNotExistException e)
             {
                 ViewBag.error = e.Message;
                 
@@ -241,7 +242,7 @@ namespace Bibblan.Controllers
                     author = AuthorServices.GetAuthor((int)authorid);
                 }
             }
-            catch(Services.Exceptions.DoesNotExistException e)
+            catch(DoesNotExistException e)
             {
                 ViewBag.error = e.Message;
             }
@@ -257,7 +258,11 @@ namespace Bibblan.Controllers
             {
                 AuthorServices.Upsert(authorViewModel);
             }
-            catch(Services.Exceptions.DoesNotExistException e)
+            catch(AlreadyExistsException e)
+            {
+                ViewBag.error = e.Message;
+            }
+            catch(DoesNotExistException e)
             {
                 ViewBag.error = e.Message;
             }
