@@ -90,6 +90,10 @@ namespace Services.Services
         /// <returns></returns>
         static public bool Upsert(BorrowerViewModel model)
         {
+            if(model.New)
+            {
+
+            }
             return Borrower.Upsert(Mapper.Map<Borrower>(model));
         }
         

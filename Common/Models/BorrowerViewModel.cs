@@ -35,6 +35,9 @@ namespace Common.Models
             } 
         }
 
+        public bool New { get; set; }
+        public AccountViewModel account { get; set; }
+
         public BorrowerViewModel()
         {
             Borrows = new List<BorrowViewModel>();
