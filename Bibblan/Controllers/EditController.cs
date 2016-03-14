@@ -164,8 +164,21 @@ namespace Bibblan.Controllers
             catch (Services.Exceptions.AuthorException.HasBooksException e)
             {
                 string authorId = Id;
-                string error = e.Message;
-                return RedirectToAction("Author", new { authorId, error });
+                TempData["error"] = e.Message;
+                return RedirectToAction("Author", new { authorId });
+            }
+            catch(Services.Exceptions.AuthorException.DoesNotExistException e)
+            {
+                ViewBag.error = e.Message;
+                
+                if (Request.UrlReferrer != null)
+                {
+                    return Redirect(Request.UrlReferrer.ToString());
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
             }
             catch (Exception)
             {
@@ -182,13 +195,26 @@ namespace Bibblan.Controllers
 
         [HttpGet]
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin)]
-        public ActionResult Author(int? authorid, string error = null)
+        public ActionResult Author(int? authorid)
         {
             AuthorViewModel author = new AuthorViewModel();
-            ViewBag.error = error;
-            if (authorid != null)
+
+            if (TempData["error"] != null)
             {
-                author = AuthorServices.GetAuthor((int)authorid);
+                ViewBag.error = TempData["error"].ToString();
+                TempData["error"] = null;
+            }
+
+            try
+            {
+                if (authorid != null)
+                {
+                    author = AuthorServices.GetAuthor((int)authorid);
+                }
+            }
+            catch(Services.Exceptions.AuthorException.DoesNotExistException e)
+            {
+                ViewBag.error = e.Message;
             }
 
             return View(author);
@@ -202,11 +228,15 @@ namespace Bibblan.Controllers
             {
                 AuthorServices.Upsert(authorViewModel);
             }
-            catch(Exception e)
+            catch(Services.Exceptions.AuthorException.DoesNotExistException e)
             {
                 ViewBag.error = e.Message;
             }
-            // TODO: Fix back button
+            catch(Exception)
+            {
+                // TODO: Handle general error
+            }
+            
             return View(authorViewModel);
         }
     }

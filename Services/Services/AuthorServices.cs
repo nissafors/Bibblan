@@ -75,23 +75,27 @@ namespace Services.Services
             return dic;
         }
 
-        public static bool Upsert(AuthorViewModel authorViewModel)
+        public static void Upsert(AuthorViewModel authorViewModel)
         {
             Author author = Mapper.Map<Author>(authorViewModel);
 
             if(author.Aid != 0)
             {
-                // Update author
+                if (!Author.Update(author))
+                {
+                    throw new DoesNotExistException("Författaren kunde inte uppdateras då han eller hon inte fanns.");
+                }
             }
             else
             {
-                // add new author
+                if (!Author.Insert(author))
+                {
+                    throw new DoesNotExistException("Kunde inte skapa en ny författare.");
+                }
             }
-
-            return false;
         }
 
-        public static bool DeleteAuthor(string AuthorID)
+        public static void DeleteAuthor(string AuthorID)
         {
             int Aid;
             List<BookAuthor> bookAuthorList;
@@ -103,7 +107,7 @@ namespace Services.Services
                 {
                     if (Author.Delete(Aid))
                     {
-                        return true;
+                        return;
                     }
                 }
                 else

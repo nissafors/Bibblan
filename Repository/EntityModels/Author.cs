@@ -88,31 +88,46 @@ namespace Repository.EntityModels
             return true;
         }
 
-        static public bool Upsert(Author author)
+        static public bool Update(Author author)
         {
-            try
+            using (SqlConnection connection = DatabaseConnection.GetConnection())
             {
-                using (SqlConnection connection = DatabaseConnection.GetConnection())
+                connection.Open();
+                using (SqlCommand command = new SqlCommand("UPDATE AUTHOR SET FirstName=@FirstName, LastName=@LastName, BirthYear=@BirthYear WHERE Aid=@Aid"))
                 {
-                    connection.Open();
-                    using (SqlCommand command = new SqlCommand("EXEC UpsertAuthor @Aid, @FirstName, @LastName, @BirthYear"))
-                    {
-                        command.Connection = connection;
-                        command.Parameters.AddWithValue("@Aid", author.Aid);
-                        command.Parameters.AddWithValue("@FirstName", author.FirstName);
-                        command.Parameters.AddWithValue("@LastName", author.LastName);
-                        command.Parameters.AddWithValue("@BirthYear", author.BirthYear);
+                    command.Connection = connection;
+                    command.Parameters.AddWithValue("@Aid", author.Aid);
+                    command.Parameters.AddWithValue("@FirstName", author.FirstName);
+                    command.Parameters.AddWithValue("@LastName", author.LastName);
+                    command.Parameters.AddWithValue("@BirthYear", author.BirthYear);
 
-                        if (command.ExecuteNonQuery() != 1)
-                        {
-                            return false;
-                        }
+                    if (command.ExecuteNonQuery() != 1)
+                    {
+                        return false;
                     }
                 }
             }
-            catch (Exception)
+
+            return true;
+        }
+
+        static public bool Insert(Author author)
+        {
+            using (SqlConnection connection = DatabaseConnection.GetConnection())
             {
-                return false;
+                connection.Open();
+                using (SqlCommand command = new SqlCommand("INSERT INTO AUTHOR (FirstName, LastName, BirthYear) VALUES (@FirstName, @LastName, @BirthYear)"))
+                {
+                    command.Connection = connection;
+                    command.Parameters.AddWithValue("@FirstName", author.FirstName);
+                    command.Parameters.AddWithValue("@LastName", author.LastName);
+                    command.Parameters.AddWithValue("@BirthYear", author.BirthYear);
+
+                    if (command.ExecuteNonQuery() != 1)
+                    {
+                        return false;
+                    }
+                }
             }
 
             return true;
@@ -128,7 +143,7 @@ namespace Repository.EntityModels
                 {
                     command.Parameters.AddWithValue("@AuthorId", Aid);
 
-                    if(command.ExecuteNonQuery() == 0)
+                    if (command.ExecuteNonQuery() == 0)
                     {
                         // Did not delete anything
                         return false;
