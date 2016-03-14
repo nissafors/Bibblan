@@ -27,5 +27,6 @@ namespace Common.Models
 
         public SelectList Statuses { get; set; }
         public string Title { get; set; }
+        public bool Update { get; set; }
     }
 }

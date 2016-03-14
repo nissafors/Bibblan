@@ -6,7 +6,7 @@
 
 <div class="page-header">
     <h1>Redigera Exemplar</h1>
-    <h3>@Model.Title</h3>
+    <h3>@Html.ActionLink(Model.Title, "Book", new { isbn = Model.ISBN })</h3>
 </div>
 
 @using (Html.BeginForm("Copy", "Edit"))
@@ -15,7 +15,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 @Html.LabelFor(model => model.BarCode)
-                @if (Model.BarCode != null)
+                @if (Model.Update)
                 {
                     @Html.TextBoxFor(model => model.BarCode , new { @class = "form-control", @readonly="readonly" })
                 }
@@ -56,7 +56,14 @@
         </div>
         <div class="col-md-6">
             <div class="form-group">
+            @if (Model.Update)
+            {
                 @Html.ActionLink("Ta Bort", "Delete", new { Type = "Copy", Id = Model.BarCode }, new { @class = "btn btn-lg btn-block btn-danger" })
+            }
+            else
+            {
+                @Html.ActionLink("Ta Bort", "Delete", new { Type = "Copy", Id = Model.BarCode }, new { @class = "btn btn-lg btn-block btn-danger disabled" })
+            }
             </div>
         </div>
     </div>
