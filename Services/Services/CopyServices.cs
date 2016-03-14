@@ -50,21 +50,13 @@ namespace Services.Services
             {
                 Copy.GetCopy(out tmp, copyViewModel.BarCode);
                 if (tmp != null)
-                    throw new Exceptions.CopyException.AlreadyExistException("Har man sett! Ett exemplar med denna streckkod finns redan.");
+                    throw new Exceptions.AlreadyExistsException("Har man sett! Ett exemplar med denna streckkod finns redan.");
             }
 
             Copy copy = Mapper.Map<Copy>(copyViewModel);
-            try
+            if (!Copy.Upsert(copy))
             {
-                bool result = Copy.Upsert(copy);
-                if (!result)
-                {
-                    throw new Exceptions.CopyException.UpsertFailedException("Hoppsan! Något gick galet när ett exemplar skulle skapas eller uppdateras. Kontakta en administratör om proplemet kvarstår.");
-                }
-            }
-            catch (Exception)
-            {
-                throw;
+                throw new Exceptions.UpsertFailedException("Hoppsan! Något gick galet när ett exemplar skulle skapas eller uppdateras. Kontakta en administratör om problemet kvarstår.");
             }
         }
 

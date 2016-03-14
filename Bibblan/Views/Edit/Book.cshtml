@@ -14,7 +14,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 @Html.LabelFor(model => model.ISBN)
-                @if (Model.ISBN != null)
+                @if (Model.Update)
                 {
                     @Html.TextBoxFor(model => model.ISBN, new { @class = "form-control", @readonly = "readonly" })
                 }
@@ -29,6 +29,9 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Title)
                 @Html.TextBoxFor(model => model.Title, new { @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Title, null, new { @class = "text-danger" })
+
+
             </div>
         </div>
     </div>
@@ -70,7 +73,7 @@
             <input type="submit" class="btn btn-lg btn-primary btn-block" value="Spara" />
         </div>
         <div class="col-md-6">
-        @if (Model.ISBN != null)
+        @if (Model.Update)
         {
             @Html.ActionLink("Ta bort", "Delete", new { Type = "Book", Id = Model.ISBN }, new { @class = "btn btn-lg btn-danger btn-block" })
         }
@@ -81,7 +84,7 @@
         </div>
     </div>
     
-    if (Model.ISBN != null)
+    if (Model.Update)
     {
         <h2>Exemplar</h2>
         <table class="table table-striped">

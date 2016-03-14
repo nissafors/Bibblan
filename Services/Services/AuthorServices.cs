@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Common.Models;
 using Repository.EntityModels;
 using AutoMapper;
-using Services.Exceptions.AuthorException;
+using Services.Exceptions;
 
 namespace Services.Services
 {

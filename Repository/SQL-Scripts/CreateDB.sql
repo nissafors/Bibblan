@@ -122,7 +122,7 @@ GO
 /****** Object:  Table [dbo].[CLASSIFICATION]    Script Date: 2014-08-25 15:28:58 ******/
 CREATE TABLE [dbo].[CLASSIFICATION](
 	[SignId] [int] NOT NULL,
-	[Signum] [nvarchar](50) NULL,
+	[Signum] [nvarchar](50) NULL, (
 	[Description] [nvarchar](255) NULL,
  CONSTRAINT [PK_CLASSIFICATION] PRIMARY KEY CLUSTERED 
 (
