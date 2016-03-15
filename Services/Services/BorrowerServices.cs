@@ -1,14 +1,12 @@
-﻿using System;
+﻿using AutoMapper;
+using Common.Models;
+using Repository.EntityModels;
+using Services.Exceptions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Common.Models;
-using Repository.EntityModels;
-using System.Data.SqlClient;
-using System.Web.Mvc;
-using AutoMapper;
-using Services.Exceptions;
 
 namespace Services.Services
 {
@@ -22,63 +20,37 @@ namespace Services.Services
         static public BorrowerViewModel GetBorrower(string personId)
         {
             Borrower borrower;
-            List<Category> categoryList;
-            List<BorrowViewModel> borrowList;
             BorrowerViewModel borrowerViewModel = null;
-            if (Borrower.GetBorrower(out borrower, personId) &&
-                borrower != null &&
-                Category.GetCategories(out categoryList)
-                )
+            if (Borrower.GetBorrower(out borrower, personId))
             {
-                borrowerViewModel = Mapper.Map<BorrowerViewModel>(borrower);
-                borrowerViewModel.Category = new SelectList(categoryList.OrderBy(x => x.CategoryName), "CategoryId", "CategoryName");
-                try
+                if(borrower != null)
                 {
-                    borrowList = BorrowServices.GetBorrows(personId);
+                    borrowerViewModel = Mapper.Map<BorrowerViewModel>(borrower);
+                    borrowerViewModel.Borrows = BorrowServices.GetBorrows(personId);
                 }
-                catch(Exception)
+                else
                 {
-                    throw;
+                    throw new DoesNotExistException("Kunde inte hitta den eftersökta låntagaren");
                 }
-                borrowerViewModel.Borrows = borrowList;
             }
-
             return borrowerViewModel;
         }
 
         /// <summary>
-        /// Get viewmodel with the category list filled for a borrower
+        /// Search for all borrowers matching the search term
         /// </summary>
+        /// <param name="search"></param>
         /// <returns></returns>
-        static public BorrowerViewModel GetEmptyBorrower()
-        {
-            List<Category> categoryList;
-            BorrowerViewModel borrowerViewModel = new BorrowerViewModel();
-            if (Category.GetCategories(out categoryList))
-            {
-                borrowerViewModel.Category = new SelectList(categoryList.OrderBy(x => x.CategoryName), "CategoryId", "CategoryName");
-                return borrowerViewModel;
-            }
-            else
-            {
-                return null;
-            }
-            
-        }
-
         static public List<BorrowerViewModel> SearchBorrowers(string search)
         {
             List<Borrower> borrowerList;
-            List<Category> categoryList;
-            if (Borrower.GetBorrowers(out borrowerList, search) &&
-                Category.GetCategories(out categoryList))
+            if (Borrower.GetBorrowers(out borrowerList, search))
             {
                 List<BorrowerViewModel> borrowerViewList = new List<BorrowerViewModel>();
                 
                 foreach (Borrower borrower in borrowerList)
                 {
                     BorrowerViewModel borrowerView = Mapper.Map<BorrowerViewModel>(borrower);
-                    borrowerView.Category = new SelectList(categoryList.OrderBy(x => x.CategoryName), "CategoryId", "CategoryName");
                     borrowerViewList.Add(borrowerView);
                 }
 
@@ -97,16 +69,20 @@ namespace Services.Services
         {
             Borrower borrower = Mapper.Map<Borrower>(viewModel);
             Account account = Mapper.Map<Account>(viewModel.Account);
-
             
             if (viewModel.New)
             {
                 Borrower existingBorrower = null;
-                Borrower.GetBorrower(out existingBorrower, borrower.PersonId);
-
-                if(existingBorrower != null)
+                if (Borrower.GetBorrower(out existingBorrower, borrower.PersonId))
                 {
-                    throw new AlreadyExistsException("En låntagare med det personnumret finns redan.");
+                    if (existingBorrower != null)
+                    {
+                        throw new AlreadyExistsException("En låntagare med det personnumret finns redan.");
+                    }
+                }
+                else
+                {
+                    // throw new DataAccessException("");
                 }
             }
             
@@ -114,13 +90,18 @@ namespace Services.Services
             {
                 throw new DoesNotExistException("Kunde inte uppdatera låntagaren.");
             }
-
-            // TODO: Upsert account
         }
         
-        static public bool Delete(string PersonId)
+        /// <summary>
+        /// Remove a borrower.
+        /// </summary>
+        /// <param name="PersonId"></param>
+        static public void Delete(string PersonId)
         {
-            return Borrower.Delete(PersonId);
+            if(Borrower.Delete(PersonId))
+            {
+                throw new DoesNotExistException("Låntagaren med personnummer " + PersonId + " kunde inte tas bort.");
+            }
         }
     }
 }

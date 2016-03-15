@@ -24,7 +24,7 @@ namespace Repository.EntityModels
             List<Author> authorList;
             bool result = GetAuthors(out authorList, command);
 
-            if (result)
+            if (authorList.Count > 0)
             {
                 author = authorList[0];
             }
@@ -48,34 +48,40 @@ namespace Repository.EntityModels
         static private bool GetAuthors(out List<Author> authorList, SqlCommand command)
         {
             authorList = new List<Author>();
-
-            using (SqlConnection connection = DatabaseConnection.GetConnection())
+            try
             {
-                connection.Open();
-                using (command)
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
                 {
-                    command.Connection = connection;
-                    using (SqlDataReader myReader = command.ExecuteReader())
+                    connection.Open();
+                    using (command)
                     {
-                        if (myReader != null)
+                        command.Connection = connection;
+                        using (SqlDataReader myReader = command.ExecuteReader())
                         {
-                            while (myReader.Read())
+                            if (myReader != null)
                             {
-                                authorList.Add(new Author()
+                                while (myReader.Read())
                                 {
-                                    Aid = Convert.ToInt32(myReader["Aid"]),
-                                    FirstName = Convert.ToString(myReader["FirstName"]),
-                                    LastName = Convert.ToString(myReader["LastName"]),
-                                    BirthYear = Convert.ToString(myReader["Birthyear"])
-                                });
+                                    authorList.Add(new Author()
+                                    {
+                                        Aid = Convert.ToInt32(myReader["Aid"]),
+                                        FirstName = Convert.ToString(myReader["FirstName"]),
+                                        LastName = Convert.ToString(myReader["LastName"]),
+                                        BirthYear = Convert.ToString(myReader["Birthyear"])
+                                    });
+                                }
                             }
-                        }
-                        else
-                        {
-                            return false;
+                            else
+                            {
+                                return false;
+                            }
                         }
                     }
                 }
+            }
+            catch(Exception)
+            {
+                return false;
             }
 
             return true;
