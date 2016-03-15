@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
-using Repository.Repositories;
 
 namespace Repository.EntityModels
 {
@@ -61,7 +60,7 @@ namespace Repository.EntityModels
 
             try
             {
-                using (SqlConnection connection = DatabaseConnection.GetConnection())
+                using (SqlConnection connection = HelperFunctions.GetConnection())
                 {
                     connection.Open();
                     using (command)

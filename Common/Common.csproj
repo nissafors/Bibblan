@@ -46,7 +46,6 @@
     <Compile Include="Models\BookViewModel.cs" />
     <Compile Include="Models\BorrowerViewModel.cs" />
     <Compile Include="Models\BorrowViewModel.cs" />
-    <Compile Include="Models\BrowserAuthorViewModel.cs" />
     <Compile Include="Models\CopyViewModel.cs" />
     <Compile Include="Models\EditBookViewModel.cs" />
     <Compile Include="Models\ResultViewModel.cs" />

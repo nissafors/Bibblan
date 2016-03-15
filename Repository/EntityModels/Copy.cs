@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
-using Repository.Repositories;
 
 namespace Repository.EntityModels
 {
@@ -56,17 +55,17 @@ namespace Repository.EntityModels
         {
             try
             {
-                using (SqlConnection connection = DatabaseConnection.GetConnection())
+                using (SqlConnection connection = HelperFunctions.GetConnection())
                 {
                     connection.Open();
                     using (SqlCommand command = new SqlCommand("EXEC UpsertCopy @Barcode, @Location, @StatusId, @ISBN, @Library"))
                     {
                         command.Connection = connection;
                         command.Parameters.AddWithValue("@Barcode", copy.Barcode);
-                        command.Parameters.AddWithValue("@Location", DBNullHelper.ValueOrDBNull(copy.Location));
+                        command.Parameters.AddWithValue("@Location", HelperFunctions.ValueOrDBNull(copy.Location));
                         command.Parameters.AddWithValue("@StatusId", copy.StatusId);
-                        command.Parameters.AddWithValue("@ISBN", DBNullHelper.ValueOrDBNull(copy.ISBN));
-                        command.Parameters.AddWithValue("@Library", DBNullHelper.ValueOrDBNull(copy.Library));
+                        command.Parameters.AddWithValue("@ISBN", HelperFunctions.ValueOrDBNull(copy.ISBN));
+                        command.Parameters.AddWithValue("@Library", HelperFunctions.ValueOrDBNull(copy.Library));
 
                         if (command.ExecuteNonQuery() != 1)
                         {
@@ -93,7 +92,7 @@ namespace Repository.EntityModels
         {
             try
             {
-                using (SqlConnection connection = DatabaseConnection.GetConnection())
+                using (SqlConnection connection = HelperFunctions.GetConnection())
                 {
                     connection.Open();
                     using (SqlCommand command = new SqlCommand("DELETE FROM COPY WHERE Barcode = @Barcode"))
@@ -126,7 +125,7 @@ namespace Repository.EntityModels
 
             try
             {
-                using (SqlConnection connection = DatabaseConnection.GetConnection())
+                using (SqlConnection connection = HelperFunctions.GetConnection())
                 {
                     connection.Open();
                     using (command)

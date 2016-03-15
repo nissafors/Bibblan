@@ -1,0 +1,64 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Data.SqlClient;
+
+namespace Repository.EntityModels
+{
+    class HelperFunctions
+    {
+        /// <summary>
+        /// Get a connection to the database.
+        /// </summary>
+        /// <returns>Returns a SqlConnection object.</returns>
+        public static SqlConnection GetConnection()
+        {
+            var username = DBCredentials.Username;
+            var password = DBCredentials.Password;
+            return new SqlConnection(@"Data Source=libinstance.ckprwkebxagl.eu-central-1.rds.amazonaws.com;Initial Catalog=BibblanDatabase;User ID=" + username + ";Password=" + password);
+        }
+
+        /// <summary>
+        /// Retain an objects value if set, but cast to DBNull if it is null.
+        /// </summary>
+        /// <param name="value">Any object.</param>
+        /// <returns>Returns the object unchanged if set and DBNull.Value otherwise.</returns>
+        static public object ValueOrDBNull(object value)
+        {
+            if (value != null)
+            {
+                return value;
+            }
+            else
+            {
+                return DBNull.Value;
+            }
+        }
+
+        /// <summary>
+        /// Modify a search string for use in a SQL statement.
+        /// </summary>
+        /// <param name="search">The raw search string.</param>
+        /// <returns>Returns the modified search string.</returns>
+        static public string SetupSearchString(string search)
+        {
+            string modifiedSearch = "%";
+            foreach (char character in search)
+            {
+                if (char.IsWhiteSpace(character))
+                {
+                    modifiedSearch += "%";
+                }
+                else
+                {
+                    modifiedSearch += character;
+                }
+            }
+            modifiedSearch += "%";
+
+            return modifiedSearch;
+        }
+    }
+}

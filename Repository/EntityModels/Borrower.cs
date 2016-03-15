@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
-using Repository.Repositories;
 
 namespace Repository.EntityModels
 {
@@ -71,7 +70,7 @@ namespace Repository.EntityModels
         {
             borrowerList = new List<Borrower>();
 
-            using (SqlConnection connection = DatabaseConnection.GetConnection())
+            using (SqlConnection connection = HelperFunctions.GetConnection())
             {
                 connection.Open();
                 using (command)
@@ -114,7 +113,7 @@ namespace Repository.EntityModels
         {
             try
             {
-                using (SqlConnection connection = DatabaseConnection.GetConnection())
+                using (SqlConnection connection = HelperFunctions.GetConnection())
                 {
                     connection.Open();
                     // Update BOOK
@@ -122,11 +121,11 @@ namespace Repository.EntityModels
                     {
                         command.Connection = connection;
                         command.Parameters.AddWithValue("@PersonId", borrower.PersonId);
-                        command.Parameters.AddWithValue("@FirstName", DBNullHelper.ValueOrDBNull(borrower.FirstName));
-                        command.Parameters.AddWithValue("@LastName", DBNullHelper.ValueOrDBNull(borrower.LastName));
-                        command.Parameters.AddWithValue("@Address", DBNullHelper.ValueOrDBNull(borrower.Adress));
-                        command.Parameters.AddWithValue("@Telno", DBNullHelper.ValueOrDBNull(borrower.TelNo));
-                        command.Parameters.AddWithValue("@CategoryId", DBNullHelper.ValueOrDBNull(borrower.CategoryId));
+                        command.Parameters.AddWithValue("@FirstName", HelperFunctions.ValueOrDBNull(borrower.FirstName));
+                        command.Parameters.AddWithValue("@LastName", HelperFunctions.ValueOrDBNull(borrower.LastName));
+                        command.Parameters.AddWithValue("@Address", HelperFunctions.ValueOrDBNull(borrower.Adress));
+                        command.Parameters.AddWithValue("@Telno", HelperFunctions.ValueOrDBNull(borrower.TelNo));
+                        command.Parameters.AddWithValue("@CategoryId", HelperFunctions.ValueOrDBNull(borrower.CategoryId));
 
                         if (command.ExecuteNonQuery() != 1)
                         {
@@ -152,7 +151,7 @@ namespace Repository.EntityModels
         {
             try
             {
-                using (SqlConnection connection = DatabaseConnection.GetConnection())
+                using (SqlConnection connection = HelperFunctions.GetConnection())
                 {
                     connection.Open();
                     using (SqlCommand command = new SqlCommand("DELETE FROM BORROW WHERE PersonId = @PersonId", connection))

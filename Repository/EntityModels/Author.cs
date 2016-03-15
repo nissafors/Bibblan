@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
-using Repository.Repositories;
 
 namespace Repository.EntityModels
 {
@@ -76,7 +75,7 @@ namespace Repository.EntityModels
             authorList = new List<Author>();
             try
             {
-                using (SqlConnection connection = DatabaseConnection.GetConnection())
+                using (SqlConnection connection = HelperFunctions.GetConnection())
                 {
                     connection.Open();
                     using (command)
@@ -122,16 +121,16 @@ namespace Repository.EntityModels
         {
             try
             {
-                using (SqlConnection connection = DatabaseConnection.GetConnection())
+                using (SqlConnection connection = HelperFunctions.GetConnection())
                 {
                     connection.Open();
                     using (SqlCommand command = new SqlCommand("UPDATE AUTHOR SET FirstName=@FirstName, LastName=@LastName, BirthYear=@BirthYear WHERE Aid=@Aid"))
                     {
                         command.Connection = connection;
                         command.Parameters.AddWithValue("@Aid", author.Aid);
-                        command.Parameters.AddWithValue("@FirstName", DBNullHelper.ValueOrDBNull(author.FirstName));
-                        command.Parameters.AddWithValue("@LastName", DBNullHelper.ValueOrDBNull(author.LastName));
-                        command.Parameters.AddWithValue("@BirthYear", DBNullHelper.ValueOrDBNull(author.BirthYear));
+                        command.Parameters.AddWithValue("@FirstName", HelperFunctions.ValueOrDBNull(author.FirstName));
+                        command.Parameters.AddWithValue("@LastName", HelperFunctions.ValueOrDBNull(author.LastName));
+                        command.Parameters.AddWithValue("@BirthYear", HelperFunctions.ValueOrDBNull(author.BirthYear));
 
                         if (command.ExecuteNonQuery() != 1)
                         {
@@ -157,15 +156,15 @@ namespace Repository.EntityModels
         {
             try
             {
-                using (SqlConnection connection = DatabaseConnection.GetConnection())
+                using (SqlConnection connection = HelperFunctions.GetConnection())
                 {
                     connection.Open();
                     using (SqlCommand command = new SqlCommand("INSERT INTO AUTHOR (FirstName, LastName, BirthYear) VALUES (@FirstName, @LastName, @BirthYear)"))
                     {
                         command.Connection = connection;
-                        command.Parameters.AddWithValue("@FirstName", DBNullHelper.ValueOrDBNull(author.FirstName));
-                        command.Parameters.AddWithValue("@LastName", DBNullHelper.ValueOrDBNull(author.LastName));
-                        command.Parameters.AddWithValue("@BirthYear", DBNullHelper.ValueOrDBNull(author.BirthYear));
+                        command.Parameters.AddWithValue("@FirstName", HelperFunctions.ValueOrDBNull(author.FirstName));
+                        command.Parameters.AddWithValue("@LastName", HelperFunctions.ValueOrDBNull(author.LastName));
+                        command.Parameters.AddWithValue("@BirthYear", HelperFunctions.ValueOrDBNull(author.BirthYear));
 
                         if (command.ExecuteNonQuery() != 1)
                         {
@@ -192,7 +191,7 @@ namespace Repository.EntityModels
         {
             try
             {
-                using (SqlConnection connection = DatabaseConnection.GetConnection())
+                using (SqlConnection connection = HelperFunctions.GetConnection())
                 {
                     connection.Open();
                     // Delete author
