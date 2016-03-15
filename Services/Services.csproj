@@ -49,6 +49,7 @@
     <Compile Include="Exceptions\AlreadyExistsException.cs" />
     <Compile Include="Exceptions\HasBooksException.cs" />
     <Compile Include="Exceptions\DoesNotExistException.cs" />
+    <Compile Include="Exceptions\NoSuchAuthorException.cs" />
     <Compile Include="Exceptions\UpsertFailedException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AuthorServices.cs" />
