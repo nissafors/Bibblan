@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Common.Models;
 using Repository.EntityModels;
 using AutoMapper;
+using Services.Exceptions;
 
 namespace Services.Services
 {
@@ -37,6 +38,9 @@ namespace Services.Services
             var copy = new Copy();
             if (Copy.GetCopy(out copy, barCode))
             {
+                if (copy == null)
+                    throw new DoesNotExistException("Ett exemplar med angiven streckkod finns inte i databasen.");
+
                 cvm = Mapper.Map<CopyViewModel>(copy);
             }
 
@@ -56,7 +60,7 @@ namespace Services.Services
             Copy copy = Mapper.Map<Copy>(copyViewModel);
             if (!Copy.Upsert(copy))
             {
-                throw new Exceptions.UpsertFailedException("Hoppsan! Något gick galet när ett exemplar skulle skapas eller uppdateras. Kontakta en administratör om problemet kvarstår.");
+                throw new Exceptions.DataAccessException("Hoppsan! Något gick galet när ett exemplar skulle skapas eller uppdateras. Kontakta en administratör om problemet kvarstår.");
             }
         }
 

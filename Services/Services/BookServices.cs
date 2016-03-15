@@ -23,7 +23,7 @@ namespace Services.Services
             EditBookViewModel ebvm = new EditBookViewModel();
             Book book = new Book();
             var authorIds = new List<int>();
-            
+
             if (Book.GetBook(out book, isbn))
             {
                 var bookAuthors = new List<BookAuthor>();
@@ -32,12 +32,16 @@ namespace Services.Services
 
                 if (BookAuthor.GetBookAuthors(out bookAuthors, book.ISBN))
                 {
-                    foreach(BookAuthor ba in bookAuthors)
+                    foreach (BookAuthor ba in bookAuthors)
                         authorIds.Add(ba.Aid);
                 }
+                else
+                    throw new NoSuchAuthorException("Mystiskt! Angivna författare kunde inte hittas.");
 
                 ebvm.AuthorIds = authorIds;
             }
+            else
+                throw new DoesNotExistException("Ajdå! Boken hittades inte.");
 
             return ebvm;
         }
@@ -70,19 +74,25 @@ namespace Services.Services
             Classification classification;
             List<BookAuthor> bookAuthorList;
 
-            if(Book.GetBook(out book, isbn) && 
-                BookAuthor.GetBookAuthors(out bookAuthorList, book.ISBN) &&
-                Classification.GetClassification(out classification, book.SignId))
+            if (!Book.GetBook(out book, isbn))
+                throw new DataAccessException("Info om en bok kunde inte hämtas.");
+            if (book == null)
+                throw new DoesNotExistException("Nähä, du! Den boken finns inte i databasen.");
+
+            if (!BookAuthor.GetBookAuthors(out bookAuthorList, book.ISBN))
+                throw new DataAccessException("Info om författare kunde inte hämtas.");
+
+            if (!Classification.GetClassification(out classification, book.SignId))
+                throw new DataAccessException("Klassifikationer kunde inte hämtas.");
+
+            bookViewModel = Mapper.Map<BookViewModel>(book);
+            bookViewModel.Classification = classification == null ? null : classification.Signum;
+            foreach (BookAuthor bookAuthor in bookAuthorList)
             {
-                bookViewModel = Mapper.Map<BookViewModel>(book);
-                bookViewModel.Classification = classification.Signum;
-                foreach (BookAuthor bookAuthor in bookAuthorList)
+                Author author;
+                if (Author.GetAuthor(out author, bookAuthor.Aid))
                 {
-                    Author author;
-                    if (Author.GetAuthor(out author, bookAuthor.Aid))
-                    {
-                        bookViewModel.Authors.Add(author.Aid, author.LastName + ", " + author.FirstName);
-                    }
+                    bookViewModel.Authors.Add(author.Aid, author.LastName + ", " + author.FirstName);
                 }
             }
 
@@ -116,7 +126,7 @@ namespace Services.Services
             }
 
             if (!success)
-                throw new UpsertFailedException("Tusan! Något gick fel när en bok skulle skapas eller uppdateras. Kontakta en administratör om felet kvarstår.");
+                throw new DataAccessException("Tusan! Något gick fel när en bok skulle skapas eller uppdateras. Kontakta en administratör om felet kvarstår.");
         }
 
         public static bool Delete(string isbn)

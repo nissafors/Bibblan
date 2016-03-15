@@ -18,10 +18,21 @@ namespace Bibblan.Controllers
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin)]
         public ActionResult Book(string isbn)
         {
-            EditBookViewModel bookInfo = BookServices.GetEditBookViewModel(isbn);
-            bookInfo.Update = (isbn != null);
+            var bookInfo = new EditBookViewModel();
+
+            if (isbn != null)
+            {
+                try
+                {
+                    bookInfo = BookServices.GetEditBookViewModel(isbn);
+                    bookInfo.Update = true;
+                }
+                catch (NoSuchAuthorException e) { ViewBag.error = e.Message; }
+                catch (AlreadyExistsException e) { ViewBag.error = e.Message; }
+                catch (Exception) { ViewBag.error = "Oväntat fel."; }
+            }
+
             setBookViewLists(bookInfo);
-            TempData["BookUpdate"] = bookInfo.Update;
 
             return View(bookInfo);
         }
@@ -41,10 +52,10 @@ namespace Bibblan.Controllers
                     BookServices.Upsert(bookInfo, bookInfo.Update);
                     bookInfo.Update = true;
                 }
-                catch (Exception e)
-                {
-                    ViewBag.error = e.Message;
-                }
+                catch (AlreadyExistsException e) { ViewBag.error = e.Message; }
+                catch (NoSuchAuthorException e) { ViewBag.error = e.Message; }
+                catch (DataAccessException e) { ViewBag.error = e.Message; }
+                catch (Exception) { ViewBag.error = "Oväntat fel."; }
             }
 
             return View(bookInfo);
@@ -65,10 +76,45 @@ namespace Bibblan.Controllers
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin)]
         public ActionResult Copy(string isbn, string barcode)
         {
-            var cvm = CopyServices.GetCopyViewModel(barcode);
-            cvm.ISBN = isbn;
-            cvm.Update = (barcode != null);
+            // We must have an ISBN number.
+            if (isbn == null)
+            {
+                TempData["error"] = "Kan endast skapa exemplar av existerande böcker.";
+                return RedirectToAction("AdminPage", "Account");
+            }
 
+            // Is this ISBN valid?
+            try
+            {
+                BookServices.GetBookDetails(isbn);
+            }
+            catch (DoesNotExistException e)
+            {
+                TempData["error"] = e.Message;
+                return RedirectToAction("AdminPage", "Account");
+            }
+            catch (DataAccessException e)
+            {
+                TempData["error"] = e.Message;
+                return RedirectToAction("AdminPage", "Account");
+            }
+
+            CopyViewModel cvm = new CopyViewModel();
+
+            // If a barcode was given; is it valid?
+            if (barcode != null) {
+                try
+                {
+                    cvm = CopyServices.GetCopyViewModel(barcode);
+                    cvm.Update = true;
+                }
+                catch (DoesNotExistException e)
+                {
+                    ViewBag.error = e.Message;
+                }
+            }
+
+            cvm.ISBN = isbn;
             setCopyViewLists(cvm);
 
             return View(cvm);

@@ -79,6 +79,9 @@ namespace Bibblan.Controllers
         [RequireLogin(RequiredRole=AccountHelper.Role.Admin)]
         public ActionResult AdminPage()
         {
+            if (TempData["error"] != null)
+                ViewBag.error = TempData["error"].ToString();
+
             return View();
         }
 

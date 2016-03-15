@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Services.Exceptions
 {
-    class NoSuchAuthorException : Exception
+    public class NoSuchAuthorException : Exception
     {
         public NoSuchAuthorException()
         {

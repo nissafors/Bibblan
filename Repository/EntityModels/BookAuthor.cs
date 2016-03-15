@@ -32,6 +32,13 @@ namespace Repository.EntityModels
             return getBookAuthors(out bookAuthorList, new SqlCommand("SELECT * from BOOK_AUTHOR"));
         }
 
+        /// <summary>
+        /// Excecutes command and places the result in a list.
+        /// </summary>
+        /// <param name="bookAuthorList">A list of BookAuthors. Will be set to a new instance.
+        /// May have zero length if no records where found.</param>
+        /// <param name="command">The SqlCommand to execute.</param>
+        /// <returns>True if nothing extraordinary happened.</returns>
         private static bool getBookAuthors(out List<BookAuthor> bookAuthorList, SqlCommand command)
         {
             bookAuthorList = new List<BookAuthor>();

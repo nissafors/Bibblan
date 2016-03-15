@@ -6,19 +6,19 @@ using System.Threading.Tasks;
 
 namespace Services.Exceptions
 {
-    class UpsertFailedException : Exception
+    public class DataAccessException : Exception
     {
-        public UpsertFailedException()
+        public DataAccessException()
         {
 
         }
 
-        public UpsertFailedException(string message)
+        public DataAccessException(string message)
             : base(message)
         {
         }
 
-        public UpsertFailedException(string message, Exception inner)
+        public DataAccessException(string message, Exception inner)
             : base(message, inner)
         {
         }
