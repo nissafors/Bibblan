@@ -3,6 +3,7 @@ using Common.Models;
 using Repository.EntityModels;
 using AutoMapper;
 using System;
+using Services.Exceptions;
 
 namespace Services.Services
 {
@@ -88,7 +89,7 @@ namespace Services.Services
             return bookViewModel;
         }
 
-        public static bool Upsert(EditBookViewModel editBookViewModel, bool overwriteExisting)
+        public static void Upsert(EditBookViewModel editBookViewModel, bool overwriteExisting)
         {
             if (!overwriteExisting)
             {
@@ -96,12 +97,26 @@ namespace Services.Services
                 Book.GetBook(out tmp, editBookViewModel.ISBN);
                 if (tmp != null)
                 {
-                    // throw new exception
+                    throw new AlreadyExistsException("Aj, aj! En bok med angivet ISBN finns redan!");
                 }
             }
 
             Book book = Mapper.Map<Book>(editBookViewModel);
-            return Book.Upsert(book, editBookViewModel.AuthorIds);
+            bool success = true;
+            try
+            {
+                success = Book.Upsert(book, editBookViewModel.AuthorIds);
+            }
+            catch (ArgumentException e)
+            {
+                if (e.ParamName == "authorIdList")
+                    throw new NoSuchAuthorException("De angivna författarna finns inte i databasen.");
+                else
+                    throw;
+            }
+
+            if (!success)
+                throw new UpsertFailedException("Tusan! Något gick fel när en bok skulle skapas eller uppdateras. Kontakta en administratör om felet kvarstår.");
         }
 
         public static bool Delete(string isbn)

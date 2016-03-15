@@ -21,6 +21,7 @@ namespace Bibblan.Controllers
             EditBookViewModel bookInfo = BookServices.GetEditBookViewModel(isbn);
             bookInfo.Update = (isbn != null);
             setBookViewLists(bookInfo);
+            TempData["BookUpdate"] = bookInfo.Update;
 
             return View(bookInfo);
         }

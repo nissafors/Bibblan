@@ -86,21 +86,35 @@ namespace Repository.EntityModels
 
         public static bool Upsert(Book book, List<int> authorIdList)
         {
+            // Are there any authorId:s and if so, do they exist? If not, the authorIdList argument was invalid.
+            if (authorIdList.Count < 1)
+                throw new ArgumentException("Inga författare angavs.", "authorIdList");
+
+            foreach (int aid in authorIdList)
+            {
+                Author a;
+                Author.GetAuthor(out a, aid);
+                if (a == null)
+                {
+                    throw new ArgumentException("En eller flera angivna författare finns inte i databasen.", "authorIdList");
+                }
+            }
+
+            // Update or create BOOK
             try
             {
                 using (SqlConnection connection = DatabaseConnection.GetConnection())
                 {
                     connection.Open();
-                    // Update BOOK
                     using (SqlCommand command = new SqlCommand("EXEC UpsertBook @ISBN, @Title, @SignId, @PublicationYear, @PublicationInfo, @Pages"))
                     {
                         command.Connection = connection;
                         command.Parameters.AddWithValue("@ISBN", book.ISBN);
                         command.Parameters.AddWithValue("@Title", book.Title);
                         command.Parameters.AddWithValue("@SignId", book.SignId);
-                        command.Parameters.AddWithValue("@PublicationYear", book.PublicationYear);
-                        command.Parameters.AddWithValue("@PublicationInfo", book.PublicationInfo);
-                        command.Parameters.AddWithValue("@Pages", book.Pages);
+                        command.Parameters.AddWithValue("@PublicationYear", DBNullHelper.ValueOrDBNull(book.PublicationYear));
+                        command.Parameters.AddWithValue("@PublicationInfo", DBNullHelper.ValueOrDBNull(book.PublicationInfo));
+                        command.Parameters.AddWithValue("@Pages", DBNullHelper.ValueOrDBNull(book.Pages));
                  
                         if (command.ExecuteNonQuery() != 1)
                         {
