@@ -20,7 +20,7 @@ namespace Bibblan.Controllers
 
         public ActionResult Login()
         {
-            if(AccountHelper.isLoggedIn(this.Session))
+            if(AccountHelper.IsLoggedIn(this.Session))
             {
                 if (AccountHelper.HasAccess(this.Session, AccountHelper.Role.Admin))
                     return RedirectToAction("AdminPage");
@@ -38,7 +38,9 @@ namespace Bibblan.Controllers
         public ActionResult Login(AccountViewModel model)
         {
             AccountViewModel m = AccountServices.Login(model);
-            if(m != null)
+            string errorMessage = "Fel användarnamn / lösenord\n";;
+            
+            if(AccountHelper.GetRetriesLeft(Session) > 0 &&  m != null)
             {
                 // Setups the session indexes
                 AccountHelper.SetupUserSession(Session, m.Username, m.RoleId);
@@ -48,7 +50,19 @@ namespace Bibblan.Controllers
                 else if(AccountHelper.HasAccess(Session, AccountHelper.Role.User))
                         return RedirectToAction("UserPage");
             }
-            ViewBag.userNotFound = true;
+            else if(AccountHelper.CanRetryLogin(Session))
+            {
+                
+                errorMessage += AccountHelper.GetRetriesLeft(Session).ToString() + " försök kvar\n";
+            }
+            else
+            {
+                errorMessage = "Du har överskridit max antal inloggningsförsök\n";
+                errorMessage += "Vänligen vänta tills " + AccountHelper.GetDelay(Session).ToShortTimeString() + "\n";
+            }
+
+
+            ViewBag.loginError = errorMessage;
             return View();
         }
 

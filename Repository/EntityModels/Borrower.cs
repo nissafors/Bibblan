@@ -20,14 +20,14 @@ namespace Repository.EntityModels
         public static bool GetBorrower(out Borrower borrower, string PersonId)
         {
             borrower = null;
-            
+
             SqlCommand command = new SqlCommand("SELECT * from BORROWER WHERE PersonId = @PersonId");
             command.Parameters.AddWithValue("@PersonId", PersonId);
-            
+
             List<Borrower> borrowerList;
-            
+
             bool result = GetBorrowers(out borrowerList, command);
-            
+
             if (borrowerList.Count > 0)
             {
                 borrower = borrowerList[0];
@@ -87,7 +87,7 @@ namespace Repository.EntityModels
                     }
                 }
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return false;
             }
@@ -97,64 +97,50 @@ namespace Repository.EntityModels
 
         public static bool Upsert(Borrower borrower)
         {
-            try
+            using (SqlConnection connection = DatabaseConnection.GetConnection())
             {
-                using (SqlConnection connection = DatabaseConnection.GetConnection())
+                connection.Open();
+                // Update BOOK
+                using (SqlCommand command = new SqlCommand("EXEC UpsertBorrower @PersonId, @FirstName, @LastName, @Address, @Telno, @CategoryId"))
                 {
-                    connection.Open();
-                    // Update BOOK
-                    using (SqlCommand command = new SqlCommand("EXEC UpsertBorrower @PersonId, @FirstName, @LastName, @Address, @Telno, @CategoryId"))
-                    {
-                        command.Connection = connection;
-                        command.Parameters.AddWithValue("@PersonId", borrower.PersonId);
-                        command.Parameters.AddWithValue("@FirstName", borrower.FirstName);
-                        command.Parameters.AddWithValue("@LastName", borrower.LastName);
-                        command.Parameters.AddWithValue("@Address", borrower.Adress);
-                        command.Parameters.AddWithValue("@Telno", borrower.TelNo);
-                        command.Parameters.AddWithValue("@CategoryId", borrower.CategoryId);
+                    command.Connection = connection;
+                    command.Parameters.AddWithValue("@PersonId", borrower.PersonId);
+                    command.Parameters.AddWithValue("@FirstName", DBNullHelper.ValueOrDBNull(borrower.FirstName));
+                    command.Parameters.AddWithValue("@LastName", DBNullHelper.ValueOrDBNull(borrower.LastName));
+                    command.Parameters.AddWithValue("@Address", DBNullHelper.ValueOrDBNull(borrower.Adress));
+                    command.Parameters.AddWithValue("@Telno", DBNullHelper.ValueOrDBNull(borrower.TelNo));
+                    command.Parameters.AddWithValue("@CategoryId", DBNullHelper.ValueOrDBNull(borrower.CategoryId));
 
-                        if (command.ExecuteNonQuery() != 1)
-                        {
-                            return false;
-                        }
+                    if (command.ExecuteNonQuery() != 1)
+                    {
+                        return false;
                     }
                 }
-            }
-            catch(Exception)
-            {
-                return false;
             }
             return true;
         }
 
         public static bool Delete(string PersonId)
         {
-            try
+            using (SqlConnection connection = DatabaseConnection.GetConnection())
             {
-                using (SqlConnection connection = DatabaseConnection.GetConnection())
+                connection.Open();
+                using (SqlCommand command = new SqlCommand("DELETE FROM BORROW WHERE PersonId = @PersonId", connection))
                 {
-                    connection.Open();
-                    using (SqlCommand command = new SqlCommand("DELETE FROM BORROW WHERE PersonId = @PersonId", connection))
+                    command.Parameters.AddWithValue("@PersonId", PersonId);
+
+                    command.ExecuteNonQuery();
+                }
+
+                using (SqlCommand command = new SqlCommand("DELETE FROM BORROWER WHERE PersonId = @PersonId", connection))
+                {
+                    command.Parameters.AddWithValue("@PersonId", PersonId);
+
+                    if (command.ExecuteNonQuery() != 1)
                     {
-                        command.Parameters.AddWithValue("@PersonId", PersonId);
-
-                        command.ExecuteNonQuery();
-                    }
-
-                    using (SqlCommand command = new SqlCommand("DELETE FROM BORROWER WHERE PersonId = @PersonId", connection))
-                    {
-                        command.Parameters.AddWithValue("@PersonId", PersonId);
-
-                        if (command.ExecuteNonQuery() != 1)
-                        {
-                            return false;
-                        }
+                        return false;
                     }
                 }
-            }
-            catch (Exception)
-            {
-                return false;
             }
 
             return true;

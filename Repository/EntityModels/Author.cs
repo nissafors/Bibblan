@@ -49,40 +49,33 @@ namespace Repository.EntityModels
         {
             authorList = new List<Author>();
 
-            try
+            using (SqlConnection connection = DatabaseConnection.GetConnection())
             {
-                using (SqlConnection connection = DatabaseConnection.GetConnection())
+                connection.Open();
+                using (command)
                 {
-                    connection.Open();
-                    using (command)
+                    command.Connection = connection;
+                    using (SqlDataReader myReader = command.ExecuteReader())
                     {
-                        command.Connection = connection;
-                        using (SqlDataReader myReader = command.ExecuteReader())
+                        if (myReader != null)
                         {
-                            if (myReader != null)
+                            while (myReader.Read())
                             {
-                                while (myReader.Read())
+                                authorList.Add(new Author()
                                 {
-                                    authorList.Add(new Author()
-                                    {
-                                        Aid = Convert.ToInt32(myReader["Aid"]),
-                                        FirstName = Convert.ToString(myReader["FirstName"]),
-                                        LastName = Convert.ToString(myReader["LastName"]),
-                                        BirthYear = Convert.ToString(myReader["Birthyear"])
-                                    });
-                                }
+                                    Aid = Convert.ToInt32(myReader["Aid"]),
+                                    FirstName = Convert.ToString(myReader["FirstName"]),
+                                    LastName = Convert.ToString(myReader["LastName"]),
+                                    BirthYear = Convert.ToString(myReader["Birthyear"])
+                                });
                             }
-                            else
-                            {
-                                return false;
-                            }
+                        }
+                        else
+                        {
+                            return false;
                         }
                     }
                 }
-            }
-            catch (Exception)
-            {
-                return false;
             }
 
             return true;
@@ -97,9 +90,9 @@ namespace Repository.EntityModels
                 {
                     command.Connection = connection;
                     command.Parameters.AddWithValue("@Aid", author.Aid);
-                    command.Parameters.AddWithValue("@FirstName", author.FirstName);
-                    command.Parameters.AddWithValue("@LastName", author.LastName);
-                    command.Parameters.AddWithValue("@BirthYear", author.BirthYear);
+                    command.Parameters.AddWithValue("@FirstName", DBNullHelper.ValueOrDBNull(author.FirstName));
+                    command.Parameters.AddWithValue("@LastName", DBNullHelper.ValueOrDBNull(author.LastName));
+                    command.Parameters.AddWithValue("@BirthYear", DBNullHelper.ValueOrDBNull(author.BirthYear));
 
                     if (command.ExecuteNonQuery() != 1)
                     {
@@ -110,8 +103,6 @@ namespace Repository.EntityModels
 
             return true;
         }
-
-
 
         static public bool Insert(Author author)
         {
@@ -141,9 +132,9 @@ namespace Repository.EntityModels
             {
                 connection.Open();
                 // Delete author
-                using (SqlCommand command = new SqlCommand("DELETE FROM AUTHOR WHERE AuthorId = @AuthorId", connection))
+                using (SqlCommand command = new SqlCommand("DELETE FROM AUTHOR WHERE Aid = @Aid", connection))
                 {
-                    command.Parameters.AddWithValue("@AuthorId", Aid);
+                    command.Parameters.AddWithValue("@Aid", Aid);
 
                     if (command.ExecuteNonQuery() == 0)
                     {

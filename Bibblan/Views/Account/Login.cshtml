@@ -24,9 +24,9 @@
                     <div class="col-md-10">
                         @Html.PasswordFor(m => m.Password, new { @class = "form-control" })
                         @*@Html.ValidationMessageFor(m => m.Password, "Fel användarnamn / lösenord", new { @class = "text-danger" })*@
-                        @if (ViewBag.userNotFound != null && ViewBag.userNotFound)
+                        @if (ViewBag.loginError != null)
                         {
-                            @Html.ValidationMessageFor(m => m.Username, "Fel användarnamn / lösenord", new { @class = "text-danger" })
+                            @Html.ValidationMessageFor(m => m.Username, (string) (ViewBag.loginError), new { @class = "text-danger" })
                         }
                     </div>
                 </div>

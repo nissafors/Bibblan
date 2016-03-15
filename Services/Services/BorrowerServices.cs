@@ -8,6 +8,7 @@ using Repository.EntityModels;
 using System.Data.SqlClient;
 using System.Web.Mvc;
 using AutoMapper;
+using Services.Exceptions;
 
 namespace Services.Services
 {
@@ -22,20 +23,24 @@ namespace Services.Services
         {
             Borrower borrower;
             List<Category> categoryList;
-            List<Borrow> borrowList;
+            List<BorrowViewModel> borrowList;
             BorrowerViewModel borrowerViewModel = null;
             if (Borrower.GetBorrower(out borrower, personId) &&
                 borrower != null &&
-                Category.GetCategories(out categoryList) &&
-                Borrow.GetBorrows(out borrowList, borrower.PersonId))
+                Category.GetCategories(out categoryList)
+                )
             {
                 borrowerViewModel = Mapper.Map<BorrowerViewModel>(borrower);
                 borrowerViewModel.Category = new SelectList(categoryList.OrderBy(x => x.CategoryName), "CategoryId", "CategoryName");
-                
-                foreach(Borrow borrow in borrowList)
+                try
                 {
-                    borrowerViewModel.Borrows.Add(Mapper.Map<BorrowViewModel>(borrow));
+                    borrowList = BorrowServices.GetBorrows(personId);
                 }
+                catch(Exception)
+                {
+                    throw;
+                }
+                borrowerViewModel.Borrows = borrowList;
             }
 
             return borrowerViewModel;
@@ -88,9 +93,29 @@ namespace Services.Services
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        static public bool Upsert(BorrowerViewModel model)
+        static public void Upsert(BorrowerViewModel viewModel)
         {
-            return Borrower.Upsert(Mapper.Map<Borrower>(model));
+            Borrower borrower = Mapper.Map<Borrower>(viewModel);
+            Account account = Mapper.Map<Account>(viewModel.Account);
+
+            
+            if (viewModel.New)
+            {
+                Borrower existingBorrower = null;
+                Borrower.GetBorrower(out existingBorrower, borrower.PersonId);
+
+                if(existingBorrower != null)
+                {
+                    throw new AlreadyExistsException("En låntagare med det personnumret finns redan.");
+                }
+            }
+            
+            if(!Borrower.Upsert(borrower))
+            {
+                throw new DoesNotExistException("Kunde inte uppdatera låntagaren.");
+            }
+
+            // TODO: Upsert account
         }
         
         static public bool Delete(string PersonId)

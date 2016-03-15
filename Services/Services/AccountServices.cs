@@ -22,14 +22,14 @@ namespace Services.Services
            return Mapper.Map<AccountViewModel>(account);
         }
 
-        public static int getRoleId(string username)
+        public static int GetRoleId(string username)
         {
             UserRole role;
             Account.GetUserRole(username, out role);
             return role.Id;
         }
 
-        public List<RoleViewModel> getUserRoles()
+        public List<RoleViewModel> GetUserRoles()
         {
             List<UserRole> roles;
             UserRole.getUserRoles(out roles);
@@ -41,11 +41,5 @@ namespace Services.Services
             return models;
 
         }
-        /*
-        public List<Loan> GetLoans(Borrower user)
-        {
-            return user.Loans;
-        }
-        */
     }
 }

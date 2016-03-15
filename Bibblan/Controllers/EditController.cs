@@ -7,6 +7,7 @@ using Common.Models;
 using Services.Services;
 using Bibblan.Helpers;
 using Bibblan.Filters;
+using Services.Exceptions;
 
 namespace Bibblan.Controllers
 {
@@ -108,14 +109,16 @@ namespace Bibblan.Controllers
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin)]
         public ActionResult Borrower(string PersonId)
         {
-            BorrowerViewModel borrower = null;
+            BorrowerViewModel borrower = new BorrowerViewModel();
             if (PersonId == null)
             {
-                borrower = BorrowerServices.GetEmptyBorrower();
+                setBorrowerViewLists(borrower);
+                borrower.New = true;
             }
             else
             {
                 borrower = BorrowerServices.GetBorrower(PersonId);
+                borrower.New = false;
             }
 
             return View(borrower);
@@ -125,13 +128,32 @@ namespace Bibblan.Controllers
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
         public ActionResult Borrower(BorrowerViewModel borrower)
         {
-            if (BorrowerServices.Upsert(borrower))
+            try
             {
-                // TODO: Handle succesfull or unsuccesfull 
-                // TODO: Set history so back button works
+                BorrowerServices.Upsert(borrower);
+                borrower.New = false;
             }
-            borrower = BorrowerServices.GetBorrower(borrower.PersonId);
+            catch(Services.Exceptions.AlreadyExistsException e)
+            {
+                ViewBag.error = e.Message;
+            }
+            catch(Services.Exceptions.DoesNotExistException e)
+            {
+                ViewBag.error = e.Message;
+            }
+            catch(Exception)
+            {
+                // TODO: Handle general exception
+            }
+
+            setBorrowerViewLists(borrower);
             return View(borrower);
+        }
+
+        private void setBorrowerViewLists(BorrowerViewModel borrower)
+        {
+            var categoryDic = CategoryServices.GetCategoriesAsDictionary();
+            borrower.Category = new SelectList(categoryDic.OrderBy(x => x.Value), "Key", "Value");
         }
 
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
@@ -170,13 +192,13 @@ namespace Bibblan.Controllers
 
                 }
             }
-            catch (Services.Exceptions.HasBooksException e)
+            catch (HasBooksException e)
             {
                 string authorId = Id;
                 TempData["error"] = e.Message;
                 return RedirectToAction("Author", new { authorId });
             }
-            catch(Services.Exceptions.DoesNotExistException e)
+            catch(DoesNotExistException e)
             {
                 ViewBag.error = e.Message;
                 
@@ -221,7 +243,7 @@ namespace Bibblan.Controllers
                     author = AuthorServices.GetAuthor((int)authorid);
                 }
             }
-            catch(Services.Exceptions.DoesNotExistException e)
+            catch(DoesNotExistException e)
             {
                 ViewBag.error = e.Message;
             }
@@ -237,7 +259,11 @@ namespace Bibblan.Controllers
             {
                 AuthorServices.Upsert(authorViewModel);
             }
-            catch(Services.Exceptions.DoesNotExistException e)
+            catch(AlreadyExistsException e)
+            {
+                ViewBag.error = e.Message;
+            }
+            catch(DoesNotExistException e)
             {
                 ViewBag.error = e.Message;
             }
