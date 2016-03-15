@@ -15,6 +15,13 @@ namespace Repository.EntityModels
         public string LastName { get; set; }
         public string BirthYear { get; set; }
 
+        /// <summary>
+        /// Gets the author with the specified Aid. If there is no author
+        /// with the specified Aid then author is null.
+        /// </summary>
+        /// <param name="author"></param>
+        /// <param name="Aid"></param>
+        /// <returns></returns>
         static public bool GetAuthor(out Author author, int Aid)
         {
             author = null;
@@ -24,7 +31,7 @@ namespace Repository.EntityModels
             List<Author> authorList;
             bool result = GetAuthors(out authorList, command);
 
-            if (authorList.Count > 0)
+            if (result && authorList.Count > 0)
             {
                 author = authorList[0];
             }
@@ -32,11 +39,23 @@ namespace Repository.EntityModels
             return result;
         }
 
+        /// <summary>
+        /// Get a list with all authors in the database
+        /// </summary>
+        /// <param name="authorList"></param>
+        /// <returns></returns>
         static public bool GetAuthors(out List<Author> authorList)
         {
             return GetAuthors(out authorList, new SqlCommand("SELECT * from AUTHOR"));
         }
 
+        /// <summary>
+        /// Gets a list with all authors where their first name and/or last name 
+        /// matches the supplied search paramter. 
+        /// </summary>
+        /// <param name="authorList"></param>
+        /// <param name="search"></param>
+        /// <returns></returns>
         static public bool GetAuthors(out List<Author> authorList, string search)
         {
             search = HelperFunctions.SetupSearchString(search);
@@ -45,6 +64,13 @@ namespace Repository.EntityModels
             return GetAuthors(out authorList, command);
         }
 
+        /// <summary>
+        /// Runs the supplied SqlCommand on the database and reads the result as an author. 
+        /// Returns true if everything succeded.
+        /// </summary>
+        /// <param name="authorList"></param>
+        /// <param name="command"></param>
+        /// <returns></returns>
         static private bool GetAuthors(out List<Author> authorList, SqlCommand command)
         {
             authorList = new List<Author>();
@@ -87,68 +113,106 @@ namespace Repository.EntityModels
             return true;
         }
 
+        /// <summary>
+        /// Updates the author in the database. Returns false if it fails.
+        /// </summary>
+        /// <param name="author"></param>
+        /// <returns></returns>
         static public bool Update(Author author)
         {
-            using (SqlConnection connection = DatabaseConnection.GetConnection())
+            try
             {
-                connection.Open();
-                using (SqlCommand command = new SqlCommand("UPDATE AUTHOR SET FirstName=@FirstName, LastName=@LastName, BirthYear=@BirthYear WHERE Aid=@Aid"))
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
                 {
-                    command.Connection = connection;
-                    command.Parameters.AddWithValue("@Aid", author.Aid);
-                    command.Parameters.AddWithValue("@FirstName", DBNullHelper.ValueOrDBNull(author.FirstName));
-                    command.Parameters.AddWithValue("@LastName", DBNullHelper.ValueOrDBNull(author.LastName));
-                    command.Parameters.AddWithValue("@BirthYear", DBNullHelper.ValueOrDBNull(author.BirthYear));
-
-                    if (command.ExecuteNonQuery() != 1)
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand("UPDATE AUTHOR SET FirstName=@FirstName, LastName=@LastName, BirthYear=@BirthYear WHERE Aid=@Aid"))
                     {
-                        return false;
+                        command.Connection = connection;
+                        command.Parameters.AddWithValue("@Aid", author.Aid);
+                        command.Parameters.AddWithValue("@FirstName", DBNullHelper.ValueOrDBNull(author.FirstName));
+                        command.Parameters.AddWithValue("@LastName", DBNullHelper.ValueOrDBNull(author.LastName));
+                        command.Parameters.AddWithValue("@BirthYear", DBNullHelper.ValueOrDBNull(author.BirthYear));
+
+                        if (command.ExecuteNonQuery() != 1)
+                        {
+                            return false;
+                        }
                     }
                 }
+            }
+            catch(Exception)
+            {
+                return false;
             }
 
             return true;
         }
 
+        /// <summary>
+        /// Inserts a new author into the database. Returns false if it fails.
+        /// </summary>
+        /// <param name="author"></param>
+        /// <returns></returns>
         static public bool Insert(Author author)
         {
-            using (SqlConnection connection = DatabaseConnection.GetConnection())
+            try
             {
-                connection.Open();
-                using (SqlCommand command = new SqlCommand("INSERT INTO AUTHOR (FirstName, LastName, BirthYear) VALUES (@FirstName, @LastName, @BirthYear)"))
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
                 {
-                    command.Connection = connection;
-                    command.Parameters.AddWithValue("@FirstName", DBNullHelper.ValueOrDBNull(author.FirstName));
-                    command.Parameters.AddWithValue("@LastName", DBNullHelper.ValueOrDBNull(author.LastName));
-                    command.Parameters.AddWithValue("@BirthYear", DBNullHelper.ValueOrDBNull(author.BirthYear));
-
-                    if (command.ExecuteNonQuery() != 1)
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand("INSERT INTO AUTHOR (FirstName, LastName, BirthYear) VALUES (@FirstName, @LastName, @BirthYear)"))
                     {
-                        return false;
+                        command.Connection = connection;
+                        command.Parameters.AddWithValue("@FirstName", DBNullHelper.ValueOrDBNull(author.FirstName));
+                        command.Parameters.AddWithValue("@LastName", DBNullHelper.ValueOrDBNull(author.LastName));
+                        command.Parameters.AddWithValue("@BirthYear", DBNullHelper.ValueOrDBNull(author.BirthYear));
+
+                        if (command.ExecuteNonQuery() != 1)
+                        {
+                            return false;
+                        }
                     }
                 }
+            }
+            catch(Exception)
+            {
+                return false;
             }
 
             return true;
         }
 
+        /// <summary>
+        /// Delete the author with the supplied Aid from the database. 
+        /// Returns false if it fails.
+        /// </summary>
+        /// <param name="Aid"></param>
+        /// <returns></returns>
         static public bool Delete(int Aid)
         {
-            using (SqlConnection connection = DatabaseConnection.GetConnection())
+            try
             {
-                connection.Open();
-                // Delete author
-                using (SqlCommand command = new SqlCommand("DELETE FROM AUTHOR WHERE Aid = @Aid", connection))
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
                 {
-                    command.Parameters.AddWithValue("@Aid", Aid);
-
-                    if (command.ExecuteNonQuery() == 0)
+                    connection.Open();
+                    // Delete author
+                    using (SqlCommand command = new SqlCommand("DELETE FROM AUTHOR WHERE Aid = @Aid", connection))
                     {
-                        // Did not delete anything
-                        return false;
+                        command.Parameters.AddWithValue("@Aid", Aid);
+
+                        if (command.ExecuteNonQuery() == 0)
+                        {
+                            // Did not delete anything
+                            return false;
+                        }
                     }
                 }
             }
+            catch(Exception)
+            {
+                return false;
+            }
+
             return true;
         }
     }

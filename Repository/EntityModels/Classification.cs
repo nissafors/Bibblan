@@ -14,6 +14,13 @@ namespace Repository.EntityModels
         public string Signum { get; set; }
         public string Description { get; set; }
 
+        /// <summary>
+        /// Gets the classification with the specified SignId. If there is no classification
+        /// with the specified SignId then classification is null. Returns false if it fails.
+        /// </summary>
+        /// <param name="classification"></param>
+        /// <param name="SignId"></param>
+        /// <returns></returns>
         public static bool GetClassification(out Classification classification, int SignId)
         {
             classification = null;
@@ -24,7 +31,7 @@ namespace Repository.EntityModels
 
             bool result = GetClassifications(out classificationList, command);
 
-            if (classificationList.Count > 0)
+            if (result && classificationList.Count > 0)
             {
                 classification = classificationList[0];
             }
@@ -32,11 +39,23 @@ namespace Repository.EntityModels
             return result;
         }
 
+        /// <summary>
+        /// Gets all classifications in the database. Returns false if it fails.
+        /// </summary>
+        /// <param name="classificationList"></param>
+        /// <returns></returns>
         public static bool GetClassifications(out List<Classification> classificationList)
         {
             return GetClassifications(out classificationList, new SqlCommand("SELECT * FROM CLASSIFICATION"));
         }
 
+        /// <summary>
+        /// Runs the supplied SqlCommand on the database and reads the result as a classification. 
+        /// Returns true if everything succeded.
+        /// </summary>
+        /// <param name="classificationList"></param>
+        /// <param name="command"></param>
+        /// <returns></returns>
         private static bool GetClassifications(out List<Classification> classificationList, SqlCommand command)
         {
             classificationList = new List<Classification>();
