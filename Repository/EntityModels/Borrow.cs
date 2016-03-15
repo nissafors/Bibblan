@@ -16,21 +16,72 @@ namespace Repository.EntityModels
         public DateTime ToBeReturnedDate { get; set; }
         public DateTime? ReturnDate { get; set; }
 
+        /// <summary>
+        /// Get all Borrow:s matching either Barcode or PersonId.
+        /// </summary>
+        /// <param name="borrowList">A List of Borrow:s. Will be initialized to a new instance.
+        /// May be empty after eecution if no records were found.</param>
+        /// <param name="searchParameter">Barcode or PersonId as a string.</param>
+        /// <returns>Returns true if no errors occured.</returns>
         public static bool GetBorrows(out List<Borrow> borrowList, string searchParameter)
         {
             SqlCommand command = new SqlCommand("SELECT * from BORROW WHERE Barcode = @Barcode OR PersonId = @PersonId");
             command.Parameters.AddWithValue("@Barcode", searchParameter);
             command.Parameters.AddWithValue("@PersonId", searchParameter);
 
-            return GetBorrows(out borrowList, command);
+            return getBorrows(out borrowList, command);
         }
 
+        /// <summary>
+        /// Get all borrows in the database.
+        /// </summary>
+        /// <param name="borrowList">A List of Borrow:s. Will be initialized to a new instance.
+        /// May be empty after eecution if no records were found.</param>
+        /// <returns>Returns true if no errors occured.</returns>
         public static bool GetBorrows(out List<Borrow> borrowList)
         {
-            return GetBorrows(out borrowList, new SqlCommand("SELECT * from BORROW"));
+            return getBorrows(out borrowList, new SqlCommand("SELECT * from BORROW"));
         }
 
-        private static bool GetBorrows(out List<Borrow> borrowList, SqlCommand command)
+        /// <summary>
+        /// Write a new ToBeReturnedDate to the database.
+        /// </summary>
+        /// <param name="borrow">The Borrow object to update.</param>
+        /// <returns>Return true if one row was written and no error occured.</returns>
+        public static bool UpdateReturnDate(Borrow borrow)
+        {
+            try
+            {
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand("UPDATE SET ToBeReturnedDate = @ToBeReturnedDate WHERE Barcode = @Barcode AND PersonId = @PersonId", connection))
+                    {
+                        command.Parameters.AddWithValue("@Barcode", borrow.Barcode);
+                        command.Parameters.AddWithValue("@PersonId", borrow.PersonId);
+                        
+                        if(command.ExecuteNonQuery() != 1)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            catch(Exception)
+            {
+                return false;
+            }
+            return false;
+        }
+
+        /// <summary>
+        /// Execute command and place fetched records in a list.
+        /// </summary>
+        /// <param name="borrowList">A List of Borrow:s. Will be initialized to a new instance.
+        /// May be empty after eecution if no records were found.</param>
+        /// <param name="command">The SqlCommand to execute.</param>
+        /// <returns>Returns true if no error occured.</returns>
+        private static bool getBorrows(out List<Borrow> borrowList, SqlCommand command)
         {
             borrowList = new List<Borrow>();
 
@@ -66,38 +117,12 @@ namespace Repository.EntityModels
                     }
                 }
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return false;
             }
 
             return true;
-        }
-
-        public static bool UpdateReturnDate(Borrow borrow)
-        {
-            try
-            {
-                using (SqlConnection connection = DatabaseConnection.GetConnection())
-                {
-                    connection.Open();
-                    using (SqlCommand command = new SqlCommand("UPDATE SET ToBeReturnedDate = @ToBeReturnedDate WHERE Barcode = @Barcode AND PersonId = @PersonId", connection))
-                    {
-                        command.Parameters.AddWithValue("@Barcode", borrow.Barcode);
-                        command.Parameters.AddWithValue("@PersonId", borrow.PersonId);
-                        
-                        if(command.ExecuteNonQuery() != 1)
-                        {
-                            return false;
-                        }
-                    }
-                }
-            }
-            catch(Exception)
-            {
-                return false;
-            }
-            return false;
         }
     }
 }
