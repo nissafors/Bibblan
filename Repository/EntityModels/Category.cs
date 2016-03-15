@@ -52,7 +52,7 @@ namespace Repository.EntityModels
 
         /// <summary>
         /// Runs the supplied SqlCommand on the database and reads the result as a category. 
-        /// Returns true if everything succeded.
+        /// Returns false if it fails.
         /// </summary>
         /// <param name="categoryList"></param>
         /// <param name="command"></param>

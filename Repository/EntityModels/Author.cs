@@ -66,7 +66,7 @@ namespace Repository.EntityModels
 
         /// <summary>
         /// Runs the supplied SqlCommand on the database and reads the result as an author. 
-        /// Returns true if everything succeded.
+        /// Returns false if it fails.
         /// </summary>
         /// <param name="authorList"></param>
         /// <param name="command"></param>

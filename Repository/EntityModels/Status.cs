@@ -13,6 +13,13 @@ namespace Repository.EntityModels
         public int StatusId { get; set; }
         public string StatusName { get; set; }
 
+        /// <summary>
+        /// Gets the status with the specified StatusId. If there is no status
+        /// with the specified StatusId then status is null. Returns false if it fails.
+        /// </summary>
+        /// <param name="status"></param>
+        /// <param name="StatusId"></param>
+        /// <returns></returns>
         public static bool GetStatus(out Status status, int StatusId)
         {
             status = null;
@@ -31,11 +38,23 @@ namespace Repository.EntityModels
             return result;
         }
 
+        /// <summary>
+        /// Gets all statuses in the database. Returns false if it fails.
+        /// </summary>
+        /// <param name="statusList"></param>
+        /// <returns></returns>
         public static bool GetStatuses(out List<Status> statusList)
         {
             return GetStatuses(out statusList, new SqlCommand("SELECT * FROM STATUS"));
         }
 
+        /// <summary>
+        /// Runs the supplied SqlCommand on the database and reads the result as a status. 
+        /// Returns false if it fails.
+        /// </summary>
+        /// <param name="statusList"></param>
+        /// <param name="command"></param>
+        /// <returns></returns>
         private static bool GetStatuses(out List<Status> statusList, SqlCommand command)
         {
             statusList = new List<Status>();
