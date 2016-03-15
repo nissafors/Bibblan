@@ -51,7 +51,7 @@ namespace Repository.EntityModels
 
         /// <summary>
         /// Runs the supplied SqlCommand on the database and reads the result as a classification. 
-        /// Returns true if everything succeded.
+        /// Returns false if it fails.
         /// </summary>
         /// <param name="classificationList"></param>
         /// <param name="command"></param>
