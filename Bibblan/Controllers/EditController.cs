@@ -158,7 +158,6 @@ namespace Bibblan.Controllers
             BorrowerViewModel borrower = new BorrowerViewModel();
             if (PersonId == null)
             {
-                setBorrowerViewLists(borrower);
                 borrower.New = true;
             }
             else
@@ -166,7 +165,7 @@ namespace Bibblan.Controllers
                 borrower = BorrowerServices.GetBorrower(PersonId);
                 borrower.New = false;
             }
-
+            setBorrowerViewLists(borrower);
             return View(borrower);
         }
 
@@ -179,11 +178,11 @@ namespace Bibblan.Controllers
                 BorrowerServices.Upsert(borrower);
                 borrower.New = false;
             }
-            catch(Services.Exceptions.AlreadyExistsException e)
+            catch(AlreadyExistsException e)
             {
                 ViewBag.error = e.Message;
             }
-            catch(Services.Exceptions.DoesNotExistException e)
+            catch(DoesNotExistException e)
             {
                 ViewBag.error = e.Message;
             }
@@ -212,23 +211,24 @@ namespace Bibblan.Controllers
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
         public ActionResult Delete(string Type, string Id)
         {
+            Type = Type.ToLower();
             try
             {
                 switch (Type)
                 {
-                    case "Borrower":
+                    case "borrower":
                         BorrowerServices.Delete(Id);
                         return RedirectToAction("Borrower", "Search");
 
-                    case "Author":
+                    case "author":
                         AuthorServices.DeleteAuthor(Id);
                         return RedirectToAction("Author", "Search");
 
-                    case "Book":
+                    case "book":
                         BookServices.Delete(Id);
                         return RedirectToAction("Book", "Search");
 
-                    case "Copy":
+                    case "copy":
                         var isbn = CopyServices.GetCopyViewModel(Id).ISBN;
                         CopyServices.DeleteCopy(Id);
                         return RedirectToAction("Book", new { isbn });

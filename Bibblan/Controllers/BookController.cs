@@ -14,10 +14,14 @@ namespace Bibblan.Controllers
         // GET: /Book/
         public ActionResult Details(string isbn)
         {
-            BookViewModel viewModel = BookServices.GetBookDetails(isbn);
-            if (viewModel != null)
+            try
             {
+                BookViewModel viewModel = BookServices.GetBookDetails(isbn);
                 ViewBag.Book = viewModel;
+            }
+            catch(Exception)
+            {
+                ViewBag.Book = null;
             }
             
             return View();
