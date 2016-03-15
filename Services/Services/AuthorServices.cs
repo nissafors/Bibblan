@@ -21,16 +21,20 @@ namespace Services.Services
             List<Author> authorEntities;
             List<AuthorViewModel> authors = new List<AuthorViewModel>();
 
-            if (Author.GetAuthors(out authorEntities) && authorEntities != null)
+            if (Author.GetAuthors(out authorEntities))
             {
                 // build list
                 foreach (var author in authorEntities)
                 {
-                    authors.Add(new AuthorViewModel { FirstName = author.FirstName, LastName = author.LastName, BirthYear = author.BirthYear, Aid = author.Aid });
+                    authors.Add(Mapper.Map<AuthorViewModel>(author));
                 }
-            }
 
-            return authors;
+                return authors;
+            }
+            else
+            {
+                throw new DataAccessException("Oväntat fel när böckerna hämtades. Kontakta administratör om felet kvarstår.");
+            }
         }
 
         public static AuthorViewModel GetAuthor(int authorId)

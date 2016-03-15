@@ -1,6 +1,5 @@
-﻿@model Common.Models.BrowserAuthorViewModel
-    @{
-        ViewBag.Title = "Author";
+﻿    @{
+        ViewBag.Title = "Författare";
     }
     @using (Html.BeginForm("Title", "Browse"))
     {
@@ -15,12 +14,15 @@
             <th>Efternamn</th>
             <th>Förnamn</th>
             <th>Födelseår</th>
+@if (ViewBag.isAdmin)
+{
             <th class="col-md-1"></th>
+}
         </tr>
         </thead>
-        @if (@Model != null)
+        @if (ViewBag.authors != null)
         {
-            foreach (var item in Model.Authors)
+            foreach (var item in ViewBag.authors)
             {
                 <tr>
                     <td>@item.LastName</td>

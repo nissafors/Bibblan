@@ -12,32 +12,35 @@
 </div>
 
 <table class="table table-striped">
-	<thead>
-		<tr>
-			<th>ISBN</th>
-			<th>Titel</th>
-			<th>Utgivningsår</th>
+    <thead>
+        <tr>
+            <th>ISBN</th>
+            <th>Titel</th>
+            <th>Utgivningsår</th>
             <th>Antal sidor</th>
-			<th class="col-md-1"></th>
-		</tr>
-	</thead>
-	<tbody>
-		@if (@ViewBag.books != null)
-		{
-			foreach (var item in @ViewBag.books)
-			{
-				<tr>
-					<td>@item.ISBN</td>
-					<td><a href=@("../book/details/" + @item.ISBN)> @item.Title</a></td>
-					<td>@item.PublicationYear</td>
+            @if (ViewBag.isAdmin)
+            {
+                <th class="col-md-1"></th>
+            }
+        </tr>
+    </thead>
+    <tbody>
+        @if (@ViewBag.books != null)
+        {
+            foreach (var item in @ViewBag.books)
+            {
+                <tr>
+                    <td>@item.ISBN</td>
+                    <td><a href=@("../book/details/" + @item.ISBN)> @item.Title</a></td>
+                    <td>@item.PublicationYear</td>
                     <td>@item.Pages</td>
-					@if (ViewBag.isAdmin)
+                    @if (ViewBag.isAdmin)
                     {
                         <td><a href=@("../edit/book/" + item.ISBN) class="btn btn-xs btn-warning">Redigera bok</a></td>
                     }
-					    
-				</tr>
-			}
-		}
-	</tbody>
+
+                </tr>
+            }
+        }
+    </tbody>
 </table>

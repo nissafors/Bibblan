@@ -173,6 +173,12 @@ namespace Bibblan.Controllers
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
         public ActionResult Borrower(BorrowerViewModel borrower)
         {
+            if (TempData["error"] != null)
+            {
+                ViewBag.error = TempData["error"].ToString();
+                TempData["error"] = null;
+            }
+
             try
             {
                 BorrowerServices.Upsert(borrower);

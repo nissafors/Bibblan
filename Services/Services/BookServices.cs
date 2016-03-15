@@ -58,7 +58,10 @@ namespace Services.Services
                 }
                 return bookViewModelList;
             }
-            return null;
+            else
+            {
+                throw new DataAccessException("Oväntat fel när böckerna hämtades. Kontakta administratör om felet kvarstår.");
+            }
         }
 
         /// <summary>
