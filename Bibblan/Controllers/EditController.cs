@@ -246,27 +246,15 @@ namespace Bibblan.Controllers
             }
             catch(DoesNotExistException e)
             {
-                ViewBag.error = e.Message;
+                TempData["error"] = e.Message;
                 
-                if (Request.UrlReferrer != null)
-                {
-                    return Redirect(Request.UrlReferrer.ToString());
-                }
-                else
-                {
-                    return RedirectToAction("Index", "Home");
-                }
+                return RedirectToAction("Index", "Home");
             }
             catch (Exception)
             {
-                if (Request.UrlReferrer != null)
-                {
-                    return Redirect(Request.UrlReferrer.ToString());
-                }
-                else
-                {
-                    return RedirectToAction("Index", "Home");
-                }
+                TempData["error"] = "Ett oväntat fel uppstod när ett objekt skulle tas bort.";
+
+                return RedirectToAction("Index", "Home");
             }
         }
 

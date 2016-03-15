@@ -10,6 +10,9 @@ namespace Bibblan.Controllers
     {
         public ActionResult Index()
         {
+            if (TempData["error"] != null)
+                ViewBag.error = TempData["error"];
+
             return View();
         }
     }
