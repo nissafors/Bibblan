@@ -10,9 +10,12 @@
 	<div class="col-xs-6">
 		<h1>@ViewBag.Book.Title</h1>
 	</div>
+    @if (ViewBag.isAdmin)
+    {
 	<div class="col-xs-3 col-sm-offset-3 text-right">
-		<button class="btn btn-default">Redigera</button>
+        <a href=@("../../edit/book/" + ViewBag.Book.ISBN) class="btn btn-xs btn-warning">Redigera bok</a>
 	</div>
+    }
 </div>
 <div class="row">
 	<div class="col-md-6">

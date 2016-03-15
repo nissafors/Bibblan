@@ -5,6 +5,8 @@ using System.Web;
 using System.Web.Mvc;
 using Services.Services;
 using Common.Models;
+using Bibblan.Helpers;
+using Services.Exceptions;
 
 namespace Bibblan.Controllers
 {
@@ -16,8 +18,17 @@ namespace Bibblan.Controllers
         {
             try
             {
+                if (AccountHelper.HasAccess(this.Session, AccountHelper.Role.Admin))
+                    ViewBag.isAdmin = true;
+                else
+                    ViewBag.isAdmin = false;
+
                 BookViewModel viewModel = BookServices.GetBookDetails(isbn);
                 ViewBag.Book = viewModel;
+            }
+            catch(DataAccessException e)
+            {
+                ViewBag.error = e.Message;
             }
             catch(Exception)
             {
