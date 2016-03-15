@@ -17,6 +17,13 @@ namespace Repository.EntityModels
         public string PublicationInfo { get; set; }
         public int Pages { get; set; }
 
+        /// <summary>
+        /// Get a book given its ISBN.
+        /// </summary>
+        /// <param name="book">A variable of type Book. Will be set to a new instance if a record was found, 
+        /// and to null if no record was found.</param>
+        /// <param name="isbn">The ISBN as a string.</param>
+        /// <returns>Returns true if no error occured.</returns>
         public static bool GetBook(out Book book, string isbn)
         {
             book = null;
@@ -34,55 +41,17 @@ namespace Repository.EntityModels
             return result;
         }
 
+        /// <summary>
+        /// Get all books in the database.
+        /// </summary>
+        /// <param name="bookList">A List of Book:s. Will be initialized with a new instance.
+        /// May be empty after execution if no records where found.</param>
+        /// <returns>Returns true if no error occured.</returns>
         public static bool GetBooks(out List<Book> bookList)
         {
             return getBooks(out bookList, new SqlCommand("SELECT * from BOOK ORDER BY Title ASC"));
         }
 
-        private static bool getBooks(out List<Book> bookList, SqlCommand command)
-        {
-            bookList = new List<Book>();
-
-            try
-            {
-                using (SqlConnection connection = DatabaseConnection.GetConnection())
-                {
-                    connection.Open();
-                    using (command)
-                    {
-                        command.Connection = connection;
-                        using (SqlDataReader myReader = command.ExecuteReader())
-                        {
-                            if (myReader != null)
-                            {
-                                while (myReader.Read())
-                                {
-                                    bookList.Add(new Book()
-                                    {
-                                        ISBN = Convert.ToString(myReader["ISBN"]),
-                                        Title = Convert.ToString(myReader["Title"]),
-                                        PublicationInfo = Convert.ToString(myReader["PublicationInfo"]),
-                                        PublicationYear = Convert.ToString(myReader["PublicationYear"]),
-                                        Pages = Convert.ToInt32(myReader["Pages"]),
-                                        SignId = Convert.ToInt32(myReader["SignId"])
-                                    });
-                                }
-                            }
-                            else
-                            {
-                                return false;
-                            }
-                        }
-                    }
-                }
-            }
-            catch(Exception)
-            {
-                return false;
-            }
-
-            return true;
-        }
 
         public static bool Upsert(Book book, List<int> authorIdList)
         {
@@ -166,6 +135,11 @@ namespace Repository.EntityModels
             return true;
         }
 
+        /// <summary>
+        /// Delete a book from the database given its ISBN.
+        /// </summary>
+        /// <param name="isbn">The ISBN as a string.</param>
+        /// <returns>Returns true if no error occured.</returns>
         public static bool Delete(string isbn)
         {
             try
@@ -207,6 +181,16 @@ namespace Repository.EntityModels
             return true;
         }
 
+        /// <summary>
+        /// Get books and related authors given a search string.
+        /// </summary>
+        /// <param name="bookList">A List of Book:s. Will be set to a new instance.
+        /// May be empty after execution if no records where found.</param>
+        /// <param name="isbnAuthorList">A list of Tuple:s consisting of two strings. For each record returned the first
+        /// string in the tuple will be the full name of the author and the second string will be the ISBN of the
+        /// relevant book. Will be set to a new instance. May be empty after execution if no records where found.</param>
+        /// <param name="search">The search string.</param>
+        /// <returns>Returns true if no errors occured.</returns>
         public static bool SearchBook(out List<Book> bookList, out List<Tuple<string, string>> isbnAuthorList, string search)
         {
             string modifiedSearch = HelperFunctions.SetupSearchString(search);
@@ -257,6 +241,58 @@ namespace Repository.EntityModels
                                         });
                                     }
                                     isbnAuthorList.Add(new Tuple<string,string>(Convert.ToString(myReader["Name"]), ISBN));
+                                }
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Fetch records from the database and place them in a list.
+        /// </summary>
+        /// <param name="bookList">A List of Book:s. Will be initialized with a new instance.
+        /// May be empty after execution if no records where found.</param>
+        /// <param name="command">An SqlCommand to execute.</param>
+        /// <returns>True if no error occured.</returns>
+        private static bool getBooks(out List<Book> bookList, SqlCommand command)
+        {
+            bookList = new List<Book>();
+
+            try
+            {
+                using (SqlConnection connection = DatabaseConnection.GetConnection())
+                {
+                    connection.Open();
+                    using (command)
+                    {
+                        command.Connection = connection;
+                        using (SqlDataReader myReader = command.ExecuteReader())
+                        {
+                            if (myReader != null)
+                            {
+                                while (myReader.Read())
+                                {
+                                    bookList.Add(new Book()
+                                    {
+                                        ISBN = Convert.ToString(myReader["ISBN"]),
+                                        Title = Convert.ToString(myReader["Title"]),
+                                        PublicationInfo = Convert.ToString(myReader["PublicationInfo"]),
+                                        PublicationYear = Convert.ToString(myReader["PublicationYear"]),
+                                        Pages = Convert.ToInt32(myReader["Pages"]),
+                                        SignId = Convert.ToInt32(myReader["SignId"])
+                                    });
                                 }
                             }
                             else
