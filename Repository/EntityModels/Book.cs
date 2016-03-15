@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
-using Repository.Repositories;
 
 namespace Repository.EntityModels
 {
@@ -72,7 +71,7 @@ namespace Repository.EntityModels
             // Update or create BOOK
             try
             {
-                using (SqlConnection connection = DatabaseConnection.GetConnection())
+                using (SqlConnection connection = HelperFunctions.GetConnection())
                 {
                     connection.Open();
                     using (SqlCommand command = new SqlCommand("EXEC UpsertBook @ISBN, @Title, @SignId, @PublicationYear, @PublicationInfo, @Pages"))
@@ -81,9 +80,9 @@ namespace Repository.EntityModels
                         command.Parameters.AddWithValue("@ISBN", book.ISBN);
                         command.Parameters.AddWithValue("@Title", book.Title);
                         command.Parameters.AddWithValue("@SignId", book.SignId);
-                        command.Parameters.AddWithValue("@PublicationYear", DBNullHelper.ValueOrDBNull(book.PublicationYear));
-                        command.Parameters.AddWithValue("@PublicationInfo", DBNullHelper.ValueOrDBNull(book.PublicationInfo));
-                        command.Parameters.AddWithValue("@Pages", DBNullHelper.ValueOrDBNull(book.Pages));
+                        command.Parameters.AddWithValue("@PublicationYear", HelperFunctions.ValueOrDBNull(book.PublicationYear));
+                        command.Parameters.AddWithValue("@PublicationInfo", HelperFunctions.ValueOrDBNull(book.PublicationInfo));
+                        command.Parameters.AddWithValue("@Pages", HelperFunctions.ValueOrDBNull(book.Pages));
                  
                         if (command.ExecuteNonQuery() != 1)
                         {
@@ -144,7 +143,7 @@ namespace Repository.EntityModels
         {
             try
             {
-                using (SqlConnection connection = DatabaseConnection.GetConnection())
+                using (SqlConnection connection = HelperFunctions.GetConnection())
                 {
                     connection.Open();
                     // Delete copies
@@ -200,7 +199,7 @@ namespace Repository.EntityModels
 
             try
             {
-                using (SqlConnection connection = DatabaseConnection.GetConnection())
+                using (SqlConnection connection = HelperFunctions.GetConnection())
                 {
                     connection.Open();
                     string commandString = "SELECT " +
@@ -272,7 +271,7 @@ namespace Repository.EntityModels
 
             try
             {
-                using (SqlConnection connection = DatabaseConnection.GetConnection())
+                using (SqlConnection connection = HelperFunctions.GetConnection())
                 {
                     connection.Open();
                     using (command)
