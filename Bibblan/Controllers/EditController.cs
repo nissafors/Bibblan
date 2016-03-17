@@ -18,6 +18,7 @@ namespace Bibblan.Controllers
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin)]
         public ActionResult Book(string isbn)
         {
+            var errors = new List<string>();
             var bookInfo = new EditBookViewModel();
 
             if (isbn != null)
@@ -27,13 +28,17 @@ namespace Bibblan.Controllers
                     bookInfo = BookServices.GetEditBookViewModel(isbn);
                     bookInfo.Update = true;
                 }
-                catch (DoesNotExistException e) { ViewBag.error = e.Message; }
-                catch (AlreadyExistsException e) { ViewBag.error = e.Message; }
-                catch (Exception) { ViewBag.error = "Oväntat fel."; }
+                catch (DoesNotExistException e) { errors.Add(e.Message); }
+                catch (AlreadyExistsException e) { errors.Add(e.Message); }
+                catch (DataAccessException e) { errors.Add(e.Message); }
             }
 
-            setBookViewLists(bookInfo);
+            string err = setBookViewLists(bookInfo);
+            if (err != null)
+                errors.Add(err);
 
+            if (errors.Count > 0)
+                ViewBag.error = errors;
             return View(bookInfo);
         }
 
@@ -43,7 +48,9 @@ namespace Bibblan.Controllers
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
         public ActionResult Book(EditBookViewModel bookInfo)
         {
-            setBookViewLists(bookInfo);
+            string err = setBookViewLists(bookInfo);
+            if (err != null)
+                ViewBag.error = err + "\n";
 
             if (ModelState.IsValid)
             {
@@ -52,24 +59,36 @@ namespace Bibblan.Controllers
                     BookServices.Upsert(bookInfo, bookInfo.Update);
                     bookInfo.Update = true;
                 }
-                catch (AlreadyExistsException e) { ViewBag.error = e.Message; }
-                catch (DoesNotExistException e) { ViewBag.error = e.Message; }
-                catch (DataAccessException e) { ViewBag.error = e.Message; }
-                catch (Exception) { ViewBag.error = "Oväntat fel."; }
+                catch (AlreadyExistsException e) { ViewBag.error += e.Message; }
+                catch (DoesNotExistException e) { ViewBag.error += e.Message; }
+                catch (DataAccessException e) { ViewBag.error += e.Message; }
+                catch (Exception) { ViewBag.error += "Oväntat fel."; }
             }
 
             return View(bookInfo);
         }
 
         // Helper for the Book ActionResult's.
-        private void setBookViewLists(EditBookViewModel ebvm)
+        private string setBookViewLists(EditBookViewModel ebvm)
         {
-            ebvm.Copies = CopyServices.getCopyViewModels(ebvm.ISBN);
+            try
+            {
+                ebvm.Copies = CopyServices.getCopyViewModels(ebvm.ISBN);
 
-            var classDic = ClassificationServices.GetClassificationsAsDictionary();
-            var authorDic = AuthorServices.GetAuthorsAsDictionary();
-            ebvm.Classifications = new SelectList(classDic.OrderBy(x => x.Value), "Key", "Value");
-            ebvm.Authors = new SelectList(authorDic.OrderBy(x => x.Value), "Key", "Value");
+                var classDic = ClassificationServices.GetClassificationsAsDictionary();
+                var authorDic = AuthorServices.GetAuthorsAsDictionary();
+                ebvm.Classifications = new SelectList(classDic.OrderBy(x => x.Value), "Key", "Value");
+                ebvm.Authors = new SelectList(authorDic.OrderBy(x => x.Value), "Key", "Value");
+            }
+            catch (DataAccessException e)
+            {
+                if (ebvm.Copies == null) ebvm.Copies = new List<CopyViewModel>();
+                if (ebvm.Classifications == null) ebvm.Classifications = new SelectList(new List<SelectListItem>());
+                if (ebvm.Authors == null) ebvm.Authors = new SelectList(new List<SelectListItem>());
+                return e.Message;
+            }
+
+            return null;
         }
 
         [HttpGet]
@@ -247,13 +266,16 @@ namespace Bibblan.Controllers
             catch (DoesNotExistException e)
             {
                 TempData["error"] = e.Message;
-                
+                return RedirectToAction("Index", "Home");
+            }
+            catch (DataAccessException e)
+            {
+                TempData["error"] = e.Message;
                 return RedirectToAction("Index", "Home");
             }
             catch (Exception)
             {
                 TempData["error"] = "Ett oväntat fel uppstod när ett objekt skulle tas bort.";
-
                 return RedirectToAction("Index", "Home");
             }
         }

@@ -82,7 +82,24 @@
                         <h4 class="modal-title">Fel uppstod</h4>
                     </div>
                     <div class="modal-body">
-                        <p>@ViewBag.error</p>
+                        @if (ViewBag.error is string)
+                        {
+                            <p>@ViewBag.error</p>
+                        }
+                        else
+                        {
+                            if (ViewBag.error.Count > 1)
+                            {
+                                for (int i = 1; i <= ViewBag.error.Count; i++)
+                                {
+                                    <p>[@i] @ViewBag.error[i - 1]</p>
+                                }
+                            }
+                            else
+                            {
+                                <p>@ViewBag.error[0]</p>
+                            }
+                        }
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Stäng</button>

@@ -41,7 +41,7 @@ namespace Repository.EntityModels
         }
 
         /// <summary>
-        /// Gett all BookAuthor:s in the database.
+        /// Get all BookAuthor:s in the database.
         /// </summary>
         /// <param name="bookAuthorList">A List of BookAuthor:s.  Will be set to a new instance.
         /// May be empty after execution if no records where found.</param>

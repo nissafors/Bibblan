@@ -18,30 +18,32 @@ namespace Services.Services
         /// </remarks>
         /// <param name="isbn">ISBN as a string.</param>
         /// <returns>EditBookViewModel</returns>
+        /// <exception cref="Services.Exceptions.DoesNotExistException">
+        /// Thrown when a book or its authors could not be found.</exception>
+        /// <exception cref="Services.Exceptions.DataAccessException">
+        /// Thrown when an error occurs in the data access layer.</exception>
         public static EditBookViewModel GetEditBookViewModel(string isbn)
         {
             EditBookViewModel ebvm = new EditBookViewModel();
             Book book = new Book();
-            var authorIds = new List<int>();
 
-            if (Book.GetBook(out book, isbn))
-            {
-                var bookAuthors = new List<BookAuthor>();
-
-                ebvm = Mapper.Map<EditBookViewModel>(book);
-
-                if (BookAuthor.GetBookAuthors(out bookAuthors, book.ISBN))
-                {
-                    foreach (BookAuthor ba in bookAuthors)
-                        authorIds.Add(ba.Aid);
-                }
-                else
-                    throw new DoesNotExistException("Mystiskt! Angivna författare kunde inte hittas.");
-
-                ebvm.AuthorIds = authorIds;
-            }
-            else
+            if (!Book.GetBook(out book, isbn))
+                throw new DataAccessException("Ett oväntat fel uppstod när en bok skulle hämtas.");
+            if (book == null)
                 throw new DoesNotExistException("Ajdå! Boken hittades inte.");
+
+            var bookAuthors = new List<BookAuthor>();
+            if (!BookAuthor.GetBookAuthors(out bookAuthors, book.ISBN))
+                throw new DataAccessException("Ett oväntat fel uppstod när författare till en bok skulle hämtas.");
+            if (bookAuthors.Count < 1)
+                throw new DoesNotExistException("Mystiskt! Angivna författare kunde inte hittas.");
+
+            var authorIds = new List<int>();
+            foreach (BookAuthor ba in bookAuthors)
+                authorIds.Add(ba.Aid);
+
+            ebvm = Mapper.Map<EditBookViewModel>(book);
+            ebvm.AuthorIds = authorIds;
 
             return ebvm;
         }
