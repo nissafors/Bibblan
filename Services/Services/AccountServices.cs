@@ -21,6 +21,12 @@ namespace Services.Services
 
            return Mapper.Map<AccountViewModel>(account);
         }
+        public static bool AccountExists(string username)
+        {
+            bool b;
+            Account.AccountExists(out b, username);
+            return b;
+        }
 
         public static int GetRoleId(string username)
         {

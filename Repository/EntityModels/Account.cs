@@ -23,6 +23,7 @@ namespace Repository.EntityModels
         public string Username { get; set; }
         public string Password { get; set; }
         public string PersonId { get; set; }
+        public string Salt { get; set; }
         public int RoleId { get; set; }
 
         // TODO: Refactor get from sql
@@ -38,6 +39,16 @@ namespace Repository.EntityModels
                 }
             }
             return false;
+        }
+
+        public static bool AccountExists(out bool exists, string username)
+        {
+            foreach(var a in accountMockups)
+            {
+                if(a.Username == username)
+                    return exists = true;
+            }
+            return exists = false;
         }
 
         public static bool GetUserRole(string username, out UserRole role)

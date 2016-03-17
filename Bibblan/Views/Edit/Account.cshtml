@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewBag.Title = "Lägg Administratör";
+}
+
+<div class="page-header">
+    <h1>Redigera Administratör</h1>
+</div>
+
+@using (Html.BeginForm())
+{
+    <div class="form-group">
+        @Html.Label("Användarnamn")
+        @Html.TextBox("username", null, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.Label("Lösenord")
+        @Html.TextBox("password", null, new {@type = "password", @class = "form-control" })
+    </div>
+        <div class="form-group">
+        @Html.Label("Lösenord Igen")
+        @Html.TextBox("password-retry", null, new {@type = "password", @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <input type="submit" class="btn btn-block btn-primary" value="Lägg till" />
+    </div>
+        <div class="form-group">
+        <a href="Edit/adasd" class="btn btn-block btn-danger">Ta bort</a>
+    </div>
+}

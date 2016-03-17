@@ -308,5 +308,12 @@ namespace Bibblan.Controllers
             
             return View(authorViewModel);
         }
+
+        public ActionResult Account(string username)
+        {
+
+            return View();
+        }
+
     }
 }
