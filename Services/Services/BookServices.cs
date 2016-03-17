@@ -36,7 +36,7 @@ namespace Services.Services
                         authorIds.Add(ba.Aid);
                 }
                 else
-                    throw new NoSuchAuthorException("Mystiskt! Angivna författare kunde inte hittas.");
+                    throw new DoesNotExistException("Mystiskt! Angivna författare kunde inte hittas.");
 
                 ebvm.AuthorIds = authorIds;
             }
@@ -123,7 +123,7 @@ namespace Services.Services
             catch (ArgumentException e)
             {
                 if (e.ParamName == "authorIdList")
-                    throw new NoSuchAuthorException("De angivna författarna finns inte i databasen.");
+                    throw new DoesNotExistException("De angivna författarna finns inte i databasen.");
                 else
                     throw;
             }

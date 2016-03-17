@@ -116,7 +116,7 @@ namespace Services.Services
                 }
                 else
                 {
-                    throw new HasBooksException("Författaren kan inte tas bort då han eller hon har böcker.");
+                    throw new DeleteException("Författaren kan inte tas bort då han eller hon har böcker.");
                 }
             }
             throw new DoesNotExistException("Författaren som skulle tas bort hittades inte.");

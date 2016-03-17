@@ -7,21 +7,21 @@ using System.Threading.Tasks;
 namespace Services.Exceptions
 {
     /// <summary>
-    /// The exception that is thrown when an item that should exist doesn't.
+    /// The exception that is thrown when attempted to delete an item that is not in a deletable state.
     /// </summary>
-    public class DoesNotExistException : Exception
+    public class DeleteException : Exception
     {
-        public DoesNotExistException()
+        public DeleteException()
         {
 
         }
 
-        public DoesNotExistException(string message)
+        public DeleteException(string message)
             : base(message)
         {
         }
 
-        public DoesNotExistException(string message, Exception inner)
+        public DeleteException(string message, Exception inner)
             : base(message, inner)
         {
         }

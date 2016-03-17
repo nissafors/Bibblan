@@ -27,7 +27,7 @@ namespace Bibblan.Controllers
                     bookInfo = BookServices.GetEditBookViewModel(isbn);
                     bookInfo.Update = true;
                 }
-                catch (NoSuchAuthorException e) { ViewBag.error = e.Message; }
+                catch (DoesNotExistException e) { ViewBag.error = e.Message; }
                 catch (AlreadyExistsException e) { ViewBag.error = e.Message; }
                 catch (Exception) { ViewBag.error = "Oväntat fel."; }
             }
@@ -53,7 +53,7 @@ namespace Bibblan.Controllers
                     bookInfo.Update = true;
                 }
                 catch (AlreadyExistsException e) { ViewBag.error = e.Message; }
-                catch (NoSuchAuthorException e) { ViewBag.error = e.Message; }
+                catch (DoesNotExistException e) { ViewBag.error = e.Message; }
                 catch (DataAccessException e) { ViewBag.error = e.Message; }
                 catch (Exception) { ViewBag.error = "Oväntat fel."; }
             }
@@ -238,7 +238,7 @@ namespace Bibblan.Controllers
 
                 }
             }
-            catch (HasBooksException e)
+            catch (DeleteException e)
             {
                 string authorId = Id;
                 TempData["error"] = e.Message;

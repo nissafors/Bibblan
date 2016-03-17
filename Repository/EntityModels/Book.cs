@@ -51,7 +51,14 @@ namespace Repository.EntityModels
             return getBooks(out bookList, new SqlCommand("SELECT * from BOOK ORDER BY Title ASC"));
         }
 
-
+        /// <summary>
+        /// Update a Book or create a Book in the database if it doesn't exist. This means existing items will
+        /// be overwritten.
+        /// </summary>
+        /// <param name="copy">The Copy to write to the database.</param>
+        /// <returns>Returns true if one row was written and no error occured.</returns>
+        /// <exception cref="System.ArgumentException">Thrown when authorIdList is empty or given author id:s
+        /// doesn't exist.</exception>
         public static bool Upsert(Book book, List<int> authorIdList)
         {
             // Are there any authorId:s and if so, do they exist? If not, the authorIdList argument was invalid.

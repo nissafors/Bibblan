@@ -6,6 +6,9 @@ using System.Threading.Tasks;
 
 namespace Services.Exceptions
 {
+    /// <summary>
+    /// The exception that is thrown when a request to the data access layer returns false, indicating an error.
+    /// </summary>
     public class DataAccessException : Exception
     {
         public DataAccessException()

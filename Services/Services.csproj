@@ -46,9 +46,8 @@
   <ItemGroup>
     <Compile Include="Configuration\AutoMapperConfig.cs" />
     <Compile Include="Exceptions\AlreadyExistsException.cs" />
-    <Compile Include="Exceptions\HasBooksException.cs" />
+    <Compile Include="Exceptions\DeleteException.cs" />
     <Compile Include="Exceptions\DoesNotExistException.cs" />
-    <Compile Include="Exceptions\NoSuchAuthorException.cs" />
     <Compile Include="Exceptions\DataAccessException.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Services\AuthorServices.cs" />
