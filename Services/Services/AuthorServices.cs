@@ -15,7 +15,10 @@ namespace Services.Services
         /// <summary>
         /// Returns a list of all authors in the database
         /// </summary>
-        /// <returns></returns>
+        /// <returns>A List of AuthorViewModel:s</returns>
+        /// <exception cref="Services.Exceptions.DataAccessException">
+        /// Thrown when an error occurs in the data access layer.
+        /// </exception>
         public static List<AuthorViewModel> GetAuthors()
         {
             List<Author> authorEntities;
@@ -37,32 +40,47 @@ namespace Services.Services
             }
         }
 
+        /// <summary>
+        /// Get author by id.
+        /// </summary>
+        /// <param name="authorId">The id of the author.</param>
+        /// <returns>Returns an AuthorViewModel.</returns>
+        /// <exception cref="Services.Exceptions.DataAccessException">
+        /// Thrown when an error occurs in the data access layer.</exception>
+        /// <exception cref="Services.Exceptions.DoesNotExistException">
+        /// Throw if no author with given id can be found.</exception>
         public static AuthorViewModel GetAuthor(int authorId)
         {
             Author author;
 
-            if (Author.GetAuthor(out author, authorId)
-                && author != null)
-            {
-                return Mapper.Map<AuthorViewModel>(author);
-            }
-            return null;
+            if (!Author.GetAuthor(out author, authorId))
+                throw new DataAccessException("Oväntat fel när författaren skulle hämtas.");
+            if (author != null)
+                throw new DoesNotExistException("En författare med angivet id kunde inte hittas.");
+
+            return Mapper.Map<AuthorViewModel>(author);
         }
 
+        /// <summary>
+        /// Returns all authors that matches the conditions in a search string.
+        /// </summary>
+        /// <param name="search">The search string.</param>
+        /// <returns>Returns a List of AuthorViewModel:s.</returns>
+        /// <exception cref="Services.Exceptions.DataAccessException">
+        /// Thrown when an error occurs in the data access layer.</exception>
         public static List<AuthorViewModel> SearchAuthors(string search)
         {
             List<Author> authorList;
-            if (Author.GetAuthors(out authorList, search))
-            {
-                List<AuthorViewModel> authorViewModelList = new List<AuthorViewModel>();
-                foreach (Author author in authorList)
-                {
-                    authorViewModelList.Add(Mapper.Map<AuthorViewModel>(author));
-                }
+            if (!Author.GetAuthors(out authorList, search))
+                throw new DataAccessException("Ett oväntat fel inträffade.");
 
-                return authorViewModelList;
+            List<AuthorViewModel> authorViewModelList = new List<AuthorViewModel>();
+            foreach (Author author in authorList)
+            {
+                authorViewModelList.Add(Mapper.Map<AuthorViewModel>(author));
             }
-            return null;
+
+            return authorViewModelList;
         }
 
         public static Dictionary<int, string> GetAuthorsAsDictionary()

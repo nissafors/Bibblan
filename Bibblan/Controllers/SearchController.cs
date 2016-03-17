@@ -8,6 +8,7 @@ using Services.Services;
 using System.Diagnostics;
 using Bibblan.Helpers;
 using Bibblan.Filters;
+using Services.Exceptions;
 
 namespace Bibblan.Controllers
 {
@@ -81,8 +82,12 @@ namespace Bibblan.Controllers
             else
             {
                 List<AuthorViewModel> model;
-                model = AuthorServices.SearchAuthors(search);
-                ViewBag.result = model;
+                try
+                {
+                    model = AuthorServices.SearchAuthors(search);
+                    ViewBag.result = model;
+                }
+                catch (DataAccessException e) { ViewBag.error = e.Message; }
             }
 
             return View();

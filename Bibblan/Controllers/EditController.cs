@@ -244,7 +244,7 @@ namespace Bibblan.Controllers
                 TempData["error"] = e.Message;
                 return RedirectToAction("Author", new { authorId });
             }
-            catch(DoesNotExistException e)
+            catch (DoesNotExistException e)
             {
                 TempData["error"] = e.Message;
                 
@@ -277,10 +277,8 @@ namespace Bibblan.Controllers
                     author = AuthorServices.GetAuthor((int)authorid);
                 }
             }
-            catch(DoesNotExistException e)
-            {
-                ViewBag.error = e.Message;
-            }
+            catch (DoesNotExistException e) { ViewBag.error = e.Message; }
+            catch (DataAccessException e) { ViewBag.error = e.Message; }
 
             return View(author);
         }
