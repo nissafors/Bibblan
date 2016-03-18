@@ -27,8 +27,10 @@ namespace Bibblan.Controllers
 
             if (search != null)
             {
-                ViewBag.result = BorrowerServices.SearchBorrowers(search);
+                try { ViewBag.result = BorrowerServices.SearchBorrowers(search); }
+                catch (DataAccessException e) { ViewBag.error = e.Message; }
             }
+
             return View();
         }
         

@@ -5,22 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using Common.Models;
 using Repository.EntityModels;
+using Services.Exceptions;
 
 namespace Services.Services
 {
     public class CategoryServices
     {
-        static public List<Category> GetAllCategories()
-        {
-            List<Category> categories = new List<Category>();
-            if(Category.GetCategories(out categories))
-            {
-                return categories;
-            }
-            
-            return null;
-        }
-
+        /// <summary>
+        /// Return category ids and corresponding names.
+        /// </summary>
+        /// <returns>Returns a dictionary with ids as keys and names as strings.</returns>
+        /// <exception cref="Services.Exceptions.DataAccessException">
+        /// Thrown when an error occurs in the data access layer.</exception>
         public static Dictionary<int, string> GetCategoriesAsDictionary()
         {
             Dictionary<int, string> categoryDic = new Dictionary<int, string>();
@@ -33,6 +29,8 @@ namespace Services.Services
                     categoryDic.Add(category.CategoryId, category.CategoryName);
                 }
             }
+            else
+                throw new DataAccessException("Oväntat fel när kategorier skulle hämtas.");
 
             return categoryDic;
         }

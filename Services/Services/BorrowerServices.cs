@@ -1,4 +1,7 @@
-﻿using AutoMapper;
+﻿// TODO:
+// Document and revise Upsert()
+
+using AutoMapper;
 using Common.Models;
 using Repository.EntityModels;
 using Services.Exceptions;
@@ -15,15 +18,19 @@ namespace Services.Services
         /// <summary>
         /// Get a viewmodel for a specific borrower
         /// </summary>
-        /// <param name="personId"></param>
-        /// <returns></returns>
+        /// <param name="personId">The id of the borrower as a string.</param>
+        /// <returns>Returns a BorrowerViewModel.</returns>
+        /// <exception cref="Services.Exceptions.DoesNotExistException">
+        /// Thrown when a borrower with given personId could not be found.</exception>
+        /// <exception cref="Services.Exceptions.DataAccessException">
+        /// Thrown when an error occurs in the data access layer.</exception>
         static public BorrowerViewModel GetBorrower(string personId)
         {
             Borrower borrower;
             BorrowerViewModel borrowerViewModel = null;
             if (Borrower.GetBorrower(out borrower, personId))
             {
-                if(borrower != null)
+                if (borrower != null)
                 {
                     borrowerViewModel = Mapper.Map<BorrowerViewModel>(borrower);
                     borrowerViewModel.Borrows = BorrowServices.GetBorrows(personId);
@@ -33,21 +40,26 @@ namespace Services.Services
                     throw new DoesNotExistException("Kunde inte hitta den eftersökta låntagaren");
                 }
             }
+            else
+                throw new DataAccessException("Oväntat fel när en låntagare skulle hämtas.");
+
             return borrowerViewModel;
         }
 
         /// <summary>
-        /// Search for all borrowers matching the search term
+        /// Search for all borrowers matching a search string.
         /// </summary>
-        /// <param name="search"></param>
-        /// <returns></returns>
+        /// <param name="search">The search string.</param>
+        /// <returns>Returns a List of BorrowerViewModel:s.</returns>
+        /// <exception cref="Services.Exceptions.DataAccessException">
+        /// Thrown when an error occurs in the data access layer.</exception>
         static public List<BorrowerViewModel> SearchBorrowers(string search)
         {
             List<Borrower> borrowerList;
             if (Borrower.GetBorrowers(out borrowerList, search))
             {
                 List<BorrowerViewModel> borrowerViewList = new List<BorrowerViewModel>();
-                
+
                 foreach (Borrower borrower in borrowerList)
                 {
                     BorrowerViewModel borrowerView = Mapper.Map<BorrowerViewModel>(borrower);
@@ -56,8 +68,8 @@ namespace Services.Services
 
                 return borrowerViewList;
             }
-
-            return null;
+            else
+                throw new DataAccessException("Oväntat fel vid boksökning.");
         }
 
         /// <summary>
@@ -93,15 +105,15 @@ namespace Services.Services
         }
         
         /// <summary>
-        /// Remove a borrower.
+        /// Remove a borrower from the database.
         /// </summary>
-        /// <param name="PersonId"></param>
+        /// <param name="PersonId">The id of the borrower as a string.</param>
+        /// <exception cref="Services.Exceptions.DoesNotExistException">
+        /// Thrown when delete failed.</exception>
         static public void Delete(string PersonId)
         {
-            if(Borrower.Delete(PersonId))
-            {
+            if(!Borrower.Delete(PersonId))
                 throw new DoesNotExistException("Låntagaren med personnummer " + PersonId + " kunde inte tas bort.");
-            }
         }
     }
 }

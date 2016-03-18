@@ -70,35 +70,42 @@ namespace Repository.EntityModels
         {
             borrowerList = new List<Borrower>();
 
-            using (SqlConnection connection = HelperFunctions.GetConnection())
+            try
             {
-                connection.Open();
-                using (command)
+                using (SqlConnection connection = HelperFunctions.GetConnection())
                 {
-                    command.Connection = connection;
-                    using (SqlDataReader myReader = command.ExecuteReader())
+                    connection.Open();
+                    using (command)
                     {
-                        if (myReader != null)
+                        command.Connection = connection;
+                        using (SqlDataReader myReader = command.ExecuteReader())
                         {
-                            while (myReader.Read())
+                            if (myReader != null)
                             {
-                                borrowerList.Add(new Borrower()
+                                while (myReader.Read())
                                 {
-                                    PersonId = Convert.ToString(myReader["PersonId"]),
-                                    FirstName = Convert.ToString(myReader["FirstName"]),
-                                    LastName = Convert.ToString(myReader["LastName"]),
-                                    Adress = Convert.ToString(myReader["Address"]),
-                                    CategoryId = Convert.ToInt32(myReader["CategoryId"]),
-                                    TelNo = Convert.ToString(myReader["TelNo"])
-                                });
+                                    borrowerList.Add(new Borrower()
+                                    {
+                                        PersonId = Convert.ToString(myReader["PersonId"]),
+                                        FirstName = Convert.ToString(myReader["FirstName"]),
+                                        LastName = Convert.ToString(myReader["LastName"]),
+                                        Adress = Convert.ToString(myReader["Address"]),
+                                        CategoryId = Convert.ToInt32(myReader["CategoryId"]),
+                                        TelNo = Convert.ToString(myReader["TelNo"])
+                                    });
+                                }
                             }
-                        }
-                        else
-                        {
-                            return false;
+                            else
+                            {
+                                return false;
+                            }
                         }
                     }
                 }
+            }
+            catch (Exception)
+            {
+                return false;
             }
 
             return true;

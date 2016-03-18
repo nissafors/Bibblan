@@ -175,15 +175,18 @@ namespace Bibblan.Controllers
         public ActionResult Borrower(string PersonId)
         {
             BorrowerViewModel borrower = new BorrowerViewModel();
-            if (PersonId == null)
+            borrower.New = true;
+            if (PersonId != null)
             {
-                borrower.New = true;
+                try
+                {
+                    borrower = BorrowerServices.GetBorrower(PersonId);
+                    borrower.New = false;
+                }
+                catch (DoesNotExistException e) { ViewBag.error = e.Message; }
+                catch (DataAccessException e) { ViewBag.error = e.Message; }
             }
-            else
-            {
-                borrower = BorrowerServices.GetBorrower(PersonId);
-                borrower.New = false;
-            }
+
             setBorrowerViewLists(borrower);
             return View(borrower);
         }
@@ -192,6 +195,8 @@ namespace Bibblan.Controllers
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
         public ActionResult Borrower(BorrowerViewModel borrower)
         {
+            var errors = new List<string>();
+
             try
             {
                 BorrowerServices.Upsert(borrower);
@@ -199,25 +204,41 @@ namespace Bibblan.Controllers
             }
             catch(AlreadyExistsException e)
             {
-                ViewBag.error = e.Message;
+                errors.Add(e.Message);
             }
             catch(DoesNotExistException e)
             {
-                ViewBag.error = e.Message;
+                errors.Add(e.Message);
             }
-            catch(Exception)
+            catch(DataAccessException e)
             {
-                // TODO: Handle general exception
+                errors.Add(e.Message);
             }
 
-            setBorrowerViewLists(borrower);
+            string err = setBorrowerViewLists(borrower);
+            if (err != "")
+                errors.Add(err);
+
+            if (errors.Count > 0)
+                ViewBag.error = errors;
+
             return View(borrower);
         }
 
-        private void setBorrowerViewLists(BorrowerViewModel borrower)
+        private string setBorrowerViewLists(BorrowerViewModel borrower)
         {
-            var categoryDic = CategoryServices.GetCategoriesAsDictionary();
-            borrower.Category = new SelectList(categoryDic.OrderBy(x => x.Value), "Key", "Value");
+            try
+            {
+                var categoryDic = CategoryServices.GetCategoriesAsDictionary();
+                borrower.Category = new SelectList(categoryDic.OrderBy(x => x.Value), "Key", "Value");
+            }
+            catch (DataAccessException e)
+            {
+                borrower.Category = new SelectList(new List<SelectListItem>());
+                return e.Message;
+            }
+
+            return "";
         }
 
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]

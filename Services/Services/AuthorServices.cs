@@ -1,4 +1,7 @@
-﻿using System;
+﻿// TODO:
+// Document and revise Upsert()
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -17,8 +20,7 @@ namespace Services.Services
         /// </summary>
         /// <returns>A List of AuthorViewModel:s</returns>
         /// <exception cref="Services.Exceptions.DataAccessException">
-        /// Thrown when an error occurs in the data access layer.
-        /// </exception>
+        /// Thrown when an error occurs in the data access layer.</exception>
         public static List<AuthorViewModel> GetAuthors()
         {
             List<Author> authorEntities;
@@ -103,8 +105,10 @@ namespace Services.Services
             return dic;
         }
 
-        // TODO:
-        // Don't overwrite existing when attempting to create new
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="authorViewModel"></param>
         public static void Upsert(AuthorViewModel authorViewModel)
         {
             Author author = Mapper.Map<Author>(authorViewModel);
@@ -149,8 +153,7 @@ namespace Services.Services
             if (bookAuthorList.Count > 0)
                 throw new DeleteException("Författaren kan inte tas bort då han eller hon har böcker.");
             if (!Author.Delete(Aid))
-                throw new DoesNotExistException("Författaren som skulle tas bort hittades inte.");
-            }
+                throw new DoesNotExistException("Författaren kunde inte tas bort.");
         }
     }
 }

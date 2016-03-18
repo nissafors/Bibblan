@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿// TODO:
+// Document and possibly revise SearchBooks()
+
+using System.Collections.Generic;
 using Common.Models;
 using Repository.EntityModels;
 using AutoMapper;
@@ -48,6 +51,12 @@ namespace Services.Services
             return ebvm;
         }
 
+        /// <summary>
+        /// Get all books.
+        /// </summary>
+        /// <returns>Returns a list of BookViewModel:s.</returns>
+        /// <exception cref="Services.Exceptions.DataAccessException">
+        /// Thrown when an error occurs in the data access layer.</exception>
         public static List<BookViewModel> GetBooks()
         {
             List<Book> bookList;
@@ -58,6 +67,7 @@ namespace Services.Services
                 {
                     bookViewModelList.Add(Mapper.Map<BookViewModel>(book));
                 }
+
                 return bookViewModelList;
             }
             else
@@ -67,10 +77,14 @@ namespace Services.Services
         }
 
         /// <summary>
-        /// Gets all details for the specified book and returns it as a BookViewModel
+        /// Gets all details for the specified book.
         /// </summary>
-        /// <param name="isbn">ISBN of the book to get details on</param>
-        /// <returns>A BookViewModel containing all the details</returns>
+        /// <param name="isbn">The ISBN of the book as a string.</param>
+        /// <returns>Returns a BookViewModel.</returns>
+        /// <exception cref="Services.Exceptions.DataAccessException">
+        /// Thrown when an error occurs in the data access layer.</exception>
+        /// <exception cref="Services.Exceptions.DoesNotExistException">
+        /// Thrown when there's no book with given ISBN in the database.</exception>
         public static BookViewModel GetBookDetails(string isbn)
         {
             
@@ -80,15 +94,15 @@ namespace Services.Services
             List<BookAuthor> bookAuthorList;
 
             if (!Book.GetBook(out book, isbn))
-                throw new DataAccessException("Info om en bok kunde inte hämtas.");
+                throw new DataAccessException("Oväntat fel. Info om en bok kunde inte hämtas.");
             if (book == null)
                 throw new DoesNotExistException("Nähä, du! Den boken finns inte i databasen.");
 
             if (!BookAuthor.GetBookAuthors(out bookAuthorList, book.ISBN))
-                throw new DataAccessException("Info om författare kunde inte hämtas.");
+                throw new DataAccessException("Oväntat fel. Info om bokens författare kunde inte hämtas.");
 
             if (!Classification.GetClassification(out classification, book.SignId))
-                throw new DataAccessException("Klassifikationer kunde inte hämtas.");
+                throw new DataAccessException("Oväntat fel. Bokens klassifikation kunde inte hämtas.");
 
             bookViewModel = Mapper.Map<BookViewModel>(book);
             bookViewModel.Classification = classification == null ? null : classification.Signum;
@@ -96,14 +110,26 @@ namespace Services.Services
             {
                 Author author;
                 if (Author.GetAuthor(out author, bookAuthor.Aid))
-                {
                     bookViewModel.Authors.Add(author.Aid, author.LastName + ", " + author.FirstName);
-                }
+                else
+                    throw new DataAccessException("Oväntat fel när info om en författare skulle hämtas.");
             }
 
             return bookViewModel;
         }
 
+        /// <summary>
+        /// Write a book to the database.
+        /// </summary>
+        /// <param name="editBookViewModel">The EditBookViewModel to write to the database.</param>
+        /// <param name="overwriteExisting">If a book with given ISBN already exists, then overwrite it only
+        /// if overwriteExisting is set to true.</param>
+        /// <exception cref="Services.Exceptions.AlreadyExistsException">
+        /// Thrown when the item already exists in the database and overwriteExisting is set to false.</exception>
+        /// <exception cref="Services.Exceptions.DoesNotExistException">
+        /// Thrown when the author ids in the viewmodel are invalid.</exception>
+        /// <exception cref="Services.Exceptions.DataAccessException">
+        /// Thrown when an error occurs in the data access layer.</exception>
         public static void Upsert(EditBookViewModel editBookViewModel, bool overwriteExisting)
         {
             if (!overwriteExisting)
@@ -134,9 +160,16 @@ namespace Services.Services
                 throw new DataAccessException("Tusan! Något gick fel när en bok skulle skapas eller uppdateras. Kontakta en administratör om felet kvarstår.");
         }
 
-        public static bool Delete(string isbn)
+        /// <summary>
+        /// Delete a book from the database.
+        /// </summary>
+        /// <param name="isbn">The ISBN of the book to delete.</param>
+        /// <exception cref="Services.Exceptions.DataAccessException">
+        /// Thrown when an error occurs in the data access layer.</exception>
+        public static void Delete(string isbn)
         {
-            return Book.Delete(isbn);
+            if (!Book.Delete(isbn))
+                throw new DataAccessException("Oväntat fel när en bok skulle tas bort.");
         }
 
         public static List<BookViewModel> SearchBooks(string search)
