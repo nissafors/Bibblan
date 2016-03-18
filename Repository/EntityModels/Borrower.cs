@@ -17,11 +17,12 @@ namespace Repository.EntityModels
         public int CategoryId { get; set; }
 
         /// <summary>
-        /// Get the borrower with the supplied PersonId from the database
+        /// Get the borrower with the supplied PersonId from the database.
         /// </summary>
-        /// <param name="borrower"></param>
-        /// <param name="PersonId"></param>
-        /// <returns></returns>
+        /// <param name="borrower">A variable of typ Borrower. Will be set to a new instance or null if
+        /// no borrower with given id was found.</param>
+        /// <param name="PersonId">The id of the borrower as a string.</param>
+        /// <returns>Returns true if no errors occured.</returns>
         public static bool GetBorrower(out Borrower borrower, string PersonId)
         {
             borrower = null;
@@ -44,9 +45,9 @@ namespace Repository.EntityModels
         /// <summary>
         /// Get all borrowers where PersonId, first name and/or last name matches the searchParameter
         /// </summary>
-        /// <param name="borrowerList"></param>
-        /// <param name="searchParameter"></param>
-        /// <returns></returns>
+        /// <param name="borrowerList">A List of Borrower:s. Will be set to a new instance.</param>
+        /// <param name="searchParameter">The search string.</param>
+        /// <returns>Returns true if no errors occured.</returns>
         public static bool GetBorrowers(out List<Borrower> borrowerList, string searchParameter)
         {
             searchParameter = HelperFunctions.SetupSearchString(searchParameter);
@@ -59,13 +60,19 @@ namespace Repository.EntityModels
         /// <summary>
         /// Get all borrowers in the database
         /// </summary>
-        /// <param name="borrowerList"></param>
-        /// <returns></returns>
+        /// <param name="borrowerList">A List of Borrowers. Will be set to a new instance.</param>
+        /// <returns>Returns true if no errors occured.</returns>
         public static bool GetBorrowers(out List<Borrower> borrowerList)
         {
             return GetBorrowers(out borrowerList, new SqlCommand("SELECT * from BORROWER"));
         }
 
+        /// <summary>
+        /// Execute command to retrieve borrower from the database.
+        /// </summary>
+        /// <param name="borrowerList">A List of Borrower:s. Will be set to a new instance.</param>
+        /// <param name="command">The SqlCommand to execute.</param>
+        /// <returns>Returns true if no error occured.</returns>
         private static bool GetBorrowers(out List<Borrower> borrowerList, SqlCommand command)
         {
             borrowerList = new List<Borrower>();
@@ -112,10 +119,10 @@ namespace Repository.EntityModels
         }
 
         /// <summary>
-        /// Update or insert a borrower
+        /// Update or insert a borrower.
         /// </summary>
-        /// <param name="borrower"></param>
-        /// <returns></returns>
+        /// <param name="borrower">The Borrower to upsert.</param>
+        /// <returns>Returns true if upsert failed or an error occured.</returns>
         public static bool Upsert(Borrower borrower)
         {
             try
@@ -150,10 +157,10 @@ namespace Repository.EntityModels
         }
 
         /// <summary>
-        /// Delete the borrower with the key PersonId from the database
+        /// Delete the borrower with the key PersonId from the database.
         /// </summary>
-        /// <param name="PersonId"></param>
-        /// <returns></returns>
+        /// <param name="PersonId">The id of the borrower to delete.</param>
+        /// <returns>Returns false if the delete failed or an error occured.</returns>
         public static bool Delete(string PersonId)
         {
             try
