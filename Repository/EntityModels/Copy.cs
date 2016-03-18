@@ -87,7 +87,7 @@ namespace Repository.EntityModels
         /// Delete a record from the database.
         /// </summary>
         /// <param name="barcode">The Barcode of the Copy to delete.</param>
-        /// <returns>Returns true if no error occured.</returns>
+        /// <returns>Returns false if delete failed or an error occured.</returns>
         public static bool Delete(string barcode)
         {
             try
@@ -99,9 +99,9 @@ namespace Repository.EntityModels
                     {
                         command.Connection = connection;
                         command.Parameters.AddWithValue("@Barcode", barcode);
-                        command.ExecuteNonQuery();
+                        if (command.ExecuteNonQuery() == 0)
+                            return false;
                     }
-
                 }
             }
             catch (Exception)

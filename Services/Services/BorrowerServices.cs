@@ -32,8 +32,8 @@ namespace Services.Services
             {
                 if (borrower != null)
                 {
-                    borrowerViewModel = Mapper.Map<BorrowerViewModel>(borrower);
                     borrowerViewModel.Borrows = BorrowServices.GetBorrows(personId);
+                    borrowerViewModel = Mapper.Map<BorrowerViewModel>(borrower);
                 }
                 else
                 {

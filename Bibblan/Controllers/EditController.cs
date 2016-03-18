@@ -95,6 +95,8 @@ namespace Bibblan.Controllers
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin)]
         public ActionResult Copy(string isbn, string barcode)
         {
+            var errors = new List<string>();
+
             // We must have an ISBN number.
             if (isbn == null)
             {
@@ -127,14 +129,17 @@ namespace Bibblan.Controllers
                     cvm = CopyServices.GetCopyViewModel(barcode);
                     cvm.Update = true;
                 }
-                catch (DoesNotExistException e)
-                {
-                    ViewBag.error = e.Message;
-                }
+                catch (DoesNotExistException e) { errors.Add(e.Message); }
+                catch (DataAccessException e) { errors.Add(e.Message); }
             }
 
             cvm.ISBN = isbn;
-            setCopyViewLists(cvm);
+            string err = setCopyViewLists(cvm);
+            if (err != "")
+                errors.Add(err);
+
+            if (errors.Count > 0)
+                ViewBag.error = errors;
 
             return View(cvm);
         }
@@ -145,7 +150,10 @@ namespace Bibblan.Controllers
         {
             if (!ModelState.IsValid)
             {
-                setCopyViewLists(copyInfo);
+                string err = setCopyViewLists(copyInfo);
+                if (err != "")
+                    ViewBag.error = err;
+
                 return View(copyInfo);
             }
 
@@ -156,18 +164,37 @@ namespace Bibblan.Controllers
             }
             catch (Exception e)
             {
-                ViewBag.error = e.Message;
-                setCopyViewLists(copyInfo);
+                var errors = new List<string>();
+                errors.Add(e.Message);
+                string err = setCopyViewLists(copyInfo);
+                if (err != "")
+                    errors.Add("err");
+
+                ViewBag.error = errors;
+
                 return View(copyInfo);
             }
 
         }
 
-        private void setCopyViewLists(CopyViewModel cvm)
+        private string setCopyViewLists(CopyViewModel cvm)
         {
-            var statusDic = StatusServices.GetStatusesAsDictionary();
-            cvm.Statuses = new SelectList(statusDic.OrderBy(x => x.Value), "Key", "Value");
-            cvm.Title = BookServices.GetBookDetails(cvm.ISBN).Title;
+            try
+            {
+                var statusDic = StatusServices.GetStatusesAsDictionary();
+                cvm.Title = BookServices.GetBookDetails(cvm.ISBN).Title;
+                cvm.Statuses = new SelectList(statusDic.OrderBy(x => x.Value), "Key", "Value");
+            }
+            catch (DataAccessException e)
+            {
+                if (cvm.Title == null)
+                    cvm.Title = "";
+                if (cvm.Statuses == null)
+                    cvm.Statuses = new SelectList(new List<SelectListItem>());
+                return e.Message;
+            }
+
+            return "";
         }
 
         [HttpGet]
@@ -269,8 +296,24 @@ namespace Bibblan.Controllers
                         return RedirectToAction("Book", "Search");
 
                     case "copy":
-                        var isbn = CopyServices.GetCopyViewModel(Id).ISBN;
+                        bool isbnFound;
+                        string isbn = "";
+                        try
+                        {
+                            isbn = CopyServices.GetCopyViewModel(Id).ISBN;
+                            isbnFound = true;
+                        }
+                        catch (DoesNotExistException) { isbnFound = false; }
+                        catch (DataAccessException) { isbnFound = false; }
+                        
                         CopyServices.DeleteCopy(Id);
+
+                        if (!isbnFound)
+                        {
+                            TempData["error"] = "Hittar inte tillbaka till boken som ett exemplar av raderades.";
+                            return RedirectToAction("Index", "Home");
+                        }
+
                         return RedirectToAction("Book", new { isbn });
 
                     default:

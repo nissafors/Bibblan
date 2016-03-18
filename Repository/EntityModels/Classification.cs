@@ -15,11 +15,11 @@ namespace Repository.EntityModels
 
         /// <summary>
         /// Gets the classification with the specified SignId. If there is no classification
-        /// with the specified SignId then classification is null. Returns false if it fails.
+        /// with the specified SignId then classification is null.
         /// </summary>
         /// <param name="classification"></param>
         /// <param name="SignId"></param>
-        /// <returns></returns>
+        /// <returns>Returns true if no error occured.</returns>
         public static bool GetClassification(out Classification classification, int SignId)
         {
             classification = null;

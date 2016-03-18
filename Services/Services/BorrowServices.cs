@@ -1,4 +1,7 @@
-﻿using System;
+﻿// TODO:
+// Document and revise Renew()
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,6 +9,7 @@ using System.Threading.Tasks;
 using Repository.EntityModels;
 using Common.Models;
 using AutoMapper;
+using Services.Exceptions;
 
 namespace Services.Services
 {
@@ -26,6 +30,13 @@ namespace Services.Services
             return false;
         }
 
+        /// <summary>
+        /// Get a persons loans.
+        /// </summary>
+        /// <param name="personId">The id of the person.</param>
+        /// <returns>Returns a List of BorrowViewModels:s.</returns>
+        /// <exception cref="Services.Exceptions.DataAccessException">
+        /// Thrown when an error occurs in the data access layer.</exception>
         public static List<BorrowViewModel> GetBorrows(string personId)
         {
             List<Borrow> borrows;
@@ -37,18 +48,18 @@ namespace Services.Services
                     var viewmodel = Mapper.Map<BorrowViewModel>(borrow);
                     Copy copy;
                     if (!Copy.GetCopy(out copy, borrow.Barcode))
-                        throw new Exception("Could not get Copies");
+                        throw new DataAccessException("Oväntat fel när info om ett lånat exemplar skulle hämtas.");
 
                     Book book;
                     if (!Book.GetBook(out book, copy.ISBN))
-                        throw new Exception("Could not get Book");
+                        throw new DataAccessException("Oväntat fel när info om en lånad bok skulle hämtas.");
 
                     viewmodel.Title = book.Title;
                     borrowvms.Add(viewmodel);
                 }
             }
             else
-                throw new Exception("Could not get Loans");
+                throw new DataAccessException("Oväntat fel när lån skulle hämtas.");
 
             return borrowvms;
         }
