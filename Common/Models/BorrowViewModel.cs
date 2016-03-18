@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Common.Models
 {
+    // Not used by any view. Is it a viewmodel then?
     public class BorrowViewModel
     {
         public string Title { get; set; }

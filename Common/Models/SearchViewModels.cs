@@ -7,6 +7,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Common.Models
 {
+    // Not in use?
     public class SearchAuthorViewModel
     {
         [Display(Name="Förnamn")]
@@ -16,6 +17,7 @@ namespace Common.Models
         public string LastName { get; set; }
     }
 
+    // Not in use?
     public class SearchBookViewModel
     {
         [Display(Name = "ISBN")]

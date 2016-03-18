@@ -13,7 +13,9 @@ namespace Bibblan.Controllers
 {
     public class EditController : Controller
     {
-        // GET: edit/book
+        /// <summary>
+        /// GET: Edit/Book and Edit/Book/{isbn}. Display a form to create or update books.
+        /// </summary>
         [HttpGet]
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin)]
         public ActionResult Book(string isbn)
@@ -39,11 +41,13 @@ namespace Bibblan.Controllers
 
             if (errors.Count > 0)
                 ViewBag.error = errors;
+
             return View(bookInfo);
         }
 
-        // Always check Actual role against Repository (ForceCheck = true)
-        // When making changes
+        /// <summary>
+        /// POST: Edit/Book. Writes bookInfo to database and display the edit book view.
+        /// </summary>
         [HttpPost]
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
         public ActionResult Book(EditBookViewModel bookInfo)
@@ -68,29 +72,9 @@ namespace Bibblan.Controllers
             return View(bookInfo);
         }
 
-        // Helper for the Book ActionResult's.
-        private string setBookViewLists(EditBookViewModel ebvm)
-        {
-            try
-            {
-                ebvm.Copies = CopyServices.getCopyViewModels(ebvm.ISBN);
-
-                var classDic = ClassificationServices.GetClassificationsAsDictionary();
-                var authorDic = AuthorServices.GetAuthorsAsDictionary();
-                ebvm.Classifications = new SelectList(classDic.OrderBy(x => x.Value), "Key", "Value");
-                ebvm.Authors = new SelectList(authorDic.OrderBy(x => x.Value), "Key", "Value");
-            }
-            catch (DataAccessException e)
-            {
-                if (ebvm.Copies == null) ebvm.Copies = new List<CopyViewModel>();
-                if (ebvm.Classifications == null) ebvm.Classifications = new SelectList(new List<SelectListItem>());
-                if (ebvm.Authors == null) ebvm.Authors = new SelectList(new List<SelectListItem>());
-                return e.Message;
-            }
-
-            return null;
-        }
-
+        /// <summary>
+        /// GET: /Edit/Copy/{isbn}. Show a form to create and update copies of a book.
+        /// </summary>
         [HttpGet]
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin)]
         public ActionResult Copy(string isbn, string barcode)
@@ -135,7 +119,7 @@ namespace Bibblan.Controllers
 
             cvm.ISBN = isbn;
             string err = setCopyViewLists(cvm);
-            if (err != "")
+            if (err != null)
                 errors.Add(err);
 
             if (errors.Count > 0)
@@ -144,6 +128,9 @@ namespace Bibblan.Controllers
             return View(cvm);
         }
 
+        /// <summary>
+        /// POST: /edit/copy. Save copy to db and redirect to the edit book view.
+        /// </summary>
         [HttpPost]
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin)]
         public ActionResult Copy(CopyViewModel copyInfo)
@@ -151,7 +138,7 @@ namespace Bibblan.Controllers
             if (!ModelState.IsValid)
             {
                 string err = setCopyViewLists(copyInfo);
-                if (err != "")
+                if (err != null)
                     ViewBag.error = err;
 
                 return View(copyInfo);
@@ -167,7 +154,7 @@ namespace Bibblan.Controllers
                 var errors = new List<string>();
                 errors.Add(e.Message);
                 string err = setCopyViewLists(copyInfo);
-                if (err != "")
+                if (err != null)
                     errors.Add("err");
 
                 ViewBag.error = errors;
@@ -177,30 +164,12 @@ namespace Bibblan.Controllers
 
         }
 
-        private string setCopyViewLists(CopyViewModel cvm)
-        {
-            try
-            {
-                var statusDic = StatusServices.GetStatusesAsDictionary();
-                cvm.Title = BookServices.GetBookDetails(cvm.ISBN).Title;
-                cvm.Statuses = new SelectList(statusDic.OrderBy(x => x.Value), "Key", "Value");
-            }
-            catch (DataAccessException e)
-            {
-                if (cvm.Title == null)
-                    cvm.Title = "";
-                if (cvm.Statuses == null)
-                    cvm.Statuses = new SelectList(new List<SelectListItem>());
-                return e.Message;
-            }
-
-            return "";
-        }
-
         [HttpGet]
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin)]
         public ActionResult Borrower(string PersonId)
         {
+            var errors = new List<string>();
+
             BorrowerViewModel borrower = new BorrowerViewModel();
             borrower.New = true;
             if (PersonId != null)
@@ -210,11 +179,17 @@ namespace Bibblan.Controllers
                     borrower = BorrowerServices.GetBorrower(PersonId);
                     borrower.New = false;
                 }
-                catch (DoesNotExistException e) { ViewBag.error = e.Message; }
-                catch (DataAccessException e) { ViewBag.error = e.Message; }
+                catch (DoesNotExistException e) { errors.Add(e.Message); }
+                catch (DataAccessException e) { errors.Add(e.Message); }
             }
 
-            setBorrowerViewLists(borrower);
+            string err = setBorrowerViewLists(borrower);
+            if (err != null)
+                errors.Add(err);
+
+            if (errors.Count > 0)
+                ViewBag.error = errors;
+
             return View(borrower);
         }
 
@@ -243,7 +218,7 @@ namespace Bibblan.Controllers
             }
 
             string err = setBorrowerViewLists(borrower);
-            if (err != "")
+            if (err != null)
                 errors.Add(err);
 
             if (errors.Count > 0)
@@ -265,7 +240,7 @@ namespace Bibblan.Controllers
                 return e.Message;
             }
 
-            return "";
+            return null;
         }
 
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
@@ -399,5 +374,56 @@ namespace Bibblan.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Populate lists in an EditBookViewModel.
+        /// </summary>
+        /// <param name="ebvm">The EditBookViewModel.</param>
+        /// <returns>Returns an error message or null, if no error occured.</returns>
+        private string setBookViewLists(EditBookViewModel ebvm)
+        {
+            try
+            {
+                ebvm.Copies = CopyServices.getCopyViewModels(ebvm.ISBN);
+
+                var classDic = ClassificationServices.GetClassificationsAsDictionary();
+                var authorDic = AuthorServices.GetAuthorsAsDictionary();
+                ebvm.Classifications = new SelectList(classDic.OrderBy(x => x.Value), "Key", "Value");
+                ebvm.Authors = new SelectList(authorDic.OrderBy(x => x.Value), "Key", "Value");
+            }
+            catch (DataAccessException e)
+            {
+                if (ebvm.Copies == null) ebvm.Copies = new List<CopyViewModel>();
+                if (ebvm.Classifications == null) ebvm.Classifications = new SelectList(new List<SelectListItem>());
+                if (ebvm.Authors == null) ebvm.Authors = new SelectList(new List<SelectListItem>());
+                return e.Message;
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Populate Statuses and Title in a CopyViewModel.
+        /// </summary>
+        /// <param name="cvm">The CopyViewModel.</param>
+        /// <returns>Returns an error message or null, if no error occured.</returns>
+        private string setCopyViewLists(CopyViewModel cvm)
+        {
+            try
+            {
+                var statusDic = StatusServices.GetStatusesAsDictionary();
+                cvm.Title = BookServices.GetBookDetails(cvm.ISBN).Title;
+                cvm.Statuses = new SelectList(statusDic.OrderBy(x => x.Value), "Key", "Value");
+            }
+            catch (DataAccessException e)
+            {
+                if (cvm.Title == null)
+                    cvm.Title = "";
+                if (cvm.Statuses == null)
+                    cvm.Statuses = new SelectList(new List<SelectListItem>());
+                return e.Message;
+            }
+
+            return null;
+        }
     }
 }
