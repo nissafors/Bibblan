@@ -7,8 +7,6 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Common.Models
 {
-    // Used by:
-    // * /Edit/Book (as main viewmodel)
     public class EditBookViewModel
     {
         // Properties
@@ -51,6 +49,13 @@ namespace Common.Models
         /// </summary>
         public EditBookViewModel()
         {
+            /*
+            this.Authors = new SelectList((from s in authorServices.GetAuthors() select new
+            {
+                Id = s.Id,
+                FullName = s.FirstName + " " + s.LastName
+            }), "Id", "FullName");
+            */
             Copies = new List<CopyViewModel>();
         }
     }

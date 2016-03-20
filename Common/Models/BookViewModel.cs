@@ -6,10 +6,6 @@ using System.Threading.Tasks;
 
 namespace Common.Models
 {
-    // Used by:
-    // * /Book/Details (as main viewmodel, but curiously passed through the ViewBag)
-    // * /Browse/Title (in a List)
-    // * /Search/Book (in a List)
     public class BookViewModel
     {
         public string ISBN { get; set; }
