@@ -383,7 +383,8 @@ namespace Bibblan.Controllers
         {
             try
             {
-                ebvm.Copies = CopyServices.getCopyViewModels(ebvm.ISBN);
+                if (ebvm.ISBN != null)
+                    ebvm.Copies = CopyServices.getCopyViewModels(ebvm.ISBN);
 
                 var classDic = ClassificationServices.GetClassificationsAsDictionary();
                 var authorDic = AuthorServices.GetAuthorsAsDictionary();
