@@ -1,5 +1,5 @@
 ﻿// TODO:
-// Document and revise Upsert()
+// Document Upsert()
 
 using System;
 using System.Collections.Generic;
@@ -117,7 +117,7 @@ namespace Services.Services
             {
                 if (!Author.Update(author))
                 {
-                    throw new DoesNotExistException("Författaren kunde inte uppdateras då han eller hon inte fanns.");
+                    throw new DoesNotExistException("Författaren kunde inte uppdateras.");
                 }
             }
             else

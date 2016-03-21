@@ -12,10 +12,12 @@ namespace Bibblan.Controllers
 {
     public class BookController : Controller
     {
-        //
-        // GET: /Book/
-        public ActionResult Details(string isbn)
+        /// <summary>
+        /// GET: /Book/Details/{isbn}. Show details about a book.
+        /// </summary>
+        public ActionResult Details(string isbn = "")
         {
+            BookViewModel viewModel = null;
             try
             {
                 if (AccountHelper.HasAccess(this.Session, AccountHelper.Role.Admin))
@@ -23,19 +25,18 @@ namespace Bibblan.Controllers
                 else
                     ViewBag.isAdmin = false;
 
-                BookViewModel viewModel = BookServices.GetBookDetails(isbn);
-                ViewBag.Book = viewModel;
+                viewModel = BookServices.GetBookDetails(isbn);
             }
             catch(DataAccessException e)
             {
                 ViewBag.error = e.Message;
             }
-            catch(Exception)
+            catch(DoesNotExistException e)
             {
-                ViewBag.Book = null;
+                ViewBag.error = e.Message;
             }
             
-            return View();
+            return View(viewModel);
         }
     }
 }

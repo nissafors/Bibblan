@@ -1,7 +1,4 @@
-﻿// TODO:
-// Document and revise Upsert()
-
-using AutoMapper;
+﻿using AutoMapper;
 using Common.Models;
 using Repository.EntityModels;
 using Services.Exceptions;
@@ -32,8 +29,8 @@ namespace Services.Services
             {
                 if (borrower != null)
                 {
-                    borrowerViewModel.Borrows = BorrowServices.GetBorrows(personId);
                     borrowerViewModel = Mapper.Map<BorrowerViewModel>(borrower);
+                    borrowerViewModel.Borrows = BorrowServices.GetBorrows(personId);
                 }
                 else
                 {
@@ -76,12 +73,14 @@ namespace Services.Services
         /// Update existing borrower or insert a new one
         /// </summary>
         /// <param name="model"></param>
-        /// <returns></returns>
+        /// <exception cref="Services.Exceptions.AlreadyExistsException">
+        /// Thrown if trying to create a new borrower with id that already exists </exception>
+        /// <exception cref="Services.Exceptions.DataAccessException">
+        /// Thrown when an error occurs in the data access layer.</exception>
         static public void Upsert(BorrowerViewModel viewModel)
         {
             Borrower borrower = Mapper.Map<Borrower>(viewModel);
-            Account account = Mapper.Map<Account>(viewModel.Account);
-            
+
             if (viewModel.New)
             {
                 Borrower existingBorrower = null;
@@ -94,13 +93,21 @@ namespace Services.Services
                 }
                 else
                 {
-                    // throw new DataAccessException("");
+                    throw new DataAccessException("Oväntat fel när låntagare skulle uppdateras.");
                 }
             }
             
             if(!Borrower.Upsert(borrower))
             {
-                throw new DoesNotExistException("Kunde inte uppdatera låntagaren.");
+                throw new DataAccessException("Oväntat fel när låntagare skulle uppdateras.");
+            }
+
+            if (viewModel.Account.Password != null)
+            {
+                Account account = Mapper.Map<Account>(viewModel.Account);
+                account.PersonId = borrower.PersonId;
+                account.RoleId = (int)Role.borrower;
+                // TODO: Upsert account
             }
         }
         
@@ -113,7 +120,7 @@ namespace Services.Services
         static public void Delete(string PersonId)
         {
             if(!Borrower.Delete(PersonId))
-                throw new DoesNotExistException("Låntagaren med personnummer " + PersonId + " kunde inte tas bort.");
+                throw new DataAccessException("Oväntat fel när låntagaren skulle tas bort.");
         }
     }
 }
