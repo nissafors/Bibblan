@@ -447,7 +447,7 @@ namespace Bibblan.Controllers
             {
                 AccountServices.Upsert(viewModel);
             }
-            catch (DoesNotExistException e) { ViewBag.error = e.Message}
+            catch (DoesNotExistException e) { ViewBag.error = e.Message; }
 
             return View(viewModel);
         }
