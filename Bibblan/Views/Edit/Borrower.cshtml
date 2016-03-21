@@ -37,7 +37,7 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                @Html.LabelFor(model => model.PersonId) 
+                @Html.LabelFor(model => model.PersonId)
                 @Html.TextBoxFor(model => model.PersonId, Model.New ? (object)new { @class = "form-control" } : new { @class = "form-control", @readonly = "readonly" })
                 @Html.ValidationMessageFor(model => model.PersonId, null, new { @class = "text-danger" })
             </div>
@@ -68,8 +68,8 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                @Html.LabelFor(model => model.Account.NewPassword) 
-                @Html.TextBoxFor(model => model.Account.NewPassword, new { @type="password", @class = "form-control" })
+                @Html.LabelFor(model => model.Account.NewPassword)
+                @Html.TextBoxFor(model => model.Account.NewPassword, new { @type = "password", @class = "form-control" })
             </div>
         </div>
         <div class="col-md-6">
@@ -80,55 +80,63 @@
             </div>
         </div>
     </div>
-    
+
     <div class="row">
         <div class="col-md-6">
             <input type="submit" class="btn btn-block btn-primary" value="Bekräfta" />
         </div>
         <div class="col-md-6">
-            <a href=@("../Delete/Borrower/" + Model.PersonId) class="form-control btn btn-block btn-danger @(Model.PersonId != null ? "": "disabled")">Ta bort</a>
+            @Html.ActionLink("Ta bort", "Delete", new
+       {
+           Type = "Borrower",
+           Id = Model.PersonId
+       }, Model.New ?
+       new { @class = "form-control btn btn-block btn-danger disabled" } :
+       new { @class = "form-control btn btn-block btn-danger" })
         </div>
     </div>
-    
+
     if (!Model.New)
     {
-    <h2>Lån</h2>
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Streckkod</th>
-                <th>Låndatum</th>
-                <th>Returdatum</th>
-                <th>Återlämnad</th>
-                <th class="col-md-1"></th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var borrow in Model.Borrows)
-            {
+        <h2>Lån</h2>
+        <table class="table table-striped">
+            <thead>
                 <tr>
-                    <td>@borrow.Barcode</td>
-                    <td>@borrow.BorrowDate.ToShortDateString()</td>
-                    <td>@borrow.ToBeReturnedDate.ToShortDateString()</td>
-                    @if (borrow.ReturnDate.Year == 1)
-                    {
-                        <td>@Html.ActionLink("Förnya", "Renew", new
+                    <th>Streckkod</th>
+                    <th>Låndatum</th>
+                    <th>Returdatum</th>
+                    <th>Återlämnad</th>
+                    <th class="col-md-1"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var borrow in Model.Borrows)
+                {
+                    <tr>
+                        <td>@borrow.Barcode</td>
+                        <td>@borrow.BorrowDate.ToShortDateString()</td>
+                        <td>@borrow.ToBeReturnedDate.ToShortDateString()</td>
+                        @if (borrow.ReturnDate.Year == 1)
+                        {
+                            <td>
+                                @Html.ActionLink("Förnya", "Renew", new
                        {
                            Barcode = borrow.Barcode,
                            PersonId = borrow.PersonId,
                            BorrowDate = borrow.BorrowDate,
                            ToBeReturnedDate = borrow.ToBeReturnedDate,
                            ReturnDate = borrow.ReturnDate
-                       }, new { @class="form-control btn btn-block btn-primary" })</td>
-                    }
-                    else
-                    {
-                        <td>@borrow.ReturnDate.ToShortDateString()</td>
-                    }
-                </tr>
-            }
-        </tbody>
-    </table>
+                       }, new { @class = "form-control btn btn-block btn-primary" })
+                        </td>
+                        }
+                        else
+                        {
+                            <td>@borrow.ReturnDate.ToShortDateString()</td>
+                        }
+                    </tr>
+                }
+            </tbody>
+        </table>
     }
 }
 

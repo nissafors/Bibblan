@@ -309,18 +309,17 @@ namespace Bibblan.Controllers
             catch (DoesNotExistException e)
             {
                 TempData["error"] = e.Message;
-                return RedirectToAction("Index", "Home");
             }
             catch (DataAccessException e)
             {
                 TempData["error"] = e.Message;
-                return RedirectToAction("Index", "Home");
             }
             catch (Exception)
             {
                 TempData["error"] = "Ett oväntat fel uppstod när ett objekt skulle tas bort.";
-                return RedirectToAction("Index", "Home");
             }
+
+            return RedirectToAction("Index", "Home");
         }
 
         /// <summary>
