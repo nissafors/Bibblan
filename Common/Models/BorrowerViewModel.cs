@@ -7,6 +7,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Common.Models
 {
+    // Used by:
+    // * /edit/borrower (as main viewmodel)
     public class BorrowerViewModel
     {
         [Required(ErrorMessage="Ett personnummer krävs")]
