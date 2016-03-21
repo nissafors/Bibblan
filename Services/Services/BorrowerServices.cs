@@ -102,10 +102,10 @@ namespace Services.Services
                 throw new DataAccessException("Oväntat fel när låntagare skulle uppdateras.");
             }
 
-            if (viewModel.Account.Password != null)
+            if (viewModel.Account.NewPassword != null)
             {
-                Account account = Mapper.Map<Account>(viewModel);
-                // TODO: Upsert account
+                AccountViewModel account = Mapper.Map<AccountViewModel>(viewModel);
+                AccountServices.Upsert(account);
             }
         }
         

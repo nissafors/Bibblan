@@ -18,7 +18,7 @@ namespace Bibblan
                     url: "Book/Details/{isbn}",
                     defaults: new { controller = "Book", action = "Details" }
             );
-  
+
             routes.MapRoute(
                     name: "DeleteObject",
                     url: "Edit/Delete/{Type}/{Id}",
@@ -53,6 +53,12 @@ namespace Bibblan
                     name: "EditAccount",
                     url: "Edit/Account/{username}",
                     defaults: new { controller = "Edit", action = "Account", username = UrlParameter.Optional }
+            );
+
+            routes.MapRoute(
+                    name: "ChangePassword",
+                    url: "Edit/ChangePassword/{Username}",
+                    defaults: new { controller = "Edit", action = "Password" }
             );
 
             routes.MapRoute(
