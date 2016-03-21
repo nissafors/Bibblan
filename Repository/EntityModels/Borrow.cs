@@ -70,7 +70,8 @@ namespace Repository.EntityModels
             {
                 return false;
             }
-            return false;
+
+            return true;
         }
 
         /// <summary>

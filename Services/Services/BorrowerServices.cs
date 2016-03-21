@@ -1,7 +1,4 @@
-﻿// TODO:
-// Document and revise Upsert()
-
-using AutoMapper;
+﻿using AutoMapper;
 using Common.Models;
 using Repository.EntityModels;
 using Services.Exceptions;
@@ -76,7 +73,10 @@ namespace Services.Services
         /// Update existing borrower or insert a new one
         /// </summary>
         /// <param name="model"></param>
-        /// <returns></returns>
+        /// <exception cref="Services.Exceptions.AlreadyExistsException">
+        /// Thrown if trying to create a new borrower with id that already exists </exception>
+        /// <exception cref="Services.Exceptions.DataAccessException">
+        /// Thrown when an error occurs in the data access layer.</exception>
         static public void Upsert(BorrowerViewModel viewModel)
         {
             Borrower borrower = Mapper.Map<Borrower>(viewModel);
@@ -94,13 +94,13 @@ namespace Services.Services
                 }
                 else
                 {
-                    // throw new DataAccessException("");
+                    throw new DataAccessException("Oväntat fel när låntagare skulle uppdateras.");
                 }
             }
             
             if(!Borrower.Upsert(borrower))
             {
-                throw new DoesNotExistException("Kunde inte uppdatera låntagaren.");
+                throw new DataAccessException("Oväntat fel när låntagare skulle uppdateras.");
             }
         }
         

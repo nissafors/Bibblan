@@ -221,6 +221,11 @@ namespace Repository.EntityModels
                                            "INNER JOIN BOOK ON BOOK_AUTHOR.ISBN = BOOK.ISBN " +
                                            "INNER JOIN AUTHOR ON BOOK_AUTHOR.AID = AUTHOR.AID " +
                                            "WHERE Title + COALESCE(FirstName, '') + COALESCE(LastName, '') LIKE @ModifiedSearch OR " +
+                                           "WHERE Title + COALESCE(LastName, '') + COALESCE(FirstName, '') LIKE @ModifiedSearch OR " +
+                                           "WHERE COALESCE(LastName, '') + Title + COALESCE(FirstName, '') LIKE @ModifiedSearch OR " +
+                                           "WHERE COALESCE(LastName, '') + COALESCE(FirstName, '') + Title LIKE @ModifiedSearch OR " +
+                                           "WHERE COALESCE(FirstName, '') + COALESCE(LastName, '') + Title LIKE @ModifiedSearch OR " +
+                                           "WHERE COALESCE(FirstName, '') + Title + COALESCE(LastName, '') LIKE @ModifiedSearch OR " +
                                            "BOOK.ISBN = @Search";
                     using (SqlCommand command = new SqlCommand(commandString, connection))
                     {
