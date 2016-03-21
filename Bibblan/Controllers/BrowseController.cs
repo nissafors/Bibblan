@@ -1,4 +1,8 @@
-﻿using System;
+﻿// TODO:
+// * Should viewmodels be sent through ViewBag?
+// * Do not catch Exception
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -12,7 +16,9 @@ namespace Bibblan.Controllers
 {
     public class BrowseController : Controller
     {
-        // GET: /Browse/Title
+        /// <summary>
+        /// GET: /Browse/Title
+        /// </summary>
         public ActionResult Title()
         {
             checkAccess();
@@ -32,7 +38,9 @@ namespace Bibblan.Controllers
             return View();
         }
 
-        // GET: /Browse/Author
+        /// <summary>
+        /// GET: /Browse/Author
+        /// </summary>
         public ActionResult Author()
         {
             checkAccess();
@@ -52,8 +60,10 @@ namespace Bibblan.Controllers
             return View();
         }
         /// <summary>
-        /// Session cannot be checked in has Constructor since it is built later in the lifecycle of the controller instance
+        /// Do  permission checking for the user.
         /// </summary>
+        /// <remarks>Session cannot be checked in has Constructor since it is built later in the lifecycle of the
+        /// controller instance.</remarks>
         private void checkAccess()
         {
             if (AccountHelper.HasAccess(this.Session, AccountHelper.Role.Admin))

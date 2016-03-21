@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Common.Models
 {
+    // Not in use?
     public class UserPageViewModel
     {
         public BorrowerViewModel Borrower { get; set; }

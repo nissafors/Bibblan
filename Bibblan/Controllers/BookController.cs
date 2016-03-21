@@ -1,4 +1,7 @@
-﻿using System;
+﻿// TODO:
+// Should this view send the viewmodel through the ViewBag?
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -12,9 +15,10 @@ namespace Bibblan.Controllers
 {
     public class BookController : Controller
     {
-        //
-        // GET: /Book/
-        public ActionResult Details(string isbn)
+        /// <summary>
+        /// GET: /Book/Details/{isbn}. Show details about a book.
+        /// </summary>
+        public ActionResult Details(string isbn = "")
         {
             try
             {
@@ -30,7 +34,7 @@ namespace Bibblan.Controllers
             {
                 ViewBag.error = e.Message;
             }
-            catch(Exception)
+            catch(DoesNotExistException)
             {
                 ViewBag.Book = null;
             }
