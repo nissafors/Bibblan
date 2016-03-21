@@ -45,7 +45,7 @@ namespace Repository.EntityModels
                         command.Parameters.AddWithValue("@Password", account.Password);
                         command.Parameters.AddWithValue("@Salt", account.Salt);
                         command.Parameters.AddWithValue("@RoleId", account.RoleId);
-                        command.Parameters.AddWithValue("@BorrowerId", account.BorrowerId);
+                        command.Parameters.AddWithValue("@BorrowerId", HelperFunctions.ValueOrDBNull(account.BorrowerId));
 
                         if (command.ExecuteNonQuery() != 1)
                         {

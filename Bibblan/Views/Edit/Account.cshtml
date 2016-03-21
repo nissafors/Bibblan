@@ -9,7 +9,7 @@
 
 @using (Html.BeginForm())
 {
-    if(ViewBag.editAll)
+    if(ViewBag.editAll != null && ViewBag.editAll)
     {
        <div class="form-group">
             @Html.LabelFor(m => Model.Username, "Användarnamn")
@@ -46,7 +46,7 @@
         </div>
     </div>
     <hr />
-    if(ViewBag.editAll)
+    if(ViewBag.editAll != null && ViewBag.editAll)
     {
         <table class="table table-striped">
         <thead>

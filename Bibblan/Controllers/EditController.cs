@@ -416,10 +416,10 @@ namespace Bibblan.Controllers
             catch(DataAccessException e)
             {
                 ViewBag.error = e.Message;
-                return Redirect(Url.Content("~/") + "Edit/Account/");
+                return View();
             }
 
-            return Redirect(Url.Content("~/") + "Edit/Account/" + model.Username);
+            return View(model);
         }
 
         /// <summary>

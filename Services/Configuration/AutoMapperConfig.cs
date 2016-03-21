@@ -33,7 +33,7 @@ namespace Services.Configuration
                     mapping.CreateMap<AccountViewModel, Account>();
                     mapping.CreateMap<UserRole, RoleViewModel>();
                     mapping.CreateMap<BorrowerViewModel, Account>()
-                        .ForMember(c => c.PersonId, op => op.MapFrom(v => v.PersonId))
+                        .ForMember(c => c.BorrowerId, op => op.MapFrom(v => v.PersonId))
                         .ForMember(c => c.Username, op => op.MapFrom(v => v.PersonId))
                         .ForMember(c => c.Password, op => op.MapFrom(v => v.Account.NewPassword))
                         .ForMember(c => c.RoleId, op => op.UseValue(1));
