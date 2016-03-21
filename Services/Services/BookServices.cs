@@ -1,7 +1,4 @@
-﻿// TODO:
-// Document SearchBooks()
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Common.Models;
 using Repository.EntityModels;
 using AutoMapper;
@@ -172,6 +169,13 @@ namespace Services.Services
                 throw new DataAccessException("Oväntat fel när en bok skulle tas bort.");
         }
 
+        /// <summary>
+        /// Search for books using given search string and return the result.
+        /// </summary>
+        /// <param name="search">The search string.</param>
+        /// <returns>Returns a list of BookViewModel:s.</returns>
+        /// <exception cref="Services.Exceptions.DataAccessException">
+        /// Thrown when an error occurs in the data access layer.</exception>
         public static List<BookViewModel> SearchBooks(string search)
         {
             List<Book> bookList = null;

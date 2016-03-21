@@ -13,7 +13,7 @@ namespace Bibblan.Controllers
     public class BrowseController : Controller
     {
         /// <summary>
-        /// GET: /Browse/Title
+        /// GET: /Browse/Title. List all books in the database.
         /// </summary>
         public ActionResult Title()
         {
@@ -32,7 +32,7 @@ namespace Bibblan.Controllers
         }
 
         /// <summary>
-        /// GET: /Browse/Author
+        /// GET: /Browse/Author. List all authors in the database.
         /// </summary>
         public ActionResult Author()
         {

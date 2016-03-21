@@ -8,6 +8,9 @@ namespace Bibblan.Controllers
 {
     public class HomeController : Controller
     {
+        /// <summary>
+        /// GET: /Home/Index. The home page of the site.
+        /// </summary>
         public ActionResult Index()
         {
             if (TempData["error"] != null)

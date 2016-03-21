@@ -162,7 +162,6 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Helpers\AccountHelper.cs" />
     <Compile Include="Controllers\BrowseController.cs" />
-    <Compile Include="Controllers\BorrowerController.cs" />
     <Compile Include="Controllers\EditController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\BookController.cs" />

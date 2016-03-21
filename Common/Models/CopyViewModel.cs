@@ -8,8 +8,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Common.Models
 {
-    // Used by:
-    // * /Edit/Copy (as main viewmodel)
+    /// <summary>
+    /// View model for /Edit/Copy.</summary>
     public class CopyViewModel
     {
         [Required(ErrorMessage="En streckkod krävs")]

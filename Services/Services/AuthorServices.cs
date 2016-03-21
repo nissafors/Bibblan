@@ -1,7 +1,4 @@
-﻿// TODO:
-// Document Upsert()
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -106,9 +103,13 @@ namespace Services.Services
         }
 
         /// <summary>
-        /// 
+        /// Insert into (if Aid is zero), or update an author in, the database. 
         /// </summary>
-        /// <param name="authorViewModel"></param>
+        /// <param name="authorViewModel">The AuthorViewModel to upsert.</param>
+        /// <exception cref="Services.Exceptions.DataAccessException">
+        /// Thrown when an error occurs in the data access layer.</exception>
+        /// <exception cref="Services.Exceptions.DoesNotExistException">
+        /// Throw when an update fails.</exception>
         public static void Upsert(AuthorViewModel authorViewModel)
         {
             Author author = Mapper.Map<Author>(authorViewModel);
@@ -124,7 +125,7 @@ namespace Services.Services
             {
                 if (!Author.Insert(author))
                 {
-                    throw new DoesNotExistException("Kunde inte skapa en ny författare.");
+                    throw new DataAccessException("Oväntat fel när en författare skulle skapas.");
                 }
             }
         }
