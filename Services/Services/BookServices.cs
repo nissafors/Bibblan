@@ -1,5 +1,5 @@
 ﻿// TODO:
-// Document and possibly revise SearchBooks()
+// Document SearchBooks()
 
 using System.Collections.Generic;
 using Common.Models;
@@ -191,14 +191,17 @@ namespace Services.Services
                         {
                             bookView.Authors.Add(i, item.Item1);
                         }
+
                         ++i;
                     }
+
                     bookViewModelList.Add(bookView);
                 }
+
                 return bookViewModelList;
             }
 
-            return null;
+            throw new DataAccessException("Oväntat fel vid sökning av böcker.");
         }
     }
 }
