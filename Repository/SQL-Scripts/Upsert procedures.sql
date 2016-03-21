@@ -73,7 +73,7 @@ CREATE PROCEDURE UpsertAccount
 	@BorrowerId nvarchar(13)
 AS
 	UPDATE ACCOUNT
-	SET Username = @Username, Password = @Password, RoleId = @RoleId
+	SET Username = @Username, Password = @Password, RoleId = @RoleId, Salt = @Salt
 	WHERE Username = @Username
 	IF @@ROWCOUNT = 0
 		INSERT INTO ACCOUNT(Username, Password, Salt, RoleId, BorrowerId)

@@ -72,5 +72,16 @@ namespace Services.Services
             return models;
 
         }
+        // Creates a new account
+        public static void Upsert(AccountViewModel model)
+        {
+            var account = Mapper.Map<Account>(model);
+            // Update Password if changed
+            if (model.NewPassword != null)
+                account.Password = model.NewPassword;
+
+            if (!Account.Upsert(account))
+                throw new DataAccessException("Kunde inte skapa användare!");
+        }
     }
 }

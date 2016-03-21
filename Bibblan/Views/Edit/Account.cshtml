@@ -1,4 +1,4 @@
-﻿
+﻿@model Common.Models.AccountViewModel
 @{
     ViewBag.Title = "Lägg Administratör";
 }
@@ -9,22 +9,60 @@
 
 @using (Html.BeginForm())
 {
+    if(ViewBag.editAll)
+    {
+       <div class="form-group">
+            @Html.LabelFor(m => Model.Username, "Användarnamn")
+            @if(Model == null)
+            {
+                @Html.TextBoxFor(m => Model.Username, new { @class = "form-control"})
+            }
+            else
+            {
+                @Html.TextBoxFor(m => Model.Username, new { @class = "form-control", @disabled = ""})
+            }
+        </div> 
+    }
     <div class="form-group">
-        @Html.Label("Användarnamn")
-        @Html.TextBox("username", null, new { @class = "form-control" })
+        @Html.LabelFor(m => Model.Password, "Gammalt Lösenord")
+        @Html.TextBoxFor(m => Model.Password, new {@type = "password", @class = "form-control" })
     </div>
     <div class="form-group">
-        @Html.Label("Lösenord")
-        @Html.TextBox("password", null, new {@type = "password", @class = "form-control" })
+        @Html.LabelFor(m => Model.NewPassword, "Lösenord")
+        @Html.TextBoxFor(m => Model.NewPassword, new {@type = "password", @class = "form-control" })
     </div>
         <div class="form-group">
-        @Html.Label("Lösenord Igen")
-        @Html.TextBox("password-retry", null, new {@type = "password", @class = "form-control" })
+        @Html.LabelFor(m => Model.NewPasswordAgain, "Lösenord Igen")
+        @Html.TextBoxFor(m => Model.NewPasswordAgain, new {@type = "password", @class = "form-control" })
     </div>
     <div class="form-group">
-        <input type="submit" class="btn btn-block btn-primary" value="Lägg till" />
+        <div class="row">
+            <div class="col-md-6">
+                <input type="submit" class="btn btn-block btn-primary" value="Lägg till" />
+            </div>
+            <div class="col-md-6">
+                <a href="Edit/adasd" class="btn btn-block btn-danger disabled">Ta bort</a>
+            </div>
+        </div>
     </div>
-        <div class="form-group">
-        <a href="Edit/adasd" class="btn btn-block btn-danger">Ta bort</a>
-    </div>
+    <hr />
+    if(ViewBag.editAll)
+    {
+        <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Användarnamn</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var item in ViewBag.accounts)
+            {
+                
+                    <tr>
+                        <td>@Html.ActionLink(item.Username as string,"../Edit/Account/" + item.Username as string)</td>
+                    </tr>
+            }   
+        </tbody>
+        </table>
+    }
 }

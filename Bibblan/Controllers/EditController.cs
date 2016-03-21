@@ -392,8 +392,50 @@ namespace Bibblan.Controllers
 
         public ActionResult Account(string username)
         {
+            if (!AccountHelper.HasAccess(Session, AccountHelper.Role.Admin, true))
+            {
+                ViewBag.editAll = true;
+                try 
+                {
+                    ViewBag.accounts = AccountServices.GetAccounts((int)AccountHelper.Role.Admin);
+                }
+                catch(DataAccessException e)
+                {
+                    ViewBag.error = e.Message;
+                    ViewBag.accounts = new List<AccountViewModel>();
 
-            return View();
+                }
+            }    
+            else
+                ViewBag.editAll = false;
+
+            AccountViewModel model;
+            try
+            {
+                model = AccountServices.GetAccount(username);
+            }
+            catch(DoesNotExistException e)
+            {
+                return View();
+            }
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Account(AccountViewModel model)
+        {
+            try
+            {
+                AccountServices.Upsert(model);
+            }
+            catch(DataAccessException e)
+            {
+                ViewBag.error = e.Message;
+                return Redirect(Url.Content("~/") + "Edit/Account/");
+            }
+
+            return Redirect(Url.Content("~/") + "Edit/Account/" + model.Username);
         }
 
         /// <summary>

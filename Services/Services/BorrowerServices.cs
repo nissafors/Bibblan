@@ -105,7 +105,7 @@ namespace Services.Services
             if (viewModel.Account.Password != null)
             {
                 Account account = Mapper.Map<Account>(viewModel.Account);
-                account.PersonId = borrower.PersonId;
+                account.BorrowerId = borrower.PersonId;
                 account.RoleId = (int)Role.borrower;
                 // TODO: Upsert account
             }

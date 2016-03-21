@@ -15,7 +15,7 @@ namespace Common.Models
         public string NewPassword { get; set; }
         public string NewPasswordAgain { get; set; }
         public int RoleId { get; set; }
-        public string PersonId { get; set; }
+        public string BorrowerId { get; set; }
     }
 
     public class RoleViewModel

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Security.Cryptography;
+using System.Data.SqlClient;
 
 namespace Repository.EntityModels
 {
@@ -16,15 +17,49 @@ namespace Repository.EntityModels
         {
             new Account {Username = "person1", Password = "1234", RoleId = 0}, // Admin
             new Account {Username = "person2", Password = "1248", RoleId = 0}, // Admin
-            new Account {Username = "Olof", Password = "0kOrv", PersonId = "920201-1212", RoleId = 1}, // User
-            new Account {Username = "AnDer s", Password = "00000", PersonId = "930801-2727", RoleId = 1} // User
+            new Account {Username = "Olof", Password = "0kOrv", BorrowerId = "920201-1212", RoleId = 1}, // User
+            new Account {Username = "AnDer s", Password = "00000", BorrowerId = "930801-2727", RoleId = 1} // User
         };
 
         public string Username { get; set; }
         public string Password { get; set; }
-        public string PersonId { get; set; }
+        public string BorrowerId { get; set; }
         public string Salt { get; set; }
         public int RoleId { get; set; }
+
+        public static bool Upsert(Account account)
+        {
+            try
+            {
+                using (SqlConnection connection = HelperFunctions.GetConnection())
+                {
+                    connection.Open();
+                    // Make a new hash for the user
+                    var hash = makeHash(account.Password);
+                    account.Password = hash[0];
+                    account.Salt = hash[1];
+                    using (SqlCommand command = new SqlCommand("EXEC UpsertAccount @Username, @Password, @Salt, @RoleId, @BorrowerId"))
+                    {
+                        command.Connection = connection;
+                        command.Parameters.AddWithValue("@Username", account.Username);
+                        command.Parameters.AddWithValue("@Password", account.Password);
+                        command.Parameters.AddWithValue("@Salt", account.Salt);
+                        command.Parameters.AddWithValue("@RoleId", account.RoleId);
+                        command.Parameters.AddWithValue("@BorrowerId", account.BorrowerId);
+
+                        if (command.ExecuteNonQuery() != 1)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+            return true;
+        }
 
         public static bool GetAccounts(out List<Account> accounts, int roleId)
         {
