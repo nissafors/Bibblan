@@ -68,14 +68,15 @@
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
-                @Html.Label("Lösenord (Lämna blankt för att inte ändra)") 
-                @Html.TextBox("password", null, new { @type="password", @class = "form-control" })
+                @Html.LabelFor(model => model.Account.NewPassword) 
+                @Html.TextBoxFor(model => model.Account.NewPassword, new { @type="password", @class = "form-control" })
             </div>
         </div>
         <div class="col-md-6">
             <div class="form-group">
-                @Html.Label("Lösenord igen")
-                @Html.TextBox("passwordRetry", null, new { @type = "password", @class = "form-control" })
+                @Html.LabelFor(model => model.Account.NewPasswordAgain)
+                @Html.TextBoxFor(model => model.Account.NewPasswordAgain, new { @type = "password", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Account.NewPasswordAgain, null, new { @class = "text-danger" })
             </div>
         </div>
     </div>
