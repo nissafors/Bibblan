@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace Common.Models
 {
+    public enum Role { admin, borrower }
+
     public class AccountViewModel
     {
         public string Username { get; set; }

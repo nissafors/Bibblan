@@ -29,8 +29,8 @@ namespace Services.Services
             {
                 if (borrower != null)
                 {
-                    borrowerViewModel.Borrows = BorrowServices.GetBorrows(personId);
                     borrowerViewModel = Mapper.Map<BorrowerViewModel>(borrower);
+                    borrowerViewModel.Borrows = BorrowServices.GetBorrows(personId);
                 }
                 else
                 {
@@ -106,7 +106,7 @@ namespace Services.Services
             {
                 Account account = Mapper.Map<Account>(viewModel.Account);
                 account.PersonId = borrower.PersonId;
-                account.RoleId = 1; // Borrower
+                account.RoleId = (int)Role.borrower;
                 // TODO: Upsert account
             }
         }
@@ -120,7 +120,7 @@ namespace Services.Services
         static public void Delete(string PersonId)
         {
             if(!Borrower.Delete(PersonId))
-                throw new DoesNotExistException("Låntagaren med personnummer " + PersonId + " kunde inte tas bort.");
+                throw new DataAccessException("Oväntat fel när låntagaren skulle tas bort.");
         }
     }
 }

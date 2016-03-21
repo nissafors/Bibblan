@@ -43,6 +43,7 @@ namespace Common.Models
         public BorrowerViewModel()
         {
             Borrows = new List<BorrowViewModel>();
+            Account = new AccountViewModel();
         }
     }
 }

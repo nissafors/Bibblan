@@ -1,8 +1,4 @@
-﻿// TODO:
-// * Should viewmodels be sent through ViewBag?
-// * Do not catch Exception
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -31,10 +27,7 @@ namespace Bibblan.Controllers
             {
                 ViewBag.error = e.Message;
             }
-            catch (Exception)
-            {
-                ViewBag.books = null;
-            }
+
             return View();
         }
 
@@ -53,12 +46,10 @@ namespace Bibblan.Controllers
             {
                 ViewBag.error = e.Message;
             }
-            catch (Exception)
-            {
-                ViewBag.authors = null;
-            }
+
             return View();
         }
+
         /// <summary>
         /// Do  permission checking for the user.
         /// </summary>

@@ -1,7 +1,4 @@
-﻿// TODO:
-// Should this view send the viewmodel through the ViewBag?
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -20,6 +17,7 @@ namespace Bibblan.Controllers
         /// </summary>
         public ActionResult Details(string isbn = "")
         {
+            BookViewModel viewModel = null;
             try
             {
                 if (AccountHelper.HasAccess(this.Session, AccountHelper.Role.Admin))
@@ -27,19 +25,18 @@ namespace Bibblan.Controllers
                 else
                     ViewBag.isAdmin = false;
 
-                BookViewModel viewModel = BookServices.GetBookDetails(isbn);
-                ViewBag.Book = viewModel;
+                viewModel = BookServices.GetBookDetails(isbn);
             }
             catch(DataAccessException e)
             {
                 ViewBag.error = e.Message;
             }
-            catch(DoesNotExistException)
+            catch(DoesNotExistException e)
             {
-                ViewBag.Book = null;
+                ViewBag.error = e.Message;
             }
             
-            return View();
+            return View(viewModel);
         }
     }
 }
