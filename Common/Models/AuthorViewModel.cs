@@ -7,10 +7,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Common.Models
 {
-    // Used by:
-    // * /Browse/Author (in a List)
-    // * /Edit/Author (as main viewmodel)
-    // * /Search/Author (in a List)
+    /// <summary>
+    /// View model for /Edit/Author.</summary>
+    /// <remarks>
+    /// Also used in lists by /Browse/Author and /Search/Author.</remarks>
     public class AuthorViewModel
     {
         [Display(Name = "Förnamn")]
