@@ -111,7 +111,8 @@ namespace Bibblan.Controllers
             CopyViewModel cvm = new CopyViewModel();
 
             // If a barcode was given; is it valid?
-            if (barcode != null) {
+            if (barcode != null)
+            {
                 try
                 {
                     cvm = CopyServices.GetCopyViewModel(barcode);
@@ -284,7 +285,7 @@ namespace Bibblan.Controllers
                         }
                         catch (DoesNotExistException) { isbnFound = false; }
                         catch (DataAccessException) { isbnFound = false; }
-                        
+
                         CopyServices.DeleteCopy(Id);
 
                         if (!isbnFound)
@@ -361,15 +362,15 @@ namespace Bibblan.Controllers
             {
                 AuthorServices.Upsert(authorViewModel);
             }
-            catch(DataAccessException e)
+            catch (DataAccessException e)
             {
                 ViewBag.error = e.Message;
             }
-            catch(DoesNotExistException e)
+            catch (DoesNotExistException e)
             {
                 ViewBag.error = e.Message;
             }
-            
+
             return View(authorViewModel);
         }
 
@@ -378,17 +379,17 @@ namespace Bibblan.Controllers
             if (!AccountHelper.HasAccess(Session, AccountHelper.Role.Admin, true))
             {
                 ViewBag.editAll = true;
-                try 
+                try
                 {
                     ViewBag.accounts = AccountServices.GetAccounts((int)AccountHelper.Role.Admin);
                 }
-                catch(DataAccessException e)
+                catch (DataAccessException e)
                 {
                     ViewBag.error = e.Message;
                     ViewBag.accounts = new List<AccountViewModel>();
 
                 }
-            }    
+            }
             else
                 ViewBag.editAll = false;
 
@@ -397,7 +398,7 @@ namespace Bibblan.Controllers
             {
                 model = AccountServices.GetAccount(username);
             }
-            catch(DoesNotExistException e)
+            catch (DoesNotExistException e)
             {
                 return View();
             }
@@ -412,13 +413,39 @@ namespace Bibblan.Controllers
             {
                 AccountServices.Upsert(model);
             }
-            catch(DataAccessException e)
+            catch (DataAccessException e)
             {
                 ViewBag.error = e.Message;
                 return View();
             }
 
             return View(model);
+        }
+
+        /// <summary>
+        /// GET: /Edit/ChangePassword/{Username}. Change the password for user
+        /// </summary>
+        [HttpGet]
+        [RequireLogin(RequiredRole = AccountHelper.Role.User)]
+        public ActionResult ChangePassword()
+        {
+            AccountViewModel viewModel = new AccountViewModel();
+            viewModel.Username = AccountHelper.GetUserName(this.Session);
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [RequireLogin(RequiredRole = AccountHelper.Role.User, ForceCheck = true)]
+        public ActionResult ChangePassword(AccountViewModel viewModel)
+        {
+            // TODO: Service for changepassword?
+            try
+            {
+                AccountServices.Upsert(viewModel);
+            }
+            catch (DoesNotExistException e) { ViewBag.error = e.Message}
+
+            return View(viewModel);
         }
 
         /// <summary>
