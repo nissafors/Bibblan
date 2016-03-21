@@ -15,19 +15,30 @@ namespace Services.Services
 {
     public class BorrowServices
     {
-        public static bool Renew(BorrowViewModel borrow)
+        /// <summary>
+        /// Renew a loan.
+        /// </summary>
+        /// <param name="borrow">The BorrowViewModel for the loan.</param>
+        /// <exception cref="Services.Exceptions.DoesNotExistException">
+        /// Thrown when the borrower or it's category could not be found.</exception>
+        /// <exception cref="Services.Exceptions.DataAccessException">
+        /// Thrown when an error occurs in the data access layer.</exception>
+        public static void Renew(BorrowViewModel borrow)
         {
             Borrower borrower;
             Category category;
-            if(Borrower.GetBorrower(out borrower, borrow.PersonId) &&
-                borrower != null &&
-                Category.GetCategory(out category, borrower.CategoryId))
-            {
-                borrow.ToBeReturnedDate = DateTime.Now.AddDays(category.Period);
-                return Borrow.UpdateReturnDate(Mapper.Map<Borrow>(borrow));
-            }
-
-            return false;
+            if(!Borrower.GetBorrower(out borrower, borrow.PersonId))
+                throw new DataAccessException("Oväntat fel när en låntagare skulle hämtas.");
+            if (!Category.GetCategory(out category, borrower.CategoryId))
+                throw new DataAccessException("Oväntat fel när kategorin skulle hämtas.");
+            if (borrower == null)
+                throw new DoesNotExistException("Nädu! Den låntagaren finns inte.");
+            if (category == null)
+                throw new DoesNotExistException("Låntagaren är inte kategoriserad. Kontakta en administratör.");
+            
+            borrow.ToBeReturnedDate = DateTime.Now.AddDays(category.Period);
+            if (!Borrow.UpdateReturnDate(Mapper.Map<Borrow>(borrow)))
+                throw new DataAccessException("Oväntat fel när ett lån skulle förnyas.");
         }
 
         /// <summary>
