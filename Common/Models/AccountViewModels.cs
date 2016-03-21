@@ -7,17 +7,20 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Common.Models
 {
-    public enum Role { admin, borrower }
+    public enum Role { admin, borrower , all = -1}
 
     public class AccountViewModel
     {
         [Display(Name = "Användarnamn")]
+        [Required]
         public string Username { get; set; }
         
         [Display(Name = "Lösenord")]
+        [Required]
         public string Password { get; set; }
         
-        [Display(Name = "Lösenord")]
+        [Display(Name = "Nytt Lösenord")]
+        [Required]
         public string NewPassword { get; set; }
 
         // System.ComponentModel.DataAnnotations.CompareAttribute should be used instead of

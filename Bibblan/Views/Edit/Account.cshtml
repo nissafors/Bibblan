@@ -9,8 +9,6 @@
 
 @using (Html.BeginForm())
 {
-    if(ViewBag.editAll != null && ViewBag.editAll)
-    {
        <div class="form-group">
             @Html.LabelFor(m => Model.Username, "Användarnamn")
             @if(Model == null)
@@ -19,21 +17,17 @@
             }
             else
             {
-                @Html.TextBoxFor(m => Model.Username, new { @class = "form-control", @disabled = ""})
+                @Html.TextBoxFor(m => Model.Username, new { @class = "form-control", @readonly = "readonly"})
             }
-        </div> 
-    }
+        </div>
     <div class="form-group">
-        @Html.LabelFor(m => Model.Password, "Gammalt Lösenord")
-        @Html.TextBoxFor(m => Model.Password, new {@type = "password", @class = "form-control" })
-    </div>
-    <div class="form-group">
-        @Html.LabelFor(m => Model.NewPassword, "Lösenord")
+        @Html.LabelFor(m => Model.NewPassword)
         @Html.TextBoxFor(m => Model.NewPassword, new {@type = "password", @class = "form-control" })
     </div>
         <div class="form-group">
-        @Html.LabelFor(m => Model.NewPasswordAgain, "Lösenord Igen")
+        @Html.LabelFor(m => Model.NewPasswordAgain)
         @Html.TextBoxFor(m => Model.NewPasswordAgain, new {@type = "password", @class = "form-control" })
+        @Html.ValidationMessageFor(m => Model.NewPasswordAgain)
     </div>
     <div class="form-group">
         <div class="row">
@@ -41,13 +35,18 @@
                 <input type="submit" class="btn btn-block btn-primary" value="Lägg till" />
             </div>
             <div class="col-md-6">
-                <a href="Edit/adasd" class="btn btn-block btn-danger disabled">Ta bort</a>
+                @if(Model == null)
+                {
+                    <a href="#" class="btn btn-block btn-danger disabled">Ta bort</a>
+                }
+                else
+                {
+                     <a href=@("/Edit/Delete/Account/" + Model.Username) class="btn btn-block btn-danger">Ta bort</a>
+                }
             </div>
         </div>
     </div>
     <hr />
-    if(ViewBag.editAll != null && ViewBag.editAll)
-    {
         <table class="table table-striped">
         <thead>
             <tr>
@@ -64,5 +63,4 @@
             }   
         </tbody>
         </table>
-    }
 }

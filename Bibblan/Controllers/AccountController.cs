@@ -12,6 +12,7 @@ using Common.Models;
 using Services.Services;
 using Bibblan.Helpers;
 using Bibblan.Filters;
+using Services.Exceptions;
 
 namespace Bibblan.Controllers
 {
@@ -37,9 +38,18 @@ namespace Bibblan.Controllers
         [HttpPost]
         public ActionResult Login(AccountViewModel model)
         {
-            AccountViewModel m = AccountServices.Login(model);
-            string errorMessage = "Fel användarnamn / lösenord\n";;
-            
+            AccountViewModel m;
+            string errorMessage = null;
+            try
+            {
+                m = AccountServices.Login(model);
+            }
+            catch(DoesNotExistException e)
+            {
+                errorMessage = e.Message;
+                m = null;
+            }
+
             if(AccountHelper.GetRetriesLeft(Session) > 0 &&  m != null)
             {
                 // Setups the session indexes

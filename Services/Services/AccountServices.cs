@@ -14,22 +14,39 @@ namespace Services.Services
     {
         public static AccountViewModel Login(AccountViewModel model)
         {
-           Account account;
-           
+           Account account;      
 
            if (!Account.GetAccount(out account, model.Username, model.Password))
-               throw new DoesNotExistException("Fel lösenord / användarnamn");
+               throw new DoesNotExistException("Fel lösenord / användarnamn ");
 
            return Mapper.Map<AccountViewModel>(account);
         }
 
+        /// <summary>
+        /// Remove a given user from the repository
+        /// </summary>
+        /// <param name="model"></param>
+        public static void Delete(AccountViewModel model)
+        {
+            var account = Mapper.Map<Account>(model);
+
+            if (!Account.Delete(account))
+                throw new DataAccessException("Kunde inte ta bort användare");
+        }
+        /// <summary>
+        /// Verify if an Account Exists in the Repository
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
         public static bool AccountExists(string username)
         {
             bool b;
-            Account.AccountExists(out b, username);
+            if (!Account.AccountExists(out b, username))
+                throw new DataAccessException("Kunde inte ansluta");
             return b;
         }
 
+        /* 
         public static AccountViewModel GetAccount(string username)
         {
             Account account;
@@ -39,6 +56,7 @@ namespace Services.Services
 
             return Mapper.Map<AccountViewModel>(account);
         }
+        */
 
         public static int GetRoleId(string username)
         {
@@ -47,10 +65,10 @@ namespace Services.Services
             return role.Id;
         }
 
-        public static List<AccountViewModel> GetAccounts(int roleId = -1)
+        public static List<AccountViewModel> GetAccounts(Role role)
         {
             List<Account> accounts;
-            if (!Account.GetAccounts(out accounts, roleId))
+            if (!Account.GetAccounts(out accounts, (int) role))
                 throw new DataAccessException("Kunde inte komma åt användare");
 
             List<AccountViewModel> models = new List<AccountViewModel>();

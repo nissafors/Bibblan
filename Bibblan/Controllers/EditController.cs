@@ -254,7 +254,7 @@ namespace Bibblan.Controllers
         /// </summary>
         /// <remarks>
         /// Different Type:s redirects to different places. Most uses /home/index as a fallback on error.</remarks>
-        [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
+        //[RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
         public ActionResult Delete(string Type, string Id)
         {
             Type = Type.ToLower();
@@ -294,6 +294,10 @@ namespace Bibblan.Controllers
                         }
 
                         return RedirectToAction("Book", new { isbn });
+
+                    case "account":
+                        AccountServices.Delete(new AccountViewModel() { Username = Id });
+                        return RedirectToAction("Account");
 
                     default:
                         return RedirectToAction("Index", "Home");
@@ -376,9 +380,8 @@ namespace Bibblan.Controllers
 
         public ActionResult Account(string username)
         {
-            if (!AccountHelper.HasAccess(Session, AccountHelper.Role.Admin, true))
-            {
-                ViewBag.editAll = true;
+            if(TempData["error"] != null)
+                ViewBag.error = TempData["error"];
                 try 
                 {
                     ViewBag.accounts = AccountServices.GetAccounts((int)AccountHelper.Role.Admin);
@@ -389,21 +392,22 @@ namespace Bibblan.Controllers
                     ViewBag.accounts = new List<AccountViewModel>();
 
                 }
-            }    
-            else
-                ViewBag.editAll = false;
 
-            AccountViewModel model;
-            try
+            if(username != null)
             {
-                model = AccountServices.GetAccount(username);
-            }
-            catch(DoesNotExistException e)
-            {
-                return View();
+                try
+                {
+                    AccountServices.AccountExists(username);
+                }
+                catch (DataAccessException e)
+                {
+                    ViewBag.error = e.Message;
+                    return View();
+                }
+                return View(new AccountViewModel() { Username = username });
             }
 
-            return View(model);
+            return View();
         }
 
         [HttpPost]
@@ -415,11 +419,11 @@ namespace Bibblan.Controllers
             }
             catch(DataAccessException e)
             {
-                ViewBag.error = e.Message;
-                return View();
+                TempData["error"] = e.Message;
+                return RedirectToAction("Account");
             }
 
-            return View(model);
+            return RedirectToAction("Account");
         }
 
         /// <summary>

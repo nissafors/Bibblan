@@ -27,6 +27,11 @@ namespace Repository.EntityModels
         public string Salt { get; set; }
         public int RoleId { get; set; }
 
+        /// <summary>
+        /// Update account in DB, if it does not exist create new
+        /// </summary>
+        /// <param name="account"></param>
+        /// <returns></returns>
         public static bool Upsert(Account account)
         {
             try
@@ -61,55 +66,76 @@ namespace Repository.EntityModels
             return true;
         }
 
-        public static bool GetAccounts(out List<Account> accounts, int roleId)
+        public static bool Delete(Account account)
         {
-            accounts = new List<Account>();
-            foreach(var a in accountMockups)
+            try
             {
-                if (a.RoleId == roleId || roleId == -1)
-                    accounts.Add(a);
+                using (SqlConnection connection = HelperFunctions.GetConnection())
+                {
+                    connection.Open();
+                    using (SqlCommand command = new SqlCommand("DELETE FROM ACCOUNT WHERE Username = @Username"))
+                    {
+                        command.Connection = connection;
+                        command.Parameters.AddWithValue("@Username", account.Username);
+                        if (command.ExecuteNonQuery() != 1)
+                        {
+                            return false;
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return false;
             }
             return true;
         }
 
-        // TODO: Refactor get from sql
-        public static bool GetAccount(out Account account, string username, string password)
+        // Get accounts with a specified role if (-1) it means all
+        public static bool GetAccounts(out List<Account> accounts, int roleId)
         {
-            account = null;
-            foreach(var a in accountMockups)
-            {
-                if(a.Username == username && a.Password == password)
-                {
-                    account = a;
-                    return true;
-                }
-            }
-            return false;
+            SqlCommand command;
+            if(roleId == -1)
+                command = new SqlCommand("SELECT Username, RoleId FROM ACCOUNT");
+            else
+                command = new SqlCommand("SELECT Username, RoleId FROM ACCOUNT WHERE RoleId = @RoleId");
+
+            command.Parameters.AddWithValue("@RoleId", roleId);
+            return getAccounts(out accounts, command);
         }
 
-        // In Repo Do NOT return password
-        public static bool GetAccount(out Account account, string username)
-        {
+        // Try to login
+        public static bool GetAccount(out Account account, string username, string password)
+        { 
+            var accounts = new List<Account>();
+            var command = new SqlCommand("SELECT * FROM ACCOUNT WHERE Username = @Username");
+            command.Parameters.AddWithValue("@Username", username);
+            var ret = getAccounts(out accounts, command);
+
             account = null;
-            foreach (var a in accountMockups)
+            if (ret)
+                account = accounts[0];
+
+            // Check password
+            if (makeHash(password, account.Salt) == account.Password)
+                return true;
+            else
             {
-                if (a.Username == username)
-                {
-                    account = a;
-                    return true;
-                }
+                account = null;
+                return false;
             }
-            return false;
         }
 
         public static bool AccountExists(out bool exists, string username)
         {
-            foreach(var a in accountMockups)
-            {
-                if(a.Username == username)
-                    return exists = true;
-            }
-            return exists = false;
+            var accounts = new List<Account>();
+            var command = new SqlCommand("SELECT Username, RoleId FROM ACCOUNT WHERE Username = @Username");
+            command.Parameters.AddWithValue("@Username", username);
+
+            var ret = getAccounts(out accounts, command);
+            exists = accounts != null;
+
+            return ret;
         }
 
         public static bool GetUserRole(string username, out UserRole role)
@@ -156,5 +182,52 @@ namespace Repository.EntityModels
             pbkdf2.IterationCount = PBKDFITERATIONS;
             return Convert.ToBase64String(pbkdf2.GetBytes(20));
         }
-    }
+
+        private static bool getAccounts(out List<Account> accounts, SqlCommand command)
+        {
+            accounts = new List<Account>();
+            try
+            {
+                using (SqlConnection connection = HelperFunctions.GetConnection())
+                {
+                    connection.Open();
+                    using (command)
+                    {
+                        command.Connection = connection;
+                        using (SqlDataReader myReader = command.ExecuteReader())
+                        {
+                            if (myReader != null)
+                            {
+                                while(myReader.Read())
+                                {
+                                    string password = myReader["Password"] == null ? null : Convert.ToString(myReader["Password"]);
+                                    string salt = myReader["Salt"] == null ? null : Convert.ToString(myReader["Salt"]);
+                                    string borrowerId = myReader["BorrowerId"] == null ? null : Convert.ToString(myReader["BorrowerId"]);
+                                    accounts.Add(new Account()
+                                    {
+                                        Username = Convert.ToString(myReader["Username"]),
+                                        RoleId = Convert.ToInt32(myReader["RoleId"]),
+                                        Password = password,
+                                        Salt = salt,
+                                        BorrowerId = borrowerId
+                                    });
+                                }
+                                    
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+
+            return true;
+        }
+        }
 }
