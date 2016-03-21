@@ -64,4 +64,18 @@ AS
 		INSERT INTO BORROWER(PersonId, FirstName, LastName, Address, TelNo, CategoryId)
 		VALUES(@PersonId, @FirstName, @LastName, @Address, @TelNo, @CategoryId);
 GO
-		
+
+CREATE PROCEDURE UpsertAccount
+	@Username nvarchar(50),
+	@Password nvarchar(50),	
+	@Salt nvarchar(50),
+	@RoleId int,
+	@BorrowerId nvarchar(13)
+AS
+	UPDATE ACCOUNT
+	SET Username = @Username, Password = @Password, RoleId = @RoleId
+	WHERE Username = @Username
+	IF @@ROWCOUNT = 0
+		INSERT INTO ACCOUNT(Username, Password, Salt, RoleId, BorrowerId)
+		VALUES(@Username, @Password, @Salt, @RoleId, @BorrowerId);
+GO

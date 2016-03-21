@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Common.Models;
 using Repository.EntityModels;
 using AutoMapper;
+using Services.Exceptions;
 
 namespace Services.Services
 {
@@ -14,13 +15,14 @@ namespace Services.Services
         public static AccountViewModel Login(AccountViewModel model)
         {
            Account account;
-           Account.GetAccount(out account, model.Username, model.Password);
+           
 
-           if (account == null)
-               return null;
+           if (!Account.GetAccount(out account, model.Username, model.Password))
+               throw new DoesNotExistException("Fel lösenord / användarnamn");
 
            return Mapper.Map<AccountViewModel>(account);
         }
+
         public static bool AccountExists(string username)
         {
             bool b;
@@ -28,11 +30,34 @@ namespace Services.Services
             return b;
         }
 
+        public static AccountViewModel GetAccount(string username)
+        {
+            Account account;
+            
+            if (!Account.GetAccount(out account, username))
+                throw new DoesNotExistException("Användaren finns inte");
+
+            return Mapper.Map<AccountViewModel>(account);
+        }
+
         public static int GetRoleId(string username)
         {
             UserRole role;
             Account.GetUserRole(username, out role);
             return role.Id;
+        }
+
+        public static List<AccountViewModel> GetAccounts(int roleId = -1)
+        {
+            List<Account> accounts;
+            if (!Account.GetAccounts(out accounts, roleId))
+                throw new DataAccessException("Kunde inte komma åt användare");
+
+            List<AccountViewModel> models = new List<AccountViewModel>();
+            foreach (var account in accounts)
+                models.Add(Mapper.Map<AccountViewModel>(account));
+
+            return models;
         }
 
         public List<RoleViewModel> GetUserRoles()
