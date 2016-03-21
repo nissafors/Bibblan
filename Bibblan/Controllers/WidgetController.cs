@@ -4,32 +4,47 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using Services.Services;
+using Services.Exceptions;
+using Common.Models;
 
 namespace Bibblan.Controllers
 {
     public class WidgetController : ApiController
     {
-        // GET: api/Widget
+        /// <summary>
+        /// GET: api/Widget. Redirect to Get("").
+        /// </summary>
         public HttpResponseMessage Get()
         {
-            HttpResponseMessage response = Request.CreateResponse(
-                HttpStatusCode.OK,
-                new List<string>()
-            );
-
-            response.ReasonPhrase = "OK";
-
-            return response;
+            return Get("");
         }
 
-        // GET: api/Widget/{title}
+        /// <summary>
+        /// GET: api/Widget/{title}. Return search results. Empty string gives zero length result.
+        /// </summary>
         public HttpResponseMessage Get(string title)
         {
-            HttpResponseMessage response = Request.CreateResponse(
-                HttpStatusCode.OK,
-                new List<string>()
-            );
+            var bvms = new List<BookViewModel>();
+            var results = new List<KeyValuePair<string, List<string>>>(); // Title, authors
 
+            if (title != "")
+            {
+                try
+                {
+                    bvms = BookServices.SearchBooks(title);
+                    foreach (var bvm in bvms)
+                    {
+                        results.Add(new KeyValuePair<string, List<string>>(bvm.Title, bvm.Authors.Select(i => i.Value).ToList()));
+                    }
+                }
+                catch (DataAccessException)
+                {
+                    results.Add(new KeyValuePair<string, List<string>>("Får inte kontakt med bibblan just nu. Försök igen senare.", null));
+                }
+            }
+
+            HttpResponseMessage response = Request.CreateResponse(HttpStatusCode.OK, results);
             response.ReasonPhrase = "OK";
 
             return response;
