@@ -201,42 +201,25 @@ namespace Bibblan.Controllers
         {
             var errors = new List<string>();
             string err;
-
-            if (password != null)
+            if (ModelState.IsValid)
             {
-                if (password == passwordRetry)
+                try
                 {
-                    borrower.Account.Password = password;
+                    BorrowerServices.Upsert(borrower);
+                    borrower.New = false;
                 }
-                else
+                catch (AlreadyExistsException e)
                 {
-                    err = setBorrowerViewLists(borrower);
-                    if (err != null)
-                        errors.Add(err);
-
-                    if (errors.Count > 0)
-                        ViewBag.error = errors;
-                    // TODO Error message on passwords not equal
-                    return View(borrower);
+                    errors.Add(e.Message);
                 }
-            }
-
-            try
-            {
-                BorrowerServices.Upsert(borrower);
-                borrower.New = false;
-            }
-            catch(AlreadyExistsException e)
-            {
-                errors.Add(e.Message);
-            }
-            catch(DoesNotExistException e)
-            {
-                errors.Add(e.Message);
-            }
-            catch(DataAccessException e)
-            {
-                errors.Add(e.Message);
+                catch (DoesNotExistException e)
+                {
+                    errors.Add(e.Message);
+                }
+                catch (DataAccessException e)
+                {
+                    errors.Add(e.Message);
+                }
             }
 
             err = setBorrowerViewLists(borrower);
@@ -249,21 +232,7 @@ namespace Bibblan.Controllers
             return View(borrower);
         }
 
-        private string setBorrowerViewLists(BorrowerViewModel borrower)
-        {
-            try
-            {
-                var categoryDic = CategoryServices.GetCategoriesAsDictionary();
-                borrower.Category = new SelectList(categoryDic.OrderBy(x => x.Value), "Key", "Value");
-            }
-            catch (DataAccessException e)
-            {
-                borrower.Category = new SelectList(new List<SelectListItem>());
-                return e.Message;
-            }
 
-            return null;
-        }
 
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
         public ActionResult Renew(BorrowViewModel borrowViewModel)
@@ -443,6 +412,22 @@ namespace Bibblan.Controllers
                     cvm.Title = "";
                 if (cvm.Statuses == null)
                     cvm.Statuses = new SelectList(new List<SelectListItem>());
+                return e.Message;
+            }
+
+            return null;
+        }
+
+        private string setBorrowerViewLists(BorrowerViewModel borrower)
+        {
+            try
+            {
+                var categoryDic = CategoryServices.GetCategoriesAsDictionary();
+                borrower.Category = new SelectList(categoryDic.OrderBy(x => x.Value), "Key", "Value");
+            }
+            catch (DataAccessException e)
+            {
+                borrower.Category = new SelectList(new List<SelectListItem>());
                 return e.Message;
             }
 

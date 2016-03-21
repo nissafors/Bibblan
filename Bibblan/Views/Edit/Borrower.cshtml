@@ -18,6 +18,7 @@
 
 @using (Html.BeginForm("Borrower", "Edit"))
 {
+    @Html.HiddenFor(model => model.New)
     <div class="row">
         <div class="col-md-6">
             <div class="form-group">
