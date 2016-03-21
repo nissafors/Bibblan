@@ -13,22 +13,24 @@ namespace Bibblan
     {
         protected void Application_Start()
         {
-            AreaRegistration.RegisterAllAreas();
-            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
-            RouteConfig.RegisterRoutes(RouteTable.Routes);
-            BundleConfig.RegisterBundles(BundleTable.Bundles);
-            Services.Configuration.AutoMapperConfig.Configure();
-
+            // Register API
             GlobalConfiguration.Configure(config =>
             {
                 config.MapHttpAttributeRoutes();
 
                 config.Routes.MapHttpRoute(
                     name: "DefaultApi",
-                    routeTemplate: "api/{controller}/{id}",
-                    defaults: new { id = RouteParameter.Optional }
+                    routeTemplate: "api/{controller}/{title}",
+                    defaults: new { title = RouteParameter.Optional }
                 );
             });
+
+            // Configure
+            AreaRegistration.RegisterAllAreas();
+            FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
+            RouteConfig.RegisterRoutes(RouteTable.Routes);
+            BundleConfig.RegisterBundles(BundleTable.Bundles);
+            Services.Configuration.AutoMapperConfig.Configure();
         }
     }
 }
