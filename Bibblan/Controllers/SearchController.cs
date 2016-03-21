@@ -14,6 +14,9 @@ namespace Bibblan.Controllers
 {
     public class SearchController : Controller
     {
+        /// <summary>
+        /// GET: /Search/Borrower. Show search form for borrowers.
+        /// </summary>
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin)]
         public ActionResult Borrower(string search)
         {
@@ -26,6 +29,9 @@ namespace Bibblan.Controllers
             return View();
         }
         
+        /// <summary>
+        /// GET: /Search/Book. Show search form for books.
+        /// </summary>
         public ActionResult Book(string search)
         {
             if (search == null)
@@ -50,6 +56,9 @@ namespace Bibblan.Controllers
             return View();
         }
 
+        /// <summary>
+        /// GET: /Search/Author. Show search form for authors.
+        /// </summary>
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin)]
         public ActionResult Author(string search)
         {

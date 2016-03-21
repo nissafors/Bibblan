@@ -1,4 +1,8 @@
-﻿using System;
+﻿// TODO:
+// * Revise Renew
+// * Account
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -164,6 +168,9 @@ namespace Bibblan.Controllers
 
         }
 
+        /// <summary>
+        /// GET: /Edit/Borrower. Show form to CRUD borrower.
+        /// </summary>
         [HttpGet]
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin)]
         public ActionResult Borrower(string PersonId)
@@ -195,6 +202,9 @@ namespace Bibblan.Controllers
             return View(borrower);
         }
 
+        /// <summary>
+        /// POST: /Edit/Borrower. Upsert changes to borrower.
+        /// </summary>
         [HttpPost]
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
         public ActionResult Borrower(BorrowerViewModel borrower, string password, string passwordRetry)
@@ -249,22 +259,6 @@ namespace Bibblan.Controllers
             return View(borrower);
         }
 
-        private string setBorrowerViewLists(BorrowerViewModel borrower)
-        {
-            try
-            {
-                var categoryDic = CategoryServices.GetCategoriesAsDictionary();
-                borrower.Category = new SelectList(categoryDic.OrderBy(x => x.Value), "Key", "Value");
-            }
-            catch (DataAccessException e)
-            {
-                borrower.Category = new SelectList(new List<SelectListItem>());
-                return e.Message;
-            }
-
-            return null;
-        }
-
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
         public ActionResult Renew(BorrowViewModel borrowViewModel)
         {
@@ -272,6 +266,11 @@ namespace Bibblan.Controllers
             return Redirect(Request.UrlReferrer.ToString());
         }
 
+        /// <summary>
+        /// GET: /Edit/Delete/{Type}/{Id}. Delete a resource of type Type identified by Id.
+        /// </summary>
+        /// <remarks>
+        /// Different Type:s redirects to different places. Most uses /home/index as a fallback on error.</remarks>
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
         public ActionResult Delete(string Type, string Id)
         {
@@ -341,6 +340,9 @@ namespace Bibblan.Controllers
             }
         }
 
+        /// <summary>
+        /// GET: /Edit/Author. Show form to CRUD authors.
+        /// </summary>
         [HttpGet]
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin)]
         public ActionResult Author(int? authorid)
@@ -366,6 +368,9 @@ namespace Bibblan.Controllers
             return View(author);
         }
 
+        /// <summary>
+        /// POST: /Edit/Author. Upsert changes to author and return to view.
+        /// </summary>
         [HttpPost]
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
         public ActionResult Author(AuthorViewModel authorViewModel)
@@ -374,17 +379,13 @@ namespace Bibblan.Controllers
             {
                 AuthorServices.Upsert(authorViewModel);
             }
-            catch(AlreadyExistsException e)
+            catch(DataAccessException e)
             {
                 ViewBag.error = e.Message;
             }
             catch(DoesNotExistException e)
             {
                 ViewBag.error = e.Message;
-            }
-            catch(Exception)
-            {
-                // TODO: Handle general error
             }
             
             return View(authorViewModel);
@@ -443,6 +444,25 @@ namespace Bibblan.Controllers
                     cvm.Title = "";
                 if (cvm.Statuses == null)
                     cvm.Statuses = new SelectList(new List<SelectListItem>());
+                return e.Message;
+            }
+
+            return null;
+        }
+
+        /// <summary>
+        /// Populate selectlists in /edit/borrower.
+        /// </summary>
+        private string setBorrowerViewLists(BorrowerViewModel borrower)
+        {
+            try
+            {
+                var categoryDic = CategoryServices.GetCategoriesAsDictionary();
+                borrower.Category = new SelectList(categoryDic.OrderBy(x => x.Value), "Key", "Value");
+            }
+            catch (DataAccessException e)
+            {
+                borrower.Category = new SelectList(new List<SelectListItem>());
                 return e.Message;
             }
 
