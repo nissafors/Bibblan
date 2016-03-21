@@ -172,6 +172,7 @@ namespace Bibblan.Controllers
 
             BorrowerViewModel borrower = new BorrowerViewModel();
             borrower.New = true;
+
             if (PersonId != null)
             {
                 try
@@ -184,6 +185,7 @@ namespace Bibblan.Controllers
             }
 
             string err = setBorrowerViewLists(borrower);
+
             if (err != null)
                 errors.Add(err);
 
@@ -195,9 +197,29 @@ namespace Bibblan.Controllers
 
         [HttpPost]
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
-        public ActionResult Borrower(BorrowerViewModel borrower)
+        public ActionResult Borrower(BorrowerViewModel borrower, string password, string passwordRetry)
         {
             var errors = new List<string>();
+            string err;
+
+            if (password != null)
+            {
+                if (password == passwordRetry)
+                {
+                    borrower.Account.Password = password;
+                }
+                else
+                {
+                    err = setBorrowerViewLists(borrower);
+                    if (err != null)
+                        errors.Add(err);
+
+                    if (errors.Count > 0)
+                        ViewBag.error = errors;
+                    // TODO Error message on passwords not equal
+                    return View(borrower);
+                }
+            }
 
             try
             {
@@ -217,7 +239,7 @@ namespace Bibblan.Controllers
                 errors.Add(e.Message);
             }
 
-            string err = setBorrowerViewLists(borrower);
+            err = setBorrowerViewLists(borrower);
             if (err != null)
                 errors.Add(err);
 

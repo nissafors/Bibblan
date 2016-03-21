@@ -80,8 +80,7 @@ namespace Services.Services
         static public void Upsert(BorrowerViewModel viewModel)
         {
             Borrower borrower = Mapper.Map<Borrower>(viewModel);
-            Account account = Mapper.Map<Account>(viewModel.Account);
-            
+
             if (viewModel.New)
             {
                 Borrower existingBorrower = null;
@@ -101,6 +100,14 @@ namespace Services.Services
             if(!Borrower.Upsert(borrower))
             {
                 throw new DataAccessException("Oväntat fel när låntagare skulle uppdateras.");
+            }
+
+            if (viewModel.Account.Password != null)
+            {
+                Account account = Mapper.Map<Account>(viewModel.Account);
+                account.PersonId = borrower.PersonId;
+                account.RoleId = 1; // Borrower
+                // TODO: Upsert account
             }
         }
         

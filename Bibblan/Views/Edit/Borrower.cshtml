@@ -5,7 +5,7 @@
 }
 
 <div class="page-header">
-    @if (Model.PersonId != null)
+    @if (!Model.New)
     {
         <h1>Redigera låntagare</h1>
         <h3>@(Model.LastName), @(Model.FirstName) </h3>
@@ -37,7 +37,7 @@
         <div class="col-md-6">
             <div class="form-group">
                 @Html.LabelFor(model => model.PersonId) 
-                @Html.TextBoxFor(model => model.PersonId, Model.PersonId != null ? (object)new { @class = "form-control", @readonly = "readonly" } : new { @class = "form-control" })
+                @Html.TextBoxFor(model => model.PersonId, Model.New ? (object)new { @class = "form-control" } : new { @class = "form-control", @readonly = "readonly" })
                 @Html.ValidationMessageFor(model => model.PersonId, null, new { @class = "text-danger" })
             </div>
         </div>
@@ -66,6 +66,21 @@
 
     <div class="row">
         <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Lösenord (Lämna blankt för att inte ändra)") 
+                @Html.TextBox("password", null, new { @type="password", @class = "form-control" })
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="form-group">
+                @Html.Label("Lösenord igen")
+                @Html.TextBox("passwordRetry", null, new { @type = "password", @class = "form-control" })
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6">
             <input type="submit" class="btn btn-block btn-primary" value="Bekräfta" />
         </div>
         <div class="col-md-6">
@@ -73,7 +88,7 @@
         </div>
     </div>
     
-    if (Model.PersonId != null)
+    if (!Model.New)
     {
     <h2>Lån</h2>
     <table class="table table-striped">
