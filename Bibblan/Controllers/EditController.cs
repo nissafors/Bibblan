@@ -203,6 +203,8 @@ namespace Bibblan.Controllers
         {
             BorrowerViewModel borrower = new BorrowerViewModel();
             borrower.New = true;
+            var errors = new List<string>();
+
             if (PersonId != null)
             {
                 try
@@ -210,19 +212,46 @@ namespace Bibblan.Controllers
                     borrower = BorrowerServices.GetBorrower(PersonId);
                     borrower.New = false;
                 }
-                catch (DoesNotExistException e) { ViewBag.error = e.Message; }
-                catch (DataAccessException e) { ViewBag.error = e.Message; }
+                catch (DoesNotExistException e) { errors.Add(e.Message); }
+                catch (DataAccessException e) { errors.Add(e.Message); }
             }
 
-            setBorrowerViewLists(borrower);
+            string err = setBorrowerViewLists(borrower);
+
+            if (err != null)
+                errors.Add(err);
+
+            if (errors.Count > 0)
+                ViewBag.error = errors;
+
             return View(borrower);
         }
 
         [HttpPost]
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
-        public ActionResult Borrower(BorrowerViewModel borrower)
+        public ActionResult Borrower(BorrowerViewModel borrower, string password, string passwordRetry)
         {
             var errors = new List<string>();
+            string err;
+
+            if (password != null)
+            {
+                if (password == passwordRetry)
+                {
+                    borrower.Account.Password = password;
+                }
+                else
+                {
+                    err = setBorrowerViewLists(borrower);
+                    if (err != null)
+                        errors.Add(err);
+
+                    if (errors.Count > 0)
+                        ViewBag.error = errors;
+                    // TODO Error message on passwords not equal
+                    return View(borrower);
+                }
+            }
 
             try
             {
@@ -242,8 +271,8 @@ namespace Bibblan.Controllers
                 errors.Add(e.Message);
             }
 
-            string err = setBorrowerViewLists(borrower);
-            if (err != "")
+            err = setBorrowerViewLists(borrower);
+            if (err != null)
                 errors.Add(err);
 
             if (errors.Count > 0)
@@ -265,7 +294,7 @@ namespace Bibblan.Controllers
                 return e.Message;
             }
 
-            return "";
+            return null;
         }
 
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]

@@ -14,17 +14,9 @@ namespace Bibblan.Controllers
 {
     public class SearchController : Controller
     {
-        // Update or add borrower
+        [RequireLogin(RequiredRole = AccountHelper.Role.Admin)]
         public ActionResult Borrower(string search)
         {
-            if(!AccountHelper.HasAccess(this.Session, AccountHelper.Role.Admin))
-            {
-                if(Request.UrlReferrer != null)
-                    return Redirect(Request.UrlReferrer.ToString());
-                else
-                    return RedirectToAction("Index", "Home");
-            }
-
             if (search != null)
             {
                 try { ViewBag.result = BorrowerServices.SearchBorrowers(search); }
@@ -34,44 +26,26 @@ namespace Bibblan.Controllers
             return View();
         }
         
-
-        //
-        // POST: /Search/
-        /*
-        [HttpPost]
-        public ActionResult Author(SearchAuthorViewModel model)
-        {
-            ViewBag.result = new ResultViewModel(model.getAuthor());
-            return View(model);
-        }
-        */
-        //
-        // GET: /Search/
-        /*
-        public ActionResult Author(SearchAuthorViewModel model)
-        {
-            if (ViewHelper.isQueryMapped(model, Request.QueryString))
-                ViewBag.result = new ResultViewModel(model.getAuthor());
-            else
-                ViewBag.result = null;
-
-            return View(model);
-        }
-        */
         public ActionResult Book(string search)
         {
             if (search == null)
                 ViewBag.result = null;
             else
             {
-                List<BookViewModel> model;
-                model = BookServices.SearchBooks(search);
-                ViewBag.result = model;
+                try
+                {
+                    ViewBag.result = BookServices.SearchBooks(search);
+
+                    if (AccountHelper.HasAccess(this.Session, AccountHelper.Role.Admin))
+                        ViewBag.isAdmin = true;
+                    else
+                        ViewBag.isAdmin = false;
+                }
+                catch(DataAccessException e)
+                {
+                    ViewBag.error = e.Message;
+                }
             }
-            if (AccountHelper.HasAccess(this.Session, AccountHelper.Role.Admin))
-                ViewBag.isAdmin = true;
-            else
-                ViewBag.isAdmin = false;
 
             return View();
         }
@@ -94,13 +68,5 @@ namespace Bibblan.Controllers
 
             return View();
         }
-        /*
-        [HttpPost]
-        public ActionResult Book(SearchBookViewModel model)
-        {
-            ViewBag.result = new ResultViewModel(model.getBook());
-            return View(model);
-        }
-        */
     }
 }
