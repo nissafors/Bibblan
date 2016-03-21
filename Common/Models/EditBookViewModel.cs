@@ -7,8 +7,8 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Common.Models
 {
-    // Used by:
-    // * /Edit/Book (as main viewmodel)
+    /// <summary>
+    /// View model for /Edit/Book.</summary>
     public class EditBookViewModel
     {
         // Properties
