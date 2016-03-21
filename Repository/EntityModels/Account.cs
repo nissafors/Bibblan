@@ -26,6 +26,17 @@ namespace Repository.EntityModels
         public string Salt { get; set; }
         public int RoleId { get; set; }
 
+        public static bool GetAccounts(out List<Account> accounts, int roleId)
+        {
+            accounts = new List<Account>();
+            foreach(var a in accountMockups)
+            {
+                if (a.RoleId == roleId || roleId == -1)
+                    accounts.Add(a);
+            }
+            return true;
+        }
+
         // TODO: Refactor get from sql
         public static bool GetAccount(out Account account, string username, string password)
         {
@@ -33,6 +44,21 @@ namespace Repository.EntityModels
             foreach(var a in accountMockups)
             {
                 if(a.Username == username && a.Password == password)
+                {
+                    account = a;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // In Repo Do NOT return password
+        public static bool GetAccount(out Account account, string username)
+        {
+            account = null;
+            foreach (var a in accountMockups)
+            {
+                if (a.Username == username)
                 {
                     account = a;
                     return true;
