@@ -142,17 +142,45 @@ namespace Repository.EntityModels
 
         public static bool GetUserRole(string username, out UserRole role)
         {
+            var command = new SqlCommand("SELECT ACCOUNT.RoleId, USER_ROLES.Role FROM ACCOUNT, USER_ROLES WHERE Username = @Username AND ACCOUNT.RoleId = USER_ROLES.RoleId");
+            command.Parameters.AddWithValue("@Username", username);
             role = null;
-            foreach (var a in accountMockups)
+            try
             {
-                if (a.Username == username)
+                using (SqlConnection connection = HelperFunctions.GetConnection())
                 {
-                    UserRole.getRole(out role, a.RoleId);
-                    return true;
+                    connection.Open();
+                    using (command)
+                    {
+                        command.Connection = connection;
+                        using (SqlDataReader myReader = command.ExecuteReader())
+                        {
+                            if (myReader != null)
+                            {
+                                while(myReader.Read())
+                                {
+                                    var id = Convert.ToInt32(myReader["ACCOUNT.RoleId"]);
+                                    var roledesc = Convert.ToString(myReader["USER_ROLES.Role"]);
+                                    role = new UserRole() {Id = id, Role = roledesc};
+                                    return true;
+                                }
+                                    
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                return false;
             }
             return false;
         }
+            
         // Number of iterations to do the keystretch
         private const int PBKDFITERATIONS = 10000;
         //B per salt
