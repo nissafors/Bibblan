@@ -1,0 +1,48 @@
+﻿@{
+    ViewBag.Title = "Widget";
+}
+
+<div class="row">
+    <div class="col-md-4">
+
+        <!-- A widget for searching books in the library. -->
+        <div id="bibblan-widget">
+            <h3>Bibblan</h3>
+            <form>
+                <div class="form-group">
+                    <label>Titel/Författare/ISBN</label>
+                    <input class="form-control" type="text" />
+                </div>
+                <button class="btn btn-block btn-primary" id="bibblan-find">Sök</button>
+            </form>
+            <table class="table hidden">
+                <thead>
+                    <tr>
+                        <th>Titel</th>
+                        <th>Författare</th>
+                    </tr>
+                </thead>
+                <tbody>
+                </tbody>
+            </table>
+            <script>
+                function bibblanCallback(data) {
+                    console.log(data);
+                }
+
+                $(document).ready(function () {
+                    $('#bibblan-find').click(function () {
+                        $.ajax({
+                            type: "GET",
+                            url: "/api/widget/assembler?callback=bibblanCallback",
+                            contentType: "text/javascript"
+                        });
+                    });
+                });
+            </script>
+        </div>
+        <!-- widget/ -->
+
+    </div>
+</div>
+

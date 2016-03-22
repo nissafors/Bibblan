@@ -6,6 +6,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.Http;
+using WebApiContrib.Formatting.Jsonp;
 
 namespace Bibblan
 {
@@ -23,7 +24,10 @@ namespace Bibblan
                     routeTemplate: "api/{controller}/{title}",
                     defaults: new { title = RouteParameter.Optional }
                 );
+
+                config.AddJsonpFormatter();
             });
+
 
             // Configure
             AreaRegistration.RegisterAllAreas();

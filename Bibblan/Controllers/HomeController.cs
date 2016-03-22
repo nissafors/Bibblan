@@ -18,5 +18,14 @@ namespace Bibblan.Controllers
 
             return View();
         }
+
+        /// <summary>
+        /// GET: /Home/Widget. Demopage for the searchwidget.
+        /// </summary>
+        /// <returns></returns>
+        public ActionResult Widget()
+        {
+            return View();
+        }
     }
 }

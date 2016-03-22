@@ -1,12 +1,11 @@
-﻿using System;
+﻿using Common.Models;
+using Services.Exceptions;
+using Services.Services;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
-using Services.Services;
-using Services.Exceptions;
-using Common.Models;
 
 namespace Bibblan.Controllers
 {
