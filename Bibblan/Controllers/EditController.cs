@@ -266,9 +266,11 @@ namespace Bibblan.Controllers
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
         public ActionResult Delete(string Type, string Id)
         {
-            Type = Type.ToLower();
+
+            
             try
             {
+                Type = Type.ToLower();
                 switch (Type)
                 {
                     case "borrower":
@@ -305,6 +307,8 @@ namespace Bibblan.Controllers
                         return RedirectToAction("Book", new { isbn });
 
                     case "account":
+                        if (AccountHelper.GetUserName(Session) == Id)
+                            throw new DeleteException("Kan inte ta bort inloggad användare");
                         AccountServices.Delete(new AccountViewModel() { Username = Id });
                         return RedirectToAction("Account");
 
@@ -389,34 +393,29 @@ namespace Bibblan.Controllers
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
         public ActionResult Account(string username)
         {
-            if(TempData["error"] != null)
-                ViewBag.error = TempData["error"];
-                try 
-                {
-                    ViewBag.accounts = AccountServices.GetAccounts((int)AccountHelper.Role.Admin);
-                }
-                catch (DataAccessException e)
-                {
-                    ViewBag.error = e.Message;
-                    ViewBag.accounts = new List<AccountViewModel>();
-
-                }
-
+            getAccountList();
+            
             if(username != null)
             {
+                if(AccountHelper.GetUserName(Session) == username)
+                    ViewBag.currentUser = true;
             try
             {
-                    AccountServices.AccountExists(username);
+                if (AccountServices.AccountExists(username))
+                {
+                    ViewBag.userExists = true;
+                    var boo = true;
+                }
+                    
+                
             }
-                catch (DataAccessException e)
+            catch (DataAccessException e)
             {
                     ViewBag.error = e.Message;
-                return View();
             }
-                return View(new AccountViewModel() { Username = username });
+                
             }
-
-            return View();
+            return View(new AccountViewModel() { Username = username });
         }
 
         [HttpPost]
@@ -425,15 +424,31 @@ namespace Bibblan.Controllers
         {
             try
             {
-                AccountServices.Upsert(model);
+                if(
+                    model.NewPassword != null &&
+                    model.Username.Length > 0 &&
+                    model.NewPassword == model.NewPasswordAgain &&
+                    model.NewPassword.Length >= AccountHelper.MIN_PASSWORD_LENGTH
+                   )
+                {
+                    AccountServices.Upsert(model);
+                    ViewBag.userExists = true;
+                }
+                else
+                {
+                    if (model.NewPassword != null && model.NewPassword.Length < AccountHelper.MIN_PASSWORD_LENGTH)
+                        ViewBag.errorMessage = "Minst " + AccountHelper.MIN_PASSWORD_LENGTH + " tecken";
+                    else
+                        ViewBag.errorMessage = "Kunde inte skapa användare kontrollera att alla fält är ifyllda!";
+                }
+                    
             }
             catch (DataAccessException e)
             {
-                TempData["error"] = e.Message;
-                return RedirectToAction("Account");
+                ViewBag["error"] = e.Message;
             }
-
-            return RedirectToAction("Account");
+            getAccountList();
+            return View(model);
         }
 
         /// <summary>
@@ -531,6 +546,23 @@ namespace Bibblan.Controllers
                 return e.Message;
             }
             return null;
+        }
+
+        /// <summary>
+        /// Fill ViewBag.accounts with a list of Account viewmodels
+        /// </summary>
+        /// <returns></returns>
+        private void getAccountList()
+        {
+            try
+            {
+                ViewBag.accounts = AccountServices.GetAccounts((int)AccountHelper.Role.Admin);
+            }
+            catch (DataAccessException e)
+            {
+                ViewBag.error = e.Message;
+                ViewBag.accounts = new List<AccountViewModel>();
+            }
         }
     }
 }

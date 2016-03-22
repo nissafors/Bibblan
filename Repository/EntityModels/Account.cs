@@ -135,7 +135,7 @@ namespace Repository.EntityModels
             command.Parameters.AddWithValue("@Username", username);
 
             var ret = getAccounts(out accounts, command);
-            exists = accounts != null;
+            exists = accounts.Count > 0;
 
             return ret;
         }
@@ -159,8 +159,8 @@ namespace Repository.EntityModels
                             {
                                 while(myReader.Read())
                                 {
-                                    var id = Convert.ToInt32(myReader["ACCOUNT.RoleId"]);
-                                    var roledesc = Convert.ToString(myReader["USER_ROLES.Role"]);
+                                    var id = Convert.ToInt32(myReader["RoleId"]);
+                                    var roledesc = Convert.ToString(myReader["Role"]);
                                     role = new UserRole() {Id = id, Role = roledesc};
                                     return true;
                                 }

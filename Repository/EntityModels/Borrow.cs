@@ -40,7 +40,7 @@ namespace Repository.EntityModels
         /// <returns>Returns true if no errors occured.</returns>
         public static bool GetActiveBorrows(out List<Borrow> borrowList, string personId)
         {
-            SqlCommand command = new SqlCommand("SELECT * from BORROW WHERE PersonId = @PersonId AND ReturnDate = NULL");
+            SqlCommand command = new SqlCommand("SELECT * from BORROW WHERE PersonId = @PersonId AND ReturnDate IS NULL");
             command.Parameters.AddWithValue("@PersonId", personId);
 
             return getBorrows(out borrowList, command);

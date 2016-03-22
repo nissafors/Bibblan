@@ -24,6 +24,8 @@ namespace Bibblan.Helpers
         private const string SESSION_ROLE_KEY = "role";
         private const string SESSION_RETRIES_KEY = "retries";
         private const string SESSION_RETRY_DELAY_KEY = "delay";
+
+        public const int MIN_PASSWORD_LENGTH = 4;
         /// <summary>
         /// Returns a true if the user has the the given role, if force is true it checks the role against the database instead
         /// </summary>

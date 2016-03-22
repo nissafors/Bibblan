@@ -1,17 +1,17 @@
 ﻿@model Common.Models.AccountViewModel
 @{
-    ViewBag.Title = "Lägg Administratör";
+    ViewBag.Title = "Administartörer";
 }
 
 <div class="page-header">
-    <h1>Redigera Administratör</h1>
+    <h1>Redigera Administratörer</h1>
 </div>
 
 @using (Html.BeginForm())
 {
        <div class="form-group">
-            @Html.LabelFor(m => Model.Username, "Användarnamn")
-            @if(Model == null)
+            @Html.LabelFor(m => Model.Username)
+            @if (ViewBag.userExists == null)
             {
                 @Html.TextBoxFor(m => Model.Username, new { @class = "form-control"})
             }
@@ -32,10 +32,10 @@
     <div class="form-group">
         <div class="row">
             <div class="col-md-6">
-                <input type="submit" class="btn btn-block btn-primary" value="Lägg till" />
+                <input type="submit" class="btn btn-block btn-primary" value="@(ViewBag.userExists == null ? "Lägg till" : "Redigera")"/>
             </div>
             <div class="col-md-6">
-                @if(Model == null)
+                @if(ViewBag.userExists == null || ViewBag.currentUser != null)
                 {
                     <a href="#" class="btn btn-block btn-danger disabled">Ta bort</a>
                 }
@@ -44,7 +44,16 @@
                      <a href=@("/Edit/Delete/Account/" + Model.Username) class="btn btn-block btn-danger">Ta bort</a>
                 }
             </div>
+
         </div>
+        @if (ViewBag.userExists != null)
+        {
+            <a href=@("/Edit/Account/") class = "btn btn-block btn-success">Lägg till ny administratör</a>
+        }
+        @if(ViewBag.errorMessage != null)
+        {
+            <p class="text-danger">@ViewBag.errorMessage</p>
+        } 
     </div>
     <hr />
         <table class="table table-striped">
