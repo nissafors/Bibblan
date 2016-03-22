@@ -142,7 +142,7 @@ namespace Repository.EntityModels
 
         public static bool GetUserRole(string username, out UserRole role)
         {
-            var command = new SqlCommand("SELECT ACCOUNT.RoleId, USER_ROLES.Role FROM ACCOUNT, USER_ROLES WHERE Username = @Username AND ACCOUNT.RoleId = USER_ROLES.RoleId");
+            var command = new SqlCommand("SELECT ACCOUNT.RoleId, USER_ROLES.Role FROM ACCOUNT INNER JOIN USER_ROLES ON ACCOUNT.RoleId = USER_ROLES.RoleId WHERE Username = @Username");
             command.Parameters.AddWithValue("@Username", username);
             role = null;
             try

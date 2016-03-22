@@ -55,7 +55,7 @@ namespace Services.Services
             if (activeOnly)
                 result = Borrow.GetActiveBorrows(out borrows, personId);
             else
-                result = Borrow.GetBorrows(out borrows, personId)
+                result = Borrow.GetBorrows(out borrows, personId);
 
             if (result)
             {
