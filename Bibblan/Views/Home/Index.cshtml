@@ -1,19 +1,10 @@
 ﻿@{
-    ViewBag.Title = "Widget";
+    ViewBag.Title = "Hem";
 }
 
-<div class="row">
-    <div class="col-md-4">
-        <div id="bibblan-widget">
-            <h3>Bibblan</h3>
-            <form>
-                <div class="form-group">
-                    <label>Sök bok</label>
-                    <input class="form-control" type="text" />
-                </div>
-                <button class="btn btn-block btn-primary"></button>
-            </form>
-        </div>
-    </div>
+<div class="jumbotron">
+    <h1>Bibblan</h1>
+    <p class="lead">Världens snyggaste bibbla.</p>
 </div>
 
+@Html.ActionLink("Sök efter bok", "Book", "Search", null, new { @class = "btn btn-block btn-lg btn-primary" })
