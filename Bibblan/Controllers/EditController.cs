@@ -247,7 +247,15 @@ namespace Bibblan.Controllers
         public ActionResult Renew(BorrowViewModel borrowViewModel)
         {
             BorrowServices.Renew(borrowViewModel);
-            return Redirect(Request.UrlReferrer.ToString());
+
+            if (Request.UrlReferrer != null)
+            {
+                return Redirect(Request.UrlReferrer.ToString());
+            }
+            else
+            {
+                return RedirectToAction("Index", "Home");
+            }
         }
 
         /// <summary>
