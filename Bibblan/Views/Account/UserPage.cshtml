@@ -1,11 +1,10 @@
 ﻿@model Common.Models.BorrowerViewModel
 @{
-   ViewBag.Title = @Model.FirstName;
+   ViewBag.Title = "Mina lån";
 }
-<h1>@(Model.FirstName + " " + Model.LastName)</h1>
 <h2>Mina lån</h2>
 
-@if(Model.Borrows.Count > 0)
+@if(ViewBag.Borrows != null && ViewBag.Borrows.Count > 0)
 { 
     <table class="table table-striped">
         <thead>
@@ -17,23 +16,13 @@
             </tr>
         </thead>
         <tbody>
-            @foreach (var borrow in Model.Borrows)
+            @foreach (var borrow in ViewBag.Borrows)
             {
                 <tr>
                     <td>@borrow.Title</td>
                     <td>@borrow.BorrowDate.ToShortDateString()</td>
                     <td>@borrow.ToBeReturnedDate.ToShortDateString()</td>
                     <td>@Html.ActionLink("Förnya", "Renew", (object)borrow, new { @class = "form-control btn btn-block btn-primary" })
-    @*
-         @Html.ActionLink("Förnya", "Renew", new
-        {
-            Barcode = borrow.Barcode,
-            PersonId = borrow.PersonId,
-            BorrowDate = borrow.BorrowDate,
-            ToBeReturnedDate = borrow.ToBeReturnedDate,
-            ReturnDate = borrow.ReturnDate
-        }, new { @class = "form-control btn btn-block btn-primary" })
-    *@
                     </td>
                 </tr>
             }
