@@ -113,8 +113,10 @@ namespace Repository.EntityModels
             var ret = getAccounts(out accounts, command);
 
             account = null;
-            if (ret)
+            if (ret && accounts.Count > 0)
                 account = accounts[0];
+            else
+                return false;
 
             // Check password
             if (makeHash(password, account.Salt) == account.Password)
@@ -200,9 +202,11 @@ namespace Repository.EntityModels
                             {
                                 while(myReader.Read())
                                 {
-                                    string password = myReader["Password"] == null ? null : Convert.ToString(myReader["Password"]);
-                                    string salt = myReader["Salt"] == null ? null : Convert.ToString(myReader["Salt"]);
-                                    string borrowerId = myReader["BorrowerId"] == null ? null : Convert.ToString(myReader["BorrowerId"]);
+                                    var fields = HelperFunctions.hasFields(myReader,new string[] {"Password", "Salt", "BorrowerId"});
+
+                                    string password = !fields.Contains("Password") ? null : Convert.ToString(myReader["Password"]);
+                                    string salt = !fields.Contains("Salt") ? null : Convert.ToString(myReader["Salt"]);
+                                    string borrowerId = !fields.Contains("BorrowerId") ? null : Convert.ToString(myReader["BorrowerId"]);
                                     accounts.Add(new Account()
                                     {
                                         Username = Convert.ToString(myReader["Username"]),

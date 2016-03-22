@@ -60,5 +60,29 @@ namespace Repository.EntityModels
 
             return modifiedSearch;
         }
+
+        /// <summary>
+        /// Returns a list of strings that contains matches for strings in wanted fields
+        /// </summary>
+        /// <param name="reader"></param>
+        /// <param name="wantedFields"></param>
+        /// <returns></returns>
+        public static List<string> hasFields(SqlDataReader reader, string[] wantedFields)
+        {
+            var fields = new List<string>();
+            for (int i = 0; i < reader.FieldCount; i++)
+            {
+                foreach(var field in wantedFields)
+                {
+                    if (reader.GetName(i) == field)
+                    {
+                        fields.Add(field);
+                        break;
+                    }
+                        
+                }
+            }
+            return fields;
+        }
     }
 }
