@@ -113,8 +113,10 @@ namespace Repository.EntityModels
             var ret = getAccounts(out accounts, command);
 
             account = null;
-            if (ret)
+            if (ret && accounts.Count > 0)
                 account = accounts[0];
+            else
+                return false;
 
             // Check password
             if (makeHash(password, account.Salt) == account.Password)

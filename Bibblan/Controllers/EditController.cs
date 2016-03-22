@@ -255,7 +255,7 @@ namespace Bibblan.Controllers
         /// </summary>
         /// <remarks>
         /// Different Type:s redirects to different places. Most uses /home/index as a fallback on error.</remarks>
-        //[RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
+        [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
         public ActionResult Delete(string Type, string Id)
         {
             Type = Type.ToLower();
@@ -378,6 +378,7 @@ namespace Bibblan.Controllers
             return View(authorViewModel);
         }
 
+        [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
         public ActionResult Account(string username)
         {
             if(TempData["error"] != null)
@@ -411,6 +412,7 @@ namespace Bibblan.Controllers
         }
 
         [HttpPost]
+        [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
         public ActionResult Account(AccountViewModel model)
         {
             try
@@ -520,7 +522,6 @@ namespace Bibblan.Controllers
                 borrower.Category = new SelectList(new List<SelectListItem>());
                 return e.Message;
             }
-
             return null;
         }
     }
