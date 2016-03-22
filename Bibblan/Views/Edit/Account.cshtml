@@ -35,7 +35,7 @@
                 <input type="submit" class="btn btn-block btn-primary" value="@(ViewBag.userExists == null ? "Lägg till" : "Redigera")"/>
             </div>
             <div class="col-md-6">
-                @if(ViewBag.userExists == null)
+                @if(ViewBag.userExists == null || ViewBag.currentUser != null)
                 {
                     <a href="#" class="btn btn-block btn-danger disabled">Ta bort</a>
                 }

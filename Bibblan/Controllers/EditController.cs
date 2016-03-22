@@ -307,6 +307,8 @@ namespace Bibblan.Controllers
                         return RedirectToAction("Book", new { isbn });
 
                     case "account":
+                        if (AccountHelper.GetUserName(Session) == Id)
+                            throw new DeleteException("Kan inte ta bort inloggad användare");
                         AccountServices.Delete(new AccountViewModel() { Username = Id });
                         return RedirectToAction("Account");
 
