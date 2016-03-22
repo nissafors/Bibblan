@@ -19,7 +19,7 @@ namespace Repository.EntityModels
         /// Get all Borrow:s matching either Barcode or PersonId.
         /// </summary>
         /// <param name="borrowList">A List of Borrow:s. Will be initialized to a new instance.
-        /// May be empty after eecution if no records were found.</param>
+        /// May be empty after execution if no records were found.</param>
         /// <param name="searchParameter">Barcode or PersonId as a string.</param>
         /// <returns>Returns true if no errors occured.</returns>
         public static bool GetBorrows(out List<Borrow> borrowList, string searchParameter)
@@ -27,6 +27,21 @@ namespace Repository.EntityModels
             SqlCommand command = new SqlCommand("SELECT * from BORROW WHERE Barcode = @Barcode OR PersonId = @PersonId");
             command.Parameters.AddWithValue("@Barcode", searchParameter);
             command.Parameters.AddWithValue("@PersonId", searchParameter);
+
+            return getBorrows(out borrowList, command);
+        }
+
+        /// <summary>
+        /// Get all Borrow:s for borrower with personId that have not been returned
+        /// </summary>
+        /// <param name="borrowList">A List of Borrow:s. Will be initialized to a new instance.
+        /// May be empty after execution if no records were found.</param>
+        /// <param name="personId">The PersonId of the borrower.</param>
+        /// <returns>Returns true if no errors occured.</returns>
+        public static bool GetActiveBorrows(out List<Borrow> borrowList, string personId)
+        {
+            SqlCommand command = new SqlCommand("SELECT * from BORROW WHERE PersonId = @PersonId AND ReturnDate = NULL");
+            command.Parameters.AddWithValue("@PersonId", personId);
 
             return getBorrows(out borrowList, command);
         }

@@ -113,8 +113,10 @@ namespace Repository.EntityModels
             var ret = getAccounts(out accounts, command);
 
             account = null;
-            if (ret)
+            if (ret && accounts.Count > 0)
                 account = accounts[0];
+            else
+                return false;
 
             // Check password
             if (makeHash(password, account.Salt) == account.Password)
@@ -140,17 +142,45 @@ namespace Repository.EntityModels
 
         public static bool GetUserRole(string username, out UserRole role)
         {
+            var command = new SqlCommand("SELECT ACCOUNT.RoleId, USER_ROLES.Role FROM ACCOUNT INNER JOIN USER_ROLES ON ACCOUNT.RoleId = USER_ROLES.RoleId WHERE Username = @Username");
+            command.Parameters.AddWithValue("@Username", username);
             role = null;
-            foreach (var a in accountMockups)
+            try
             {
-                if (a.Username == username)
+                using (SqlConnection connection = HelperFunctions.GetConnection())
                 {
-                    UserRole.getRole(out role, a.RoleId);
-                    return true;
+                    connection.Open();
+                    using (command)
+                    {
+                        command.Connection = connection;
+                        using (SqlDataReader myReader = command.ExecuteReader())
+                        {
+                            if (myReader != null)
+                            {
+                                while(myReader.Read())
+                                {
+                                    var id = Convert.ToInt32(myReader["ACCOUNT.RoleId"]);
+                                    var roledesc = Convert.ToString(myReader["USER_ROLES.Role"]);
+                                    role = new UserRole() {Id = id, Role = roledesc};
+                                    return true;
+                                }
+                                    
+                            }
+                            else
+                            {
+                                return false;
+                            }
+                        }
+                    }
                 }
+            }
+            catch (Exception)
+            {
+                return false;
             }
             return false;
         }
+            
         // Number of iterations to do the keystretch
         private const int PBKDFITERATIONS = 10000;
         //B per salt
@@ -200,9 +230,11 @@ namespace Repository.EntityModels
                             {
                                 while(myReader.Read())
                                 {
-                                    string password = myReader["Password"] == null ? null : Convert.ToString(myReader["Password"]);
-                                    string salt = myReader["Salt"] == null ? null : Convert.ToString(myReader["Salt"]);
-                                    string borrowerId = myReader["BorrowerId"] == null ? null : Convert.ToString(myReader["BorrowerId"]);
+                                    var fields = HelperFunctions.hasFields(myReader,new string[] {"Password", "Salt", "BorrowerId"});
+
+                                    string password = !fields.Contains("Password") ? null : Convert.ToString(myReader["Password"]);
+                                    string salt = !fields.Contains("Salt") ? null : Convert.ToString(myReader["Salt"]);
+                                    string borrowerId = !fields.Contains("BorrowerId") ? null : Convert.ToString(myReader["BorrowerId"]);
                                     accounts.Add(new Account()
                                     {
                                         Username = Convert.ToString(myReader["Username"]),

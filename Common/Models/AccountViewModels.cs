@@ -12,15 +12,12 @@ namespace Common.Models
     public class AccountViewModel
     {
         [Display(Name = "Användarnamn")]
-        [Required]
         public string Username { get; set; }
         
         [Display(Name = "Lösenord")]
-        [Required]
         public string Password { get; set; }
         
         [Display(Name = "Nytt Lösenord")]
-        [Required]
         public string NewPassword { get; set; }
 
         // System.ComponentModel.DataAnnotations.CompareAttribute should be used instead of

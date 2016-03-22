@@ -98,7 +98,10 @@ namespace Bibblan.Controllers
         [RequireLogin(RequiredRole = AccountHelper.Role.User, ForceCheck=true)]
         public ActionResult UserPage()
         {
-            return View();
+            string username = AccountHelper.GetUserName(this.Session);
+            BorrowerViewModel viewModel = BorrowerServices.GetBorrower(username);
+            viewModel.Borrows = BorrowServices.GetBorrows(username, true);
+            return View(viewModel);
         }
     }
 }

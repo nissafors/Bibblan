@@ -42,14 +42,22 @@ namespace Services.Services
         /// Get a persons loans.
         /// </summary>
         /// <param name="personId">The id of the person.</param>
+        /// <param name="activeOnly">Wether to get only the currently active loans</param>
         /// <returns>Returns a List of BorrowViewModels:s.</returns>
         /// <exception cref="Services.Exceptions.DataAccessException">
         /// Thrown when an error occurs in the data access layer.</exception>
-        public static List<BorrowViewModel> GetBorrows(string personId)
+        public static List<BorrowViewModel> GetBorrows(string personId, bool activeOnly = false)
         {
             List<Borrow> borrows;
             var borrowvms = new List<BorrowViewModel>();
-            if (Borrow.GetBorrows(out borrows, personId))
+            bool result = false;
+
+            if (activeOnly)
+                result = Borrow.GetActiveBorrows(out borrows, personId);
+            else
+                result = Borrow.GetBorrows(out borrows, personId);
+
+            if (result)
             {
                 foreach(var borrow in borrows)
                 {
