@@ -11,38 +11,69 @@
             <form>
                 <div class="form-group">
                     <label>Titel/Författare/ISBN</label>
-                    <input class="form-control" type="text" />
+                    <input class="form-control" type="text" id="bibblan-input" />
                 </div>
                 <button class="btn btn-block btn-primary" id="bibblan-find">Sök</button>
             </form>
-            <table class="table hidden">
+            <table class="table">
                 <thead>
                     <tr>
                         <th>Titel</th>
                         <th>Författare</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="bibblan-tbody">
+                    <tr>
+                        <td colspan="2">[Inga träffar.]</td>
+                    </tr>
                 </tbody>
             </table>
-            <script>
-                function bibblanCallback(data) {
-                    console.log(data);
-                }
-
-                $(document).ready(function () {
-                    $('#bibblan-find').click(function () {
-                        $.ajax({
-                            type: "GET",
-                            url: "/api/widget/assembler?callback=bibblanCallback",
-                            contentType: "text/javascript"
-                        });
-                    });
-                });
-            </script>
         </div>
         <!-- widget/ -->
 
     </div>
 </div>
 
+@section scripts {
+<script>
+    /**
+     * This script accompanies the Bibblan widget. Requires jQuery.
+     */
+    $(document).ready(function () {
+        $('#bibblan-find').click(function (e) {
+            e.preventDefault();
+
+            var searchString = $('#bibblan-input').val();
+
+            $.ajax({
+                type: "GET",
+                url: "/api/widget/" + searchString,
+                jsonpCallback: "callback",
+                dataType: "jsonp",
+                contentType: "text/javascript",
+                success: function (json) {
+                    var tbody = $('#bibblan-tbody');
+                    tbody.empty();
+                    if (json.length == 0)
+                        tbody.append($('<td colspan="2">[Inga träffar.]</td>'));
+                    else {
+                        for (var i = 0; i < json.length; i++) {
+                            var authors = "";
+                            for (var j = 0; j < json[i].Value.length; j++) {
+                                if (j > 0)
+                                    authors += ", ";
+                                authors += json[i].Value[j] + " ";
+                            }
+
+                            tbody.append($('<tr><td>' + json[i].Key + '</td><td>' + authors + '</td></tr>'));
+                        }
+                    }
+                },
+                error: function (e) {
+                    console.log(e.message);
+                }
+            });
+        });
+    });
+</script>
+}
