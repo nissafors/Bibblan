@@ -23,16 +23,7 @@ namespace Bibblan.Filters
             var session = context.HttpContext.Session;
             if(!AccountHelper.HasAccess(session, RequiredRole, ForceCheck))
             {
-                string url;
-                if(context.HttpContext.Request.UrlReferrer != null)
-                {
-                    url = context.HttpContext.Request.UrlReferrer.ToString();
-                    
-                }
-                else
-                {
-                    url = "~/Account/Login";
-                }
+                var url = "~/Account/Login";
                 context.Result = new RedirectResult(url);
             }
 
