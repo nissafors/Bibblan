@@ -15,10 +15,11 @@ namespace Bibblan.Controllers
         /// <summary>
         /// GET: /Book/Details/{isbn}. Show details about a book.
         /// </summary>
-        [OutputCache(Duration=60)]
+        [OutputCache(Duration=600)]
         public ActionResult Details(string isbn = "")
         {
             BookViewModel viewModel = null;
+
             try
             {
                 if (AccountHelper.HasAccess(this.Session, AccountHelper.Role.Admin))

@@ -212,6 +212,8 @@ namespace Bibblan.Controllers
         {
             var errors = new List<string>();
             string err;
+            borrower.Account.Username = borrower.PersonId;
+
             if (ModelState.IsValid)
             {
                 try
@@ -399,19 +401,19 @@ namespace Bibblan.Controllers
         public ActionResult Account(string username)
         {
             getAccountList();
-            
+            AccountViewModel viewModel = new AccountViewModel() { Username = username, New = true };
+
             if(username != null)
             {
                 if(AccountHelper.GetUserName(Session) == username)
                     ViewBag.currentUser = true;
+
                 try
                 {
                     if (AccountServices.AccountExists(username))
                     {
-                        ViewBag.userExists = true;
+                        viewModel.New = false;
                     }
-                        
-                    
                 }
                 catch (DataAccessException e)
                 {
@@ -419,7 +421,7 @@ namespace Bibblan.Controllers
                 }
                 
             }
-            return View(new AccountViewModel() { Username = username });
+            return View(viewModel);
         }
 
         [HttpPost]
@@ -431,22 +433,11 @@ namespace Bibblan.Controllers
 
             try
             {
-                if(
-                    model.NewPassword != null &&
-                    model.Username.Length > 0 &&
-                    model.NewPassword == model.NewPasswordAgain &&
-                    model.NewPassword.Length >= AccountHelper.MIN_PASSWORD_LENGTH
-                   )
+                if (model.NewPassword != null &&
+                    ModelState.IsValid)
                 {
                     AccountServices.Upsert(model);
-                    ViewBag.userExists = true;
-                }
-                else
-                {
-                    if (model.NewPassword != null && model.NewPassword.Length < AccountHelper.MIN_PASSWORD_LENGTH)
-                        ViewBag.errorMessage = "Minst " + AccountHelper.MIN_PASSWORD_LENGTH + " tecken";
-                    else
-                        ViewBag.errorMessage = "Kunde inte skapa användare kontrollera att alla fält är ifyllda!";
+                    model.New = false;
                 }
                     
             }
@@ -454,6 +445,7 @@ namespace Bibblan.Controllers
             {
                 ViewBag["error"] = e.Message;
             }
+
             getAccountList();
             return View(model);
         }
