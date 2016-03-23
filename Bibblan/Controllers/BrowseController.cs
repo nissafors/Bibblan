@@ -8,6 +8,7 @@ using Common.Models;
 using Bibblan.Helpers;
 using Services.Exceptions;
 
+
 namespace Bibblan.Controllers
 {
     public class BrowseController : Controller
@@ -15,6 +16,7 @@ namespace Bibblan.Controllers
         /// <summary>
         /// GET: /Browse/Title. List all books in the database.
         /// </summary>
+        [OutputCache(Duration=600)]
         public ActionResult Title()
         {
             checkAccess();
@@ -34,6 +36,7 @@ namespace Bibblan.Controllers
         /// <summary>
         /// GET: /Browse/Author. List all authors in the database.
         /// </summary>
+        [OutputCache(Duration=600)]
         public ActionResult Author()
         {
             checkAccess();

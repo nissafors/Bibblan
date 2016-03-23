@@ -266,8 +266,6 @@ namespace Bibblan.Controllers
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
         public ActionResult Delete(string Type, string Id)
         {
-
-            
             try
             {
                 Type = Type.ToLower();
@@ -319,9 +317,16 @@ namespace Bibblan.Controllers
             }
             catch (DeleteException e)
             {
-                string authorId = Id;
                 TempData["error"] = e.Message;
-                return RedirectToAction("Author", new { authorId });
+
+                if (Request.UrlReferrer != null)
+                {
+                    return Redirect(Request.UrlReferrer.ToString());
+                }
+                else
+                {
+                    return RedirectToAction("Index", "Home");
+                }
             }
             catch (DoesNotExistException e)
             {
@@ -399,20 +404,19 @@ namespace Bibblan.Controllers
             {
                 if(AccountHelper.GetUserName(Session) == username)
                     ViewBag.currentUser = true;
-            try
-            {
-                if (AccountServices.AccountExists(username))
+                try
                 {
-                    ViewBag.userExists = true;
-                    var boo = true;
-                }
+                    if (AccountServices.AccountExists(username))
+                    {
+                        ViewBag.userExists = true;
+                    }
+                        
                     
-                
-            }
-            catch (DataAccessException e)
-            {
-                    ViewBag.error = e.Message;
-            }
+                }
+                catch (DataAccessException e)
+                {
+                        ViewBag.error = e.Message;
+                }
                 
             }
             return View(new AccountViewModel() { Username = username });
@@ -422,6 +426,9 @@ namespace Bibblan.Controllers
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
         public ActionResult Account(AccountViewModel model)
         {
+            if (AccountHelper.GetUserName(Session) == model.Username)
+                ViewBag.currentUser = true;
+
             try
             {
                 if(
