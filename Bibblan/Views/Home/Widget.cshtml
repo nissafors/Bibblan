@@ -6,6 +6,12 @@
     <div class="col-md-4">
 
         <!-- A widget for searching books in the library. -->
+        <style>
+            #bibblan-results {
+                max-height: 200px;
+                overflow: auto;
+            }
+        </style>
         <div id="bibblan-widget">
             <h3>Bibblan</h3>
             <form>
@@ -15,19 +21,21 @@
                 </div>
                 <button class="btn btn-block btn-primary" id="bibblan-find">Sök</button>
             </form>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Titel</th>
-                        <th>Författare</th>
-                    </tr>
-                </thead>
-                <tbody id="bibblan-tbody">
-                    <tr>
-                        <td colspan="2">[Inga träffar.]</td>
-                    </tr>
-                </tbody>
-            </table>
+            <div id="bibblan-results">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Titel</th>
+                            <th>Författare</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bibblan-tbody">
+                        <tr>
+                            <td colspan="2">[Ingen sökning gjord.]</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
         <!-- widget/ -->
 
@@ -35,6 +43,7 @@
 </div>
 
 @section scripts {
+<!-- <script src="//code.jquery.com/jquery-1.12.0.min.js"></script> -->
 <script>
     /**
      * This script accompanies the Bibblan widget. Requires jQuery.
@@ -42,6 +51,10 @@
     $(document).ready(function () {
         $('#bibblan-find').click(function (e) {
             e.preventDefault();
+
+            var tbody = $('#bibblan-tbody');
+            tbody.empty();
+            tbody.append($('<tr><td colspan="2">[Söker...]</td></tr>'));
 
             var searchString = $('#bibblan-input').val();
 
@@ -52,25 +65,25 @@
                 dataType: "jsonp",
                 contentType: "text/javascript",
                 success: function (json) {
-                    var tbody = $('#bibblan-tbody');
                     tbody.empty();
-                    if (json.length == 0)
-                        tbody.append($('<td colspan="2">[Inga träffar.]</td>'));
+                    if (json == null || json.length == 0)
+                        tbody.append($('<tr><td colspan="2">[Inga träffar.]</td></tr>'));
                     else {
                         for (var i = 0; i < json.length; i++) {
                             var authors = "";
-                            for (var j = 0; j < json[i].Value.length; j++) {
+                            for (var j = 0; j < json[i].Authors.length; j++) {
                                 if (j > 0)
                                     authors += ", ";
-                                authors += json[i].Value[j] + " ";
+                                authors += json[i].Authors[j] + " ";
                             }
 
-                            tbody.append($('<tr><td>' + json[i].Key + '</td><td>' + authors + '</td></tr>'));
+                            tbody.append($('<tr><td><a href="/Book/Details/' + json[i].ISBN + '">' + json[i].Title + '</a></td><td>' + authors + '</td></tr>'));
                         }
                     }
                 },
                 error: function (e) {
-                    console.log(e.message);
+                    tbody.empty();
+                    tbody.append($('<tr><td colspan="2">[Ett fel uppstod.]</td></tr>'));
                 }
             });
         });

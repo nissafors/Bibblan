@@ -9,6 +9,20 @@ using System.Web.Http;
 
 namespace Bibblan.Controllers
 {
+    public class WidgetResponseRow
+    {
+        public WidgetResponseRow(string isbn, string title, List<string> authors)
+        {
+            ISBN = isbn;
+            Title = title;
+            Authors = authors;
+        }
+
+        public string ISBN { get; set; }
+        public string Title { get; set; }
+        public List<string> Authors { get; set; }
+    }
+
     public class WidgetController : ApiController
     {
         /// <summary>
@@ -25,7 +39,8 @@ namespace Bibblan.Controllers
         public HttpResponseMessage Get(string title)
         {
             var bvms = new List<BookViewModel>();
-            var results = new List<KeyValuePair<string, List<string>>>(); // Title, authors
+            //var results = new List<KeyValuePair<string, List<string>>>(); // Title, authors
+            var results = new List<WidgetResponseRow>();
 
             if (title != "")
             {
@@ -34,12 +49,13 @@ namespace Bibblan.Controllers
                     bvms = BookServices.SearchBooks(title);
                     foreach (var bvm in bvms)
                     {
-                        results.Add(new KeyValuePair<string, List<string>>(bvm.Title, bvm.Authors.Select(i => i.Value).ToList()));
+                        results.Add(new WidgetResponseRow(bvm.ISBN, bvm.Title, bvm.Authors.Select(i => i.Value).ToList()));
                     }
                 }
                 catch (DataAccessException)
                 {
-                    results.Add(new KeyValuePair<string, List<string>>("Får inte kontakt med bibblan just nu. Försök igen senare.", null));
+                    var error = new HttpError("Data access error.");
+                    return Request.CreateResponse(HttpStatusCode.InternalServerError, error);
                 }
             }
 
