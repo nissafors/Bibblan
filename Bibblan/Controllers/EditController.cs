@@ -212,7 +212,6 @@ namespace Bibblan.Controllers
         {
             var errors = new List<string>();
             string err;
-            borrower.Account.Username = borrower.PersonId;
 
             if (ModelState.IsValid)
             {
@@ -434,6 +433,7 @@ namespace Bibblan.Controllers
             try
             {
                 if (model.NewPassword != null &&
+                    model.Username != null &&
                     ModelState.IsValid)
                 {
                     AccountServices.Upsert(model);

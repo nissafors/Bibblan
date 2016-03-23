@@ -12,7 +12,6 @@ namespace Common.Models
     public class AccountViewModel
     {
         [Display(Name = "Användarnamn")]
-        [Required(ErrorMessage="Måste ha ett användarnamn")]
         public string Username { get; set; }
         
         [Display(Name = "Lösenord")]
