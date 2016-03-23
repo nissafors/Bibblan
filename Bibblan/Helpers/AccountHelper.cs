@@ -72,12 +72,21 @@ namespace Bibblan.Helpers
             return session[SESSION_USERNAME_KEY] != null;
         }
 
+        /// <summary>
+        /// Returns the session username
+        /// </summary>
+        /// <param name="session"></param>
+        /// <returns></returns>
         public static string GetUserName(HttpSessionStateBase session)
         {
             return session[SESSION_USERNAME_KEY].ToString();
         }
 
-
+        /// <summary>
+        /// Check if the session has had login retries
+        /// </summary>
+        /// <param name="session"></param>
+        /// <returns></returns>
         public static bool CanRetryLogin(HttpSessionStateBase session)
         {
             bool returner = false;
@@ -107,11 +116,21 @@ namespace Bibblan.Helpers
             return returner;
         }
 
+        /// <summary>
+        /// Get the delay the Session has until it can retry a login
+        /// </summary>
+        /// <param name="session"></param>
+        /// <returns></returns>
         public static DateTime GetDelay(HttpSessionStateBase session)
         {
             return (DateTime)session[SESSION_RETRY_DELAY_KEY];
         }
 
+        /// <summary>
+        /// Get retries the Session has until the client has to wait for RETRY_DELAY seconds
+        /// </summary>
+        /// <param name="session"></param>
+        /// <returns></returns>
         public static int GetRetriesLeft(HttpSessionStateBase session)
         {
             int tries;
