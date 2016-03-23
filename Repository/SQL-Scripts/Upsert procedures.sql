@@ -33,37 +33,23 @@ GO
 		
 /*----------------------*/
 	
-CREATE PROCEDURE UpsertAuthor
-	@Aid int,
-	@FirstName nvarchar(50),
-	@LastName nvarchar(255),
-	@BirthYear nvarchar(10)
-AS
-	UPDATE AUTHOR
-	SET FirstName = @FirstName, LastName = @LastName, BirthYear = @BirthYear
-	WHERE Aid = @Aid
-	IF @@ROWCOUNT = 0
-		INSERT INTO AUTHOR(Aid, FirstName, LastName, BirthYear)
-		VALUES(@Aid, @FirstName, @LastName, @BirthYear);
-GO
-		
-/*----------------------*/
-	
 CREATE PROCEDURE UpsertBorrower
 	@PersonId nvarchar(13),
 	@FirstName nvarchar(50),
 	@LastName nvarchar(50),
-	@Address nvarchar(50),
+	@Adress nvarchar(50),
 	@Telno nvarchar(50),
 	@CategoryId int
 AS
 	UPDATE BORROWER
-	SET FirstName = @FirstName, LastName = @LastName, Address = @Address, TelNo = @TelNo, CategoryId = @CategoryId
+	SET FirstName = @FirstName, LastName = @LastName, Adress = @Adress, TelNo = @TelNo, CategoryId = @CategoryId
 	WHERE PersonId = @PersonId
 	IF @@ROWCOUNT = 0
-		INSERT INTO BORROWER(PersonId, FirstName, LastName, Address, TelNo, CategoryId)
-		VALUES(@PersonId, @FirstName, @LastName, @Address, @TelNo, @CategoryId);
+		INSERT INTO BORROWER(PersonId, FirstName, LastName, Adress, TelNo, CategoryId)
+		VALUES(@PersonId, @FirstName, @LastName, @Adress, @TelNo, @CategoryId);
 GO
+
+/*----------------------*/
 
 CREATE PROCEDURE UpsertAccount
 	@Username nvarchar(50),
@@ -73,7 +59,7 @@ CREATE PROCEDURE UpsertAccount
 	@BorrowerId nvarchar(13)
 AS
 	UPDATE ACCOUNT
-	SET Username = @Username, Password = @Password, RoleId = @RoleId, Salt = @Salt
+	SET Password = @Password, RoleId = @RoleId, Salt = @Salt
 	WHERE Username = @Username
 	IF @@ROWCOUNT = 0
 		INSERT INTO ACCOUNT(Username, Password, Salt, RoleId, BorrowerId)
