@@ -17,7 +17,7 @@ namespace Repository.EntityModels
         {
             var username = DBCredentials.Username;
             var password = DBCredentials.Password;
-            return new SqlConnection(@"Data Source=libinstance.ckprwkebxagl.eu-central-1.rds.amazonaws.com;Initial Catalog=BibblanDatabase;User ID=" + username + ";Password=" + password);
+            return new SqlConnection(@"Data Source=bibblan.database.windows.net;Initial Catalog=BibblanDatabase;Integrated Security=False;User ID=" + username + ";Password=" + password + ";Connect Timeout=60;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
         }
 
         /// <summary>

@@ -54,7 +54,7 @@ namespace Services.Services
 
             if (!Author.GetAuthor(out author, authorId))
                 throw new DataAccessException("Oväntat fel när författaren skulle hämtas.");
-            if (author != null)
+            if (author == null)
                 throw new DoesNotExistException("En författare med angivet id kunde inte hittas.");
 
             return Mapper.Map<AuthorViewModel>(author);

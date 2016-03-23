@@ -92,7 +92,7 @@ namespace Repository.EntityModels
                                         Aid = Convert.ToInt32(myReader["Aid"]),
                                         FirstName = Convert.ToString(myReader["FirstName"]),
                                         LastName = Convert.ToString(myReader["LastName"]),
-                                        BirthYear = Convert.ToString(myReader["Birthyear"])
+                                        BirthYear = Convert.ToString(myReader["BirthYear"])
                                     });
                                 }
                             }
@@ -104,7 +104,7 @@ namespace Repository.EntityModels
                     }
                 }
             }
-            catch(Exception)
+            catch(Exception e)
             {
                 return false;
             }

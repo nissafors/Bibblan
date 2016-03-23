@@ -9,33 +9,38 @@
 
 @using (Html.BeginForm())
 {
+    @Html.HiddenFor(m => m.New)
        <div class="form-group">
             @Html.LabelFor(m => Model.Username)
-            @if (ViewBag.userExists == null)
+           @*
+            @if (Model.New)
             {
                 @Html.TextBoxFor(m => Model.Username, new { @class = "form-control"})
             }
             else
             {
                 @Html.TextBoxFor(m => Model.Username, new { @class = "form-control", @readonly = "readonly"})
-            }
+            }*@
+           @Html.TextBoxFor(m => m.Username, Model.New ? (object)new { @class = "form-control" } : new { @class = "form-control", @readonly = "readonly" })
+           @Html.ValidationMessageFor(m => m.Username, null, new { @class = "text-danger" })
         </div>
     <div class="form-group">
         @Html.LabelFor(m => Model.NewPassword)
         @Html.TextBoxFor(m => Model.NewPassword, new {@type = "password", @class = "form-control" })
+        @Html.ValidationMessageFor(m => m.NewPassword, null, new { @class = "text-danger" })
     </div>
         <div class="form-group">
         @Html.LabelFor(m => Model.NewPasswordAgain)
         @Html.TextBoxFor(m => Model.NewPasswordAgain, new {@type = "password", @class = "form-control" })
-        @Html.ValidationMessageFor(m => Model.NewPasswordAgain)
+        @Html.ValidationMessageFor(m => Model.NewPasswordAgain, null, new { @class = "text-danger" })
     </div>
     <div class="form-group">
         <div class="row">
             <div class="col-md-6">
-                <input type="submit" class="btn btn-block btn-primary" value="@(ViewBag.userExists == null ? "Lägg till" : "Redigera")"/>
+                <input type="submit" class="btn btn-block btn-primary" value="@(Model.New ? "Lägg till" : "Redigera")"/>
             </div>
             <div class="col-md-6">
-                @if(ViewBag.userExists == null || ViewBag.currentUser != null)
+                @if (Model.New || ViewBag.currentUser != null)
                 {
                     <a href="#" class="btn btn-block btn-danger disabled">Ta bort</a>
                 }
@@ -46,14 +51,10 @@
             </div>
 
         </div>
-        @if (ViewBag.userExists != null)
+        @if (!Model.New)
         {
             <a href=@("/Edit/Account/") class = "btn btn-block btn-success">Lägg till ny administratör</a>
         }
-        @if(ViewBag.errorMessage != null)
-        {
-            <p class="text-danger">@ViewBag.errorMessage</p>
-        } 
     </div>
     <hr />
         <table class="table table-striped">
