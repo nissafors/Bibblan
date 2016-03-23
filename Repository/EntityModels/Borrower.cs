@@ -96,7 +96,7 @@ namespace Repository.EntityModels
                                         PersonId = Convert.ToString(myReader["PersonId"]),
                                         FirstName = Convert.ToString(myReader["FirstName"]),
                                         LastName = Convert.ToString(myReader["LastName"]),
-                                        Adress = Convert.ToString(myReader["Address"]),
+                                        Adress = Convert.ToString(myReader["Adress"]),
                                         CategoryId = Convert.ToInt32(myReader["CategoryId"]),
                                         TelNo = Convert.ToString(myReader["TelNo"])
                                     });
