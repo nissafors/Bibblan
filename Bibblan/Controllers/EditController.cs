@@ -243,7 +243,7 @@ namespace Bibblan.Controllers
             return View(borrower);
         }
 
-        [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
+        [RequireLogin(RequiredRole = AccountHelper.Role.User, ForceCheck = true)]
         public ActionResult Renew(BorrowViewModel borrowViewModel)
         {
             BorrowServices.Renew(borrowViewModel);

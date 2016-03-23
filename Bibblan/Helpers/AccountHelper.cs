@@ -36,9 +36,9 @@ namespace Bibblan.Helpers
                 return false;
             // Check against session or database
             if (force)
-                return UpdateSessionRole(session) == role;
+                return (int)UpdateSessionRole(session) <= (int)role;
             else
-                return (Role) (session[SESSION_ROLE_KEY]) == role;
+                return (int) (session[SESSION_ROLE_KEY]) <= (int)role;
         }
         /// <summary>
         /// Does a setup of the session indexes that are used by controllers to check if a Client has logged in
