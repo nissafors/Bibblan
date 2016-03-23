@@ -100,7 +100,6 @@ namespace Bibblan.Controllers
         {
             try
             {
-                //BorrowerViewModel viewModel = BorrowerServices.GetBorrower(AccountHelper.GetUserName(this.Session));
                 ViewBag.Borrows = BorrowServices.GetBorrows(AccountHelper.GetUserName(this.Session), true);
             }
             catch(DataAccessException e)
