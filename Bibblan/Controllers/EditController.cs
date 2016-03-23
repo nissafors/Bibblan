@@ -395,6 +395,10 @@ namespace Bibblan.Controllers
             return View(authorViewModel);
         }
 
+        /// <summary>
+        /// Does an upsert for an Account if the user session has admin privligies
+        /// GET: /Edit/Account
+        /// </summary>
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
         public ActionResult Account(string username)
         {
@@ -422,6 +426,10 @@ namespace Bibblan.Controllers
             return View(viewModel);
         }
 
+        /// <summary>
+        /// Does an upsert for an Account if the user has session privligies
+        /// POST: /Edit/Account
+        /// </summary>
         [HttpPost]
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
         public ActionResult Account(AccountViewModel model)
