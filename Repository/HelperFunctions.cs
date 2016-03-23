@@ -67,7 +67,7 @@ namespace Repository.EntityModels
         /// <param name="reader"></param>
         /// <param name="wantedFields"></param>
         /// <returns></returns>
-        public static List<string> hasFields(SqlDataReader reader, string[] wantedFields)
+        public static List<string> hasFields(SqlDataReader reader, List<string> wantedFields)
         {
             var fields = new List<string>();
             for (int i = 0; i < reader.FieldCount; i++)
@@ -77,6 +77,7 @@ namespace Repository.EntityModels
                     if (reader.GetName(i) == field)
                     {
                         fields.Add(field);
+                        wantedFields.Remove(field);
                         break;
                     }
                         

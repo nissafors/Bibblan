@@ -230,7 +230,7 @@ namespace Repository.EntityModels
                             {
                                 while(myReader.Read())
                                 {
-                                    var fields = HelperFunctions.hasFields(myReader,new string[] {"Password", "Salt", "BorrowerId"});
+                                    var fields = HelperFunctions.hasFields(myReader,new List<string> {"Password", "Salt", "BorrowerId"});
 
                                     string password = !fields.Contains("Password") ? null : Convert.ToString(myReader["Password"]);
                                     string salt = !fields.Contains("Salt") ? null : Convert.ToString(myReader["Salt"]);
