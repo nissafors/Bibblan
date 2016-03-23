@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Common.Models
 {
@@ -12,7 +7,6 @@ namespace Common.Models
     public class AccountViewModel
     {
         [Display(Name = "Användarnamn")]
-        [Required(ErrorMessage="Måste ha ett användarnamn")]
         public string Username { get; set; }
         
         [Display(Name = "Lösenord")]

@@ -12,15 +12,6 @@
     @Html.HiddenFor(m => m.New)
        <div class="form-group">
             @Html.LabelFor(m => Model.Username)
-           @*
-            @if (Model.New)
-            {
-                @Html.TextBoxFor(m => Model.Username, new { @class = "form-control"})
-            }
-            else
-            {
-                @Html.TextBoxFor(m => Model.Username, new { @class = "form-control", @readonly = "readonly"})
-            }*@
            @Html.TextBoxFor(m => m.Username, Model.New ? (object)new { @class = "form-control" } : new { @class = "form-control", @readonly = "readonly" })
            @Html.ValidationMessageFor(m => m.Username, null, new { @class = "text-danger" })
         </div>

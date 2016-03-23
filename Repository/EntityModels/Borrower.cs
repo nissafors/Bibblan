@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Data.SqlClient;
 
 namespace Repository.EntityModels
@@ -169,6 +166,13 @@ namespace Repository.EntityModels
                 {
                     connection.Open();
                     using (SqlCommand command = new SqlCommand("DELETE FROM BORROW WHERE PersonId = @PersonId", connection))
+                    {
+                        command.Parameters.AddWithValue("@PersonId", PersonId);
+
+                        command.ExecuteNonQuery();
+                    }
+
+                    using (SqlCommand command = new SqlCommand("DELETE FROM ACCOUNT WHERE BorrowerId = @PersonId", connection))
                     {
                         command.Parameters.AddWithValue("@PersonId", PersonId);
 

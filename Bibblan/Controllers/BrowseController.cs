@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.Mvc;
-using Services.Services;
+﻿using Bibblan.Helpers;
 using Common.Models;
-using Bibblan.Helpers;
 using Services.Exceptions;
+using Services.Services;
+using System.Collections.Generic;
+using System.Web.Mvc;
 
 
 namespace Bibblan.Controllers
@@ -16,7 +13,6 @@ namespace Bibblan.Controllers
         /// <summary>
         /// GET: /Browse/Title. List all books in the database.
         /// </summary>
-        [OutputCache(Duration=600)]
         public ActionResult Title()
         {
             checkAccess();
@@ -36,7 +32,6 @@ namespace Bibblan.Controllers
         /// <summary>
         /// GET: /Browse/Author. List all authors in the database.
         /// </summary>
-        [OutputCache(Duration=600)]
         public ActionResult Author()
         {
             checkAccess();

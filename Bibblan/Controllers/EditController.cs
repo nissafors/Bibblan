@@ -2,16 +2,15 @@
 // * Revise Renew
 // * Account
 
+using Bibblan.Filters;
+using Bibblan.Helpers;
+using Common.Models;
+using Services.Exceptions;
+using Services.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using Common.Models;
-using Services.Services;
-using Bibblan.Helpers;
-using Bibblan.Filters;
-using Services.Exceptions;
 
 namespace Bibblan.Controllers
 {
@@ -212,7 +211,6 @@ namespace Bibblan.Controllers
         {
             var errors = new List<string>();
             string err;
-            borrower.Account.Username = borrower.PersonId;
 
             if (ModelState.IsValid)
             {
@@ -442,6 +440,7 @@ namespace Bibblan.Controllers
             try
             {
                 if (model.NewPassword != null &&
+                    model.Username != null &&
                     ModelState.IsValid)
                 {
                     AccountServices.Upsert(model);
