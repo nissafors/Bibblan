@@ -1,10 +1,6 @@
-﻿using Common.Models;
-using Services.Services;
+﻿using Services.Services;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
-using System.Web.Mvc;
 
 namespace Bibblan.Helpers
 {

@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AutoMapper;
 using Common.Models;
 using Repository.EntityModels;
-using AutoMapper;
 using Services.Exceptions;
+using System;
+using System.Collections.Generic;
 
 namespace Services.Services
 {
