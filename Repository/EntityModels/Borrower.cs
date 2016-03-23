@@ -175,6 +175,13 @@ namespace Repository.EntityModels
                         command.ExecuteNonQuery();
                     }
 
+                    using (SqlCommand command = new SqlCommand("DELETE FROM ACCOUNT WHERE BorrowerId = @PersonId", connection))
+                    {
+                        command.Parameters.AddWithValue("@PersonId", PersonId);
+
+                        command.ExecuteNonQuery();
+                    }
+
                     using (SqlCommand command = new SqlCommand("DELETE FROM BORROWER WHERE PersonId = @PersonId", connection))
                     {
                         command.Parameters.AddWithValue("@PersonId", PersonId);
