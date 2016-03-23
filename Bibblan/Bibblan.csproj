@@ -246,6 +246,7 @@
     <Content Include="Views\Edit\Account.cshtml" />
     <Content Include="Views\Edit\ChangePassword.cshtml" />
     <Content Include="Views\Home\Widget.cshtml" />
+    <Content Include="Views\Home\PageNotFound.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
