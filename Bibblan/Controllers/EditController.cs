@@ -254,7 +254,12 @@ namespace Bibblan.Controllers
         [RequireLogin(RequiredRole = AccountHelper.Role.User, ForceCheck = true)]
         public ActionResult Renew(BorrowViewModel borrowViewModel)
         {
-            BorrowServices.Renew(borrowViewModel);
+            try
+            { 
+                BorrowServices.Renew(borrowViewModel);
+            }
+            catch(DoesNotExistException e) { ViewBag.error = e.Message; }
+            catch(DataAccessException e) { ViewBag.error = e.Message; }
 
             if (Request.UrlReferrer != null)
             {
@@ -488,14 +493,29 @@ namespace Bibblan.Controllers
         [RequireLogin(RequiredRole = AccountHelper.Role.User, ForceCheck = true)]
         public ActionResult ChangePassword(AccountViewModel viewModel)
         {
-            // TODO: Service for changepassword?
+            bool succesfull = false;
             try
             {
-                AccountServices.Upsert(viewModel);
+                if (ModelState.IsValid)
+                {
+                    AccountServices.Login(viewModel); //Throws error if login failed
+                    AccountServices.Upsert(viewModel);
+                    succesfull = true;
+                }
             }
-            catch (DoesNotExistException e) { ViewBag.error = e.Message; }
+            catch (DataAccessException)
+            {
+                ViewBag.error = "Kunde inte byta lösenord";
+            }
+            catch (DoesNotExistException)
+            {
+                ViewBag.error = "Kunde inte byta lösenord";
+            }
 
-            return View(viewModel);
+            if(succesfull)
+                return RedirectToAction("UserPage", "AccountController");
+            else
+                return View(viewModel);
         }
 
         /// <summary>
