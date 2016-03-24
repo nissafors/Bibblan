@@ -2,7 +2,6 @@
 
 namespace Common.Models
 {
-    // Not used by any view. Is it a viewmodel then?
     public class BorrowViewModel
     {
         public string Title { get; set; }
@@ -11,5 +10,18 @@ namespace Common.Models
         public DateTime BorrowDate { get; set; }
         public DateTime ToBeReturnedDate { get; set; }
         public DateTime ReturnDate { get; set; }
+
+        public String BorrowDateString
+        {
+            get { return BorrowDate.ToString("yyyy-MM-dd"); }
+        }
+        public String ToBeReturnedDateString
+        {
+            get { return BorrowDate.ToString("yyyy-MM-dd"); }
+        }
+        public String ReturnDateString
+        {
+            get { return BorrowDate.ToString("yyyy-MM-dd"); }
+        }
     }
 }

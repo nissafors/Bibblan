@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Configuration;
 
 namespace Repository.EntityModels
 {
@@ -12,9 +13,7 @@ namespace Repository.EntityModels
         /// <returns>Returns a SqlConnection object.</returns>
         public static SqlConnection GetConnection()
         {
-            var username = DBCredentials.Username;
-            var password = DBCredentials.Password;
-            return new SqlConnection(@"Data Source=bibblan.database.windows.net;Initial Catalog=BibblanDatabase;Integrated Security=False;User ID=" + username + ";Password=" + password + ";Connect Timeout=60;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+            return new SqlConnection(ConfigurationManager.ConnectionStrings["DefaultConnection"].ConnectionString);
         }
 
         /// <summary>

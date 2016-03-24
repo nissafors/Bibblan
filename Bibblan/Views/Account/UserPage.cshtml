@@ -20,8 +20,8 @@
             {
                 <tr>
                     <td>@borrow.Title</td>
-                    <td>@borrow.BorrowDate.ToShortDateString()</td>
-                    <td>@borrow.ToBeReturnedDate.ToShortDateString()</td>
+                    <td>@borrow.BorrowDateString</td>
+                    <td>@borrow.ToBeReturnedDateString</td>
                     <td>@Html.ActionLink("Förnya", "Renew", (object)borrow, new { @class = "form-control btn btn-block btn-primary" })
                     </td>
                 </tr>

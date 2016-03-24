@@ -31,6 +31,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -39,7 +40,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DBCredentials.cs" />
     <Compile Include="EntityModels\Account.cs" />
     <Compile Include="EntityModels\Author.cs" />
     <Compile Include="EntityModels\Book.cs" />
@@ -68,9 +68,6 @@
     <Content Include="SQL-Scripts\CreateDB.sql" />
     <Content Include="SQL-Scripts\DataLoad.sql" />
     <Content Include="SQL-Scripts\Upsert procedures.sql" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="DBCredentials.cs.example" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
