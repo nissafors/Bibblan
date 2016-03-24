@@ -17,11 +17,9 @@ namespace Common.Models
         [MinLength(4, ErrorMessage = "Måste ha minst 4 tecken")]
         public string NewPassword { get; set; }
 
-        // System.ComponentModel.DataAnnotations.CompareAttribute should be used instead of
-        // System.Web.Mvc.Compare but it contains known bug in our version
         [Display(Name = "Lösenord igen")]
         [MinLength(4, ErrorMessage = "Måste ha minst 4 tecken")]
-        [System.Web.Mvc.Compare("NewPassword", ErrorMessage="Lösenorden är inte lika.")]
+        [CompareAttribute("NewPassword", ErrorMessage="Lösenorden är inte lika.")]
         public string NewPasswordAgain { get; set; }
         
         public int RoleId { get; set; }
