@@ -386,13 +386,15 @@ namespace Bibblan.Controllers
             catch (DataAccessException e)
             {
                 ViewBag.error = e.Message;
+                return View(authorViewModel);
             }
             catch (DoesNotExistException e)
             {
                 ViewBag.error = e.Message;
+                return View(authorViewModel);
             }
-            
-            return View(authorViewModel);
+
+            return RedirectToAction("Author", "Search");
         }
 
         /// <summary>
