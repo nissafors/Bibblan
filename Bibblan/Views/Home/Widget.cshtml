@@ -48,6 +48,8 @@
     /**
      * This script accompanies the Bibblan widget. Requires jQuery.
      */
+    var baseURL = 'http://bibblan.azurewebsites.net';
+
     $(document).ready(function () {
         $('#bibblan-find').click(function (e) {
             e.preventDefault();
@@ -60,7 +62,7 @@
 
             $.ajax({
                 type: "GET",
-                url: "/api/widget/" + searchString,
+                url: baseURL + "/api/widget/" + searchString,
                 jsonpCallback: "callback",
                 dataType: "jsonp",
                 contentType: "text/javascript",
@@ -77,7 +79,7 @@
                                 authors += json[i].Authors[j] + " ";
                             }
 
-                            tbody.append($('<tr><td><a href="/Book/Details/' + json[i].ISBN + '">' + json[i].Title + '</a></td><td>' + authors + '</td></tr>'));
+                            tbody.append($('<tr><td><a href="' + baseURL + '/Book/Details/' + json[i].ISBN + '">' + json[i].Title + '</a></td><td>' + authors + '</td></tr>'));
                         }
                     }
                 },
