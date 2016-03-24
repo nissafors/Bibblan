@@ -56,6 +56,7 @@ namespace Bibblan.Controllers
         public ActionResult Book(EditBookViewModel bookInfo)
         {
             string err = setBookViewLists(bookInfo);
+            bool upsertSuccess = false;
             if (err != null)
                 ViewBag.error = err + "\n";
 
@@ -65,14 +66,17 @@ namespace Bibblan.Controllers
                 {
                     BookServices.Upsert(bookInfo, bookInfo.Update);
                     bookInfo.Update = true;
+                    upsertSuccess = true;
                 }
                 catch (AlreadyExistsException e) { ViewBag.error += e.Message; }
                 catch (DoesNotExistException e) { ViewBag.error += e.Message; }
                 catch (DataAccessException e) { ViewBag.error += e.Message; }
                 catch (Exception) { ViewBag.error += "Oväntat fel."; }
             }
-
-            return View(bookInfo);
+            if(upsertSuccess)
+                return View(bookInfo);
+            else
+                return RedirectToAction("Book", "Search", new { search = bookInfo.ISBN});
         }
 
         /// <summary>
@@ -211,13 +215,14 @@ namespace Bibblan.Controllers
         {
             var errors = new List<string>();
             string err;
-
+            bool upsertSuccess = false;
             if (ModelState.IsValid)
             {
                 try
                 {
                     BorrowerServices.Upsert(borrower);
                     borrower.New = false;
+                    upsertSuccess = true;
                 }
                 catch (AlreadyExistsException e)
                 {
@@ -240,7 +245,10 @@ namespace Bibblan.Controllers
             if (errors.Count > 0)
                 ViewBag.error = errors;
 
-            return View(borrower);
+            if (upsertSuccess)
+                return View(borrower);
+            else
+                return RedirectToAction("Borrower", "Search", new { search = borrower.PersonId });
         }
 
         [RequireLogin(RequiredRole = AccountHelper.Role.User, ForceCheck = true)]
@@ -394,7 +402,7 @@ namespace Bibblan.Controllers
                 return View(authorViewModel);
             }
 
-            return RedirectToAction("Author", "Search");
+            return RedirectToAction("Author", "Search", new {search = authorViewModel.FirstName + " " + authorViewModel.LastName });
         }
 
         /// <summary>
