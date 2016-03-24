@@ -22,7 +22,7 @@
                     <td>@borrow.Title</td>
                     <td>@borrow.BorrowDateString</td>
                     <td>@borrow.ToBeReturnedDateString</td>
-                    <td>@Html.ActionLink("Förnya", "Renew", (object)borrow, new { @class = "form-control btn btn-block btn-primary" })
+                    <td>@Html.ActionLink("Förnya", "Renew","Edit", borrow as object, new { @class = "form-control btn btn-block btn-primary" })
                     </td>
                 </tr>
             }
@@ -33,3 +33,6 @@ else
 {
     <p>Du har inga aktiva lån.</p>
 }
+<div class="row">
+    @Html.ActionLink("Byt lösenord", "ChangePassword", "Edit", null, new { @class = "btn btn-primary" })
+</div>
