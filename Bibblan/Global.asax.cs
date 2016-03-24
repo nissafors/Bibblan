@@ -7,6 +7,8 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using System.Web.Http;
 using WebApiContrib.Formatting.Jsonp;
+using System.Configuration;
+using System.Web.Configuration;
 
 namespace Bibblan
 {

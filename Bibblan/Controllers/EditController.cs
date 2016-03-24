@@ -2,16 +2,15 @@
 // * Revise Renew
 // * Account
 
+using Bibblan.Filters;
+using Bibblan.Helpers;
+using Common.Models;
+using Services.Exceptions;
+using Services.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
-using Common.Models;
-using Services.Services;
-using Bibblan.Helpers;
-using Bibblan.Filters;
-using Services.Exceptions;
 
 namespace Bibblan.Controllers
 {
@@ -244,7 +243,7 @@ namespace Bibblan.Controllers
             return View(borrower);
         }
 
-        [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
+        [RequireLogin(RequiredRole = AccountHelper.Role.User, ForceCheck = true)]
         public ActionResult Renew(BorrowViewModel borrowViewModel)
         {
             BorrowServices.Renew(borrowViewModel);
@@ -396,6 +395,10 @@ namespace Bibblan.Controllers
             return View(authorViewModel);
         }
 
+        /// <summary>
+        /// Does an upsert for an Account if the user session has admin privligies
+        /// GET: /Edit/Account
+        /// </summary>
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
         public ActionResult Account(string username)
         {
@@ -423,6 +426,10 @@ namespace Bibblan.Controllers
             return View(viewModel);
         }
 
+        /// <summary>
+        /// Does an upsert for an Account if the user has session privligies
+        /// POST: /Edit/Account
+        /// </summary>
         [HttpPost]
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
         public ActionResult Account(AccountViewModel model)

@@ -1,24 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.Mvc;
-using Microsoft.AspNet.Identity;
-using Microsoft.AspNet.Identity.EntityFramework;
-using Microsoft.Owin.Security;
-using Common.Models;
-using Services.Services;
+﻿using Bibblan.Filters;
 using Bibblan.Helpers;
-using Bibblan.Filters;
+using Common.Models;
 using Services.Exceptions;
+using Services.Services;
+using System.Web.Mvc;
 
 namespace Bibblan.Controllers
 {
     public class AccountController : Controller
     {
 
+        /// <summary>
+        /// Renders the login window if the client does not have a logged in session
+        /// Otherwise redirects to Account/AdminPage or Account/UserPage depending on user privligies
+        /// GET: Account/Login
+        /// </summary>
         public ActionResult Login()
         {
             if(AccountHelper.IsLoggedIn(this.Session))
@@ -32,9 +28,8 @@ namespace Bibblan.Controllers
         }
         /// <summary>
         /// Takes a AccountViewModel and tries to login
+        /// POST : /Account/Login
         /// </summary>
-        /// <param name="model"></param>
-        /// <returns></returns>
         [HttpPost]
         public ActionResult Login(AccountViewModel model)
         {
@@ -76,7 +71,10 @@ namespace Bibblan.Controllers
             return View();
         }
 
-
+        /// <summary>
+        /// Clears the session for the client & logs out
+        /// GET : /Account/Logout
+        /// </summary>
         public ActionResult Logout()
         {
             AccountHelper.ClearSession(Session);
@@ -86,6 +84,10 @@ namespace Bibblan.Controllers
                 return RedirectToAction("Index", "Home");
         }
 
+        /// <summary>
+        /// Renders the administrator page if client is Logged in & is an admin
+        /// GET : /Account/AdminPage
+        /// </summary>
         [RequireLogin(RequiredRole=AccountHelper.Role.Admin)]
         public ActionResult AdminPage()
         {
@@ -95,6 +97,10 @@ namespace Bibblan.Controllers
             return View();
         }
 
+        /// <summary>
+        /// Renders the user page if client is Logged in & is an normal user
+        /// GET : /Account/UserPage
+        /// </summary>
         [RequireLogin(RequiredRole = AccountHelper.Role.User, ForceCheck=true)]
         public ActionResult UserPage()
         {

@@ -224,14 +224,9 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
-    <Content Include="Views\Account\_ChangePasswordPartial.cshtml" />
-    <Content Include="Views\Account\_RemoveAccountPartial.cshtml" />
-    <Content Include="Views\Account\_SetPasswordPartial.cshtml" />
     <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\Account\Manage.cshtml" />
     <Content Include="Views\Account\UserPage.cshtml" />
     <Content Include="Views\Book\Details.cshtml" />
-    <Content Include="Views\Search\Results.cshtml" />
     <Content Include="Views\Browse\Title.cshtml" />
     <Content Include="Views\Browse\Author.cshtml" />
     <Content Include="Views\Account\AdminPage.cshtml" />
@@ -239,9 +234,7 @@
     <Content Include="Views\Search\Author.cshtml" />
     <Content Include="Views\Search\Book.cshtml" />
     <Content Include="Views\Edit\Borrower.cshtml" />
-    <Content Include="Views\Shared\PartialBorrowerForm.cshtml" />
     <Content Include="Views\Edit\Author.cshtml" />
-    <Content Include="Views\Search\PartialResult.cshtml" />
     <Content Include="Views\Edit\Book.cshtml" />
     <Content Include="Views\Edit\Copy.cshtml" />
     <Content Include="Views\Edit\Account.cshtml" />

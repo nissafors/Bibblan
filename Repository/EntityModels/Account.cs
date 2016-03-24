@@ -1,26 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Security.Cryptography;
 using System.Data.SqlClient;
+using System.Security.Cryptography;
 
 namespace Repository.EntityModels
 {
     public class Account
     {
-         /// <summary>
-        /// Mockups for accounts
-        /// </summary>
-        private static List<Account> accountMockups = new List<Account>()
-        {
-            new Account {Username = "person1", Password = "1234", RoleId = 0}, // Admin
-            new Account {Username = "person2", Password = "1248", RoleId = 0}, // Admin
-            new Account {Username = "Olof", Password = "0kOrv", BorrowerId = "920201-1212", RoleId = 1}, // User
-            new Account {Username = "AnDer s", Password = "00000", BorrowerId = "930801-2727", RoleId = 1} // User
-        };
-
         public string Username { get; set; }
         public string Password { get; set; }
         public string BorrowerId { get; set; }
@@ -65,7 +51,11 @@ namespace Repository.EntityModels
             }
             return true;
         }
-
+        /// <summary>
+        /// Delete an Account from repository
+        /// </summary>
+        /// <param name="account"></param>
+        /// <returns></returns>
         public static bool Delete(Account account)
         {
             try
@@ -90,8 +80,12 @@ namespace Repository.EntityModels
             }
             return true;
         }
-
-        // Get accounts with a specified role if (-1) it means all
+        /// <summary>
+        /// Get accounts with a specified role if (-1) it means all
+        /// </summary>
+        /// <param name="accounts"></param>
+        /// <param name="roleId"></param>
+        /// <returns></returns>
         public static bool GetAccounts(out List<Account> accounts, int roleId)
         {
             SqlCommand command;
@@ -104,7 +98,14 @@ namespace Repository.EntityModels
             return getAccounts(out accounts, command);
         }
 
-        // Try to login
+        /// <summary>
+        /// Selects row with give username & checks if the password hash with the row salt matches
+        /// the password hash in the table
+        /// </summary>
+        /// <param name="account"></param>
+        /// <param name="username"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public static bool GetAccount(out Account account, string username, string password)
         { 
             var accounts = new List<Account>();
@@ -127,7 +128,12 @@ namespace Repository.EntityModels
                 return false;
             }
         }
-
+        /// <summary>
+        /// Check if account exists
+        /// </summary>
+        /// <param name="exists"></param>
+        /// <param name="username"></param>
+        /// <returns></returns>
         public static bool AccountExists(out bool exists, string username)
         {
             var accounts = new List<Account>();
@@ -140,6 +146,12 @@ namespace Repository.EntityModels
             return ret;
         }
 
+        /// <summary>
+        /// Get userrole of a given user
+        /// </summary>
+        /// <param name="username"></param>
+        /// <param name="role"></param>
+        /// <returns></returns>
         public static bool GetUserRole(string username, out UserRole role)
         {
             var command = new SqlCommand("SELECT ACCOUNT.RoleId, USER_ROLES.Role FROM ACCOUNT INNER JOIN USER_ROLES ON ACCOUNT.RoleId = USER_ROLES.RoleId WHERE Username = @Username");
@@ -213,6 +225,12 @@ namespace Repository.EntityModels
             return Convert.ToBase64String(pbkdf2.GetBytes(20));
         }
 
+        /// <summary>
+        /// Helper function that returns accounts from a given SQL-query
+        /// </summary>
+        /// <param name="accounts"></param>
+        /// <param name="command"></param>
+        /// <returns></returns>
         private static bool getAccounts(out List<Account> accounts, SqlCommand command)
         {
             accounts = new List<Account>();
