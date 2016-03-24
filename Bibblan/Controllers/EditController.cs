@@ -436,22 +436,27 @@ namespace Bibblan.Controllers
         {
             if (AccountHelper.GetUserName(Session) == model.Username)
                 ViewBag.currentUser = true;
-
-            try
-            {
-                if (model.NewPassword != null &&
-                    model.Username != null &&
-                    ModelState.IsValid)
+            
+                try
                 {
-                    AccountServices.Upsert(model);
-                    model.New = false;
+                    if (model.NewPassword != null &&
+                        model.Username != null &&
+                        ModelState.IsValid &&
+                        !(AccountServices.AccountExists(model.Username) && model.New))
+                    {
+                        AccountServices.Upsert(model);
+                        model.New = false;
+                    }
+                    else if((AccountServices.AccountExists(model.Username) && model.New))
+                    {
+                        ViewBag.error = "Kan inte lägga lägga till existerande användare";
+                    }
                 }
-                    
-            }
-            catch (DataAccessException e)
-            {
-                ViewBag["error"] = e.Message;
-            }
+                catch (DataAccessException e)
+                {
+                    ViewBag.error = e.Message;
+                }
+
 
             getAccountList();
             return View(model);
