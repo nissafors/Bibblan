@@ -16,5 +16,7 @@ CREATE TABLE [dbo].[ACCOUNT](
 );
 GO
 
-INSERT INTO [dbo].[USER_ROLES] VALUES (0, 'Administratör')
-INSERT INTO [dbo].[USER_ROLES] VALUES (1, 'Låntagare')
+INSERT INTO [dbo].[USER_ROLES] VALUES (0, 'Administratör');
+INSERT INTO [dbo].[USER_ROLES] VALUES (1, 'Låntagare');
+/* Creates a admin account with user name 'admin' and password '1234' */
+INSERT INTO ACCOUNT VALUES ('admin', '9p2YxVJQ8bhYItfpYi/fqVkOIDA=', '5v+8NzCtcBefUIjgkkd0DnTd7Gm2XzYp94oUX11zJ7I=', 0, NULL);
