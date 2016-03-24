@@ -101,7 +101,7 @@ namespace Repository.EntityModels
                     }
                 }
             }
-            catch(Exception e)
+            catch(Exception)
             {
                 return false;
             }

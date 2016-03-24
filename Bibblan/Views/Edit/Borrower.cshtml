@@ -70,6 +70,7 @@
             <div class="form-group">
                 @Html.LabelFor(model => model.Account.NewPassword)
                 @Html.TextBoxFor(model => model.Account.NewPassword, new { @type = "password", @class = "form-control" })
+                @Html.ValidationMessageFor(model => model.Account.NewPassword, null, new { @class = "text-danger" })
             </div>
         </div>
         <div class="col-md-6">
@@ -114,8 +115,8 @@
                 {
                     <tr>
                         <td>@borrow.Barcode</td>
-                        <td>@borrow.BorrowDate.ToShortDateString()</td>
-                        <td>@borrow.ToBeReturnedDate.ToShortDateString()</td>
+                        <td>@borrow.BorrowDateString</td>
+                        <td>@borrow.ToBeReturnedDateString</td>
                         @if (borrow.ReturnDate.Year == 1)
                         {
                             <td>
@@ -131,7 +132,7 @@
                         }
                         else
                         {
-                            <td>@borrow.ReturnDate.ToShortDateString()</td>
+                            <td>@borrow.ReturnDateString</td>
                         }
                     </tr>
                 }

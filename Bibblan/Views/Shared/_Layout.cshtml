@@ -42,18 +42,6 @@
                         {
                             <li>@Html.ActionLink("Mina lån", "UserPage", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
                         }
-                        /*
-                        int role = Convert.ToInt32(Session["roleId"]);
-                        switch(role)
-                        {
-                            case 0:
-                                <li>@Html.ActionLink("Administrera", "AdminPage", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
-                                break;
-                                case 1:
-                                <li>@Html.ActionLink("Mina lån", "UserPage", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
-                                break;
-                        }
-                        */
                         <li>@Html.ActionLink("Logga ut", "Logout", "Account", routeValues: null, htmlAttributes: new { id = "loginLink" })</li>
                     }
                 </ul>
