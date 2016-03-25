@@ -17,11 +17,11 @@ namespace Common.Models
         }
         public String ToBeReturnedDateString
         {
-            get { return BorrowDate.ToString("yyyy-MM-dd"); }
+            get { return ToBeReturnedDate.ToString("yyyy-MM-dd"); }
         }
         public String ReturnDateString
         {
-            get { return BorrowDate.ToString("yyyy-MM-dd"); }
+            get { return ReturnDate.ToString("yyyy-MM-dd"); }
         }
     }
 }

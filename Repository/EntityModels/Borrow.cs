@@ -66,11 +66,11 @@ namespace Repository.EntityModels
                 using (SqlConnection connection = HelperFunctions.GetConnection())
                 {
                     connection.Open();
-                    using (SqlCommand command = new SqlCommand("UPDATE SET ToBeReturnedDate = @ToBeReturnedDate WHERE Barcode = @Barcode AND PersonId = @PersonId", connection))
+                    using (SqlCommand command = new SqlCommand("UPDATE BORROW SET ToBeReturnedDate = @ToBeReturnedDate WHERE Barcode = @Barcode AND PersonId = @PersonId", connection))
                     {
                         command.Parameters.AddWithValue("@Barcode", borrow.Barcode);
                         command.Parameters.AddWithValue("@PersonId", borrow.PersonId);
-                        
+                        command.Parameters.AddWithValue("@ToBeReturnedDate", borrow.ToBeReturnedDate);
                         if(command.ExecuteNonQuery() != 1)
                         {
                             return false;

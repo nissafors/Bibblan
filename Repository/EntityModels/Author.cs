@@ -42,7 +42,7 @@ namespace Repository.EntityModels
         /// <returns></returns>
         static public bool GetAuthors(out List<Author> authorList)
         {
-            return GetAuthors(out authorList, new SqlCommand("SELECT * from AUTHOR"));
+            return GetAuthors(out authorList, new SqlCommand("SELECT * from AUTHOR ORDER BY LastName ASC"));
         }
 
         /// <summary>

@@ -56,6 +56,7 @@ namespace Bibblan.Controllers
         public ActionResult Book(EditBookViewModel bookInfo)
         {
             string err = setBookViewLists(bookInfo);
+            bool upsertSuccess = false;
             if (err != null)
                 ViewBag.error = err + "\n";
 
@@ -65,14 +66,17 @@ namespace Bibblan.Controllers
                 {
                     BookServices.Upsert(bookInfo, bookInfo.Update);
                     bookInfo.Update = true;
+                    upsertSuccess = true;
                 }
                 catch (AlreadyExistsException e) { ViewBag.error += e.Message; }
                 catch (DoesNotExistException e) { ViewBag.error += e.Message; }
                 catch (DataAccessException e) { ViewBag.error += e.Message; }
                 catch (Exception) { ViewBag.error += "Oväntat fel."; }
             }
-
-            return View(bookInfo);
+            if(upsertSuccess)
+                return View(bookInfo);
+            else
+                return RedirectToAction("Book", "Search", new { search = bookInfo.ISBN});
         }
 
         /// <summary>
@@ -211,13 +215,14 @@ namespace Bibblan.Controllers
         {
             var errors = new List<string>();
             string err;
-
+            bool upsertSuccess = false;
             if (ModelState.IsValid)
             {
                 try
                 {
                     BorrowerServices.Upsert(borrower);
                     borrower.New = false;
+                    upsertSuccess = true;
                 }
                 catch (AlreadyExistsException e)
                 {
@@ -240,13 +245,21 @@ namespace Bibblan.Controllers
             if (errors.Count > 0)
                 ViewBag.error = errors;
 
-            return View(borrower);
+            if (upsertSuccess)
+                return View(borrower);
+            else
+                return RedirectToAction("Borrower", "Search", new { search = borrower.PersonId });
         }
 
         [RequireLogin(RequiredRole = AccountHelper.Role.User, ForceCheck = true)]
         public ActionResult Renew(BorrowViewModel borrowViewModel)
         {
-            BorrowServices.Renew(borrowViewModel);
+            try
+            { 
+                BorrowServices.Renew(borrowViewModel);
+            }
+            catch(DoesNotExistException e) { ViewBag.error = e.Message; }
+            catch(DataAccessException e) { ViewBag.error = e.Message; }
 
             if (Request.UrlReferrer != null)
             {
@@ -386,13 +399,15 @@ namespace Bibblan.Controllers
             catch (DataAccessException e)
             {
                 ViewBag.error = e.Message;
+                return View(authorViewModel);
             }
             catch (DoesNotExistException e)
             {
                 ViewBag.error = e.Message;
+                return View(authorViewModel);
             }
-            
-            return View(authorViewModel);
+
+            return RedirectToAction("Author", "Search", new {search = authorViewModel.FirstName + " " + authorViewModel.LastName });
         }
 
         /// <summary>
@@ -436,22 +451,27 @@ namespace Bibblan.Controllers
         {
             if (AccountHelper.GetUserName(Session) == model.Username)
                 ViewBag.currentUser = true;
-
-            try
-            {
-                if (model.NewPassword != null &&
-                    model.Username != null &&
-                    ModelState.IsValid)
+            
+                try
                 {
-                    AccountServices.Upsert(model);
-                    model.New = false;
+                    if (model.NewPassword != null &&
+                        model.Username != null &&
+                        ModelState.IsValid &&
+                        !(AccountServices.AccountExists(model.Username) && model.New))
+                    {
+                        AccountServices.Upsert(model);
+                        model.New = false;
+                    }
+                    else if((AccountServices.AccountExists(model.Username) && model.New))
+                    {
+                        ViewBag.error = "Kan inte lägga lägga till existerande användare";
+                    }
                 }
-                    
-            }
-            catch (DataAccessException e)
-            {
-                ViewBag["error"] = e.Message;
-            }
+                catch (DataAccessException e)
+                {
+                    ViewBag.error = e.Message;
+                }
+
 
             getAccountList();
             return View(model);
@@ -473,14 +493,29 @@ namespace Bibblan.Controllers
         [RequireLogin(RequiredRole = AccountHelper.Role.User, ForceCheck = true)]
         public ActionResult ChangePassword(AccountViewModel viewModel)
         {
-            // TODO: Service for changepassword?
+            bool succesfull = false;
             try
             {
-                AccountServices.Upsert(viewModel);
+                if (ModelState.IsValid)
+                {
+                    AccountServices.Login(viewModel); //Throws error if login failed
+                    AccountServices.Upsert(viewModel);
+                    succesfull = true;
+                }
             }
-            catch (DoesNotExistException e) { ViewBag.error = e.Message; }
+            catch (DataAccessException)
+            {
+                ViewBag.error = "Kunde inte byta lösenord";
+            }
+            catch (DoesNotExistException)
+            {
+                ViewBag.error = "Kunde inte byta lösenord";
+            }
 
-            return View(viewModel);
+            if(succesfull)
+                return RedirectToAction("UserPage", "AccountController");
+            else
+                return View(viewModel);
         }
 
         /// <summary>

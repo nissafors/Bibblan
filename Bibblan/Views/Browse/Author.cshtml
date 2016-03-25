@@ -11,8 +11,7 @@
     <table class="table table-striped">
         <thead>
         <tr>
-            <th>Efternamn</th>
-            <th>Förnamn</th>
+            <th>Namn</th>
             <th>Födelseår</th>
 @if (ViewBag.isAdmin)
 {
@@ -25,8 +24,8 @@
             foreach (var item in ViewBag.authors)
             {
                 <tr>
-                    <td>@item.LastName</td>
-                    <td>@item.FirstName</td>
+                    
+                    <td>@Html.ActionLink((string)item.LastName + " " + (string)item.FirstName, "Book", "Search", new { Search = item.LastName + " " + item.FirstName }, null)</td>
                     <td>@item.BirthYear</td>
                     @if(ViewBag.isAdmin)
                     {
