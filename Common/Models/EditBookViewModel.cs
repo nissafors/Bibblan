@@ -10,6 +10,7 @@ namespace Common.Models
     {
         // Properties
         [Required(ErrorMessage="ISBN krävs")]
+        [MaxLength(15, ErrorMessage="ISBN får max vara 15 tecken.")]
         [Display(Name = "ISBN")]
         public string ISBN { get; set; }
 
@@ -20,12 +21,14 @@ namespace Common.Models
         [Display(Name = "Klassifikation")]
         public int ClassificationId { get; set; }
 
+        [RegularExpression(@"\d{4}", ErrorMessage="Ange ett årtal med fyra siffor")]
         [Display(Name = "Publiceringsår")]
         public string PublicationYear { get; set; }
 
         [Display(Name = "Publiceringsinformation")]
         public string PublicationInfo { get; set; }
 
+        [Range(0, 2147483647, ErrorMessage="Sidantal måste vara ett icke-negativt heltal")]
         [Display(Name = "Sidantal")]
         public int Pages { get; set; }
 
