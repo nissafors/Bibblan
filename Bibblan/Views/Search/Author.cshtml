@@ -25,6 +25,8 @@
 
 @if (ViewBag.result != null)
 {
+    if(ViewBag.listCount > 0)
+    { 
     <table class="table table-striped">
         <thead>
             <tr>
@@ -44,4 +46,9 @@
             }
         </tbody>
     </table>
+    }
+    else
+    {
+        <p>Kunde inte hitta några författare.</p>
+    }
 }

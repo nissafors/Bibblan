@@ -26,6 +26,8 @@
 
 @if (ViewBag.result != null)
 {
+    if (ViewBag.listCount > 0)
+    {
     <table class="table table-striped">
         <thead>
             <tr>
@@ -33,20 +35,21 @@
                 <th>Titel</th>
                 <th>Klassifikation</th>
                 <th>Utgivningsår</th>
-                <th class="col-md-1"></th>
                 <th>Författare</th>
+@if (ViewBag.isAdmin)
+{
                 <th class="col-md-1"></th>
+}
             </tr>
         </thead>
         <tbody>
-            @foreach(var item in ViewBag.result)
-            { 
+            @foreach (var item in ViewBag.result)
+            {
                 <tr>
                     <td>@item.ISBN</td>
                     <td><a href=@("../Book/Details/" + item.ISBN)>@item.Title</a></td>
-                    <td>@item.SignId</td>
+                    <td>@item.Classification</td>
                     <td>@item.PublicationYear</td>
-                    <td class="col-md-1"></td>
                     <td>
                         @foreach (var author in item.Authors)
                         {
@@ -62,4 +65,9 @@
             }
         </tbody>
     </table>
+    }
+    else
+    {
+        <p>Kunde inte hitta några böcker.</p>
+    }
 }

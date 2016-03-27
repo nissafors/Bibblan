@@ -18,7 +18,12 @@ namespace Bibblan.Controllers
         {
             if (search != null)
             {
-                try { ViewBag.result = BorrowerServices.SearchBorrowers(search); }
+                try
+                {
+                    List<BorrowerViewModel> borrowerList = BorrowerServices.SearchBorrowers(search);
+                    ViewBag.result = borrowerList;
+                    ViewBag.listCount = borrowerList.Count;
+                }
                 catch (DataAccessException e) { ViewBag.error = e.Message; }
             }
 
@@ -30,13 +35,13 @@ namespace Bibblan.Controllers
         /// </summary>
         public ActionResult Book(string search)
         {
-            if (search == null)
-                ViewBag.result = null;
-            else
+            if (search != null)
             {
                 try
                 {
-                    ViewBag.result = BookServices.SearchBooks(search);
+                    List<BookViewModel> bookList = BookServices.SearchBooks(search);
+                    ViewBag.result = bookList;
+                    ViewBag.listCount = bookList.Count;
 
                     if (AccountHelper.HasAccess(this.Session, AccountHelper.Role.Admin))
                         ViewBag.isAdmin = true;
@@ -58,15 +63,14 @@ namespace Bibblan.Controllers
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin)]
         public ActionResult Author(string search)
         {
-            if (search == null)
-                ViewBag.result = null;
-            else
+            if (search != null)
             {
-                List<AuthorViewModel> model;
+                
                 try
                 {
-                    model = AuthorServices.SearchAuthors(search);
-                    ViewBag.result = model;
+                    List<AuthorViewModel> authorList = AuthorServices.SearchAuthors(search);
+                    ViewBag.result = authorList;
+                    ViewBag.listCount = authorList.Count;
                 }
                 catch (DataAccessException e) { ViewBag.error = e.Message; }
             }

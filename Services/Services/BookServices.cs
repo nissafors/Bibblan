@@ -183,10 +183,12 @@ namespace Services.Services
             if (Book.SearchBook(out bookList, out bookAuthorList, search))
             {
                 List<BookViewModel> bookViewModelList = new List<BookViewModel>();
+                Dictionary<int, string> classificationDict = ClassificationServices.GetClassificationsAsDictionary();
                 // Convert all books into bookviewmodels
                 foreach (Book book in bookList)
                 {
                     BookViewModel bookView = Mapper.Map<BookViewModel>(book);
+                    bookView.Classification = classificationDict[book.SignId];
                     int i = 0;
                     // Add authors 
                     foreach(var item in bookAuthorList)

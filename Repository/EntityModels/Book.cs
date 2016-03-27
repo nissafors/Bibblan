@@ -210,8 +210,6 @@ namespace Repository.EntityModels
                     string commandString = "SELECT " +
                                            "BOOK.ISBN AS ISBN, " +
                                            "BOOK.Title AS Title, " +
-                                           "Book.Pages AS Pages, " +
-                                           "BOOK.PublicationInfo AS PublicationInfo, " +
                                            "BOOK.PublicationYear AS PublicationYear, " +
                                            "BOOK.SignId AS SignId, " +
                                            "COALESCE(AUTHOR.LastName + ' ' + AUTHOR.FirstName, AUTHOR.LastName, AUTHOR.FirstName) AS Name " +
@@ -243,9 +241,7 @@ namespace Repository.EntityModels
                                         {
                                             ISBN = ISBN,
                                             Title = Convert.ToString(myReader["Title"]),
-                                            PublicationInfo = Convert.ToString(myReader["PublicationInfo"]),
                                             PublicationYear = Convert.ToString(myReader["PublicationYear"]),
-                                            Pages = Convert.ToInt32(myReader["Pages"]),
                                             SignId = Convert.ToInt32(myReader["SignId"])
                                         });
                                     }
