@@ -8,6 +8,12 @@ namespace Services.Services
 {
     public class AccountServices
     {
+        /// <summary>
+        /// Tries to get an account entity model to map to a viewmodel from the repository
+        /// Based on a given viewmodel
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
         public static AccountViewModel Login(AccountViewModel model)
         {
            Account account;      
@@ -42,25 +48,24 @@ namespace Services.Services
             return b;
         }
 
-        /* 
-        public static AccountViewModel GetAccount(string username)
-        {
-            Account account;
-            
-            if (!Account.GetAccount(out account, username))
-                throw new DoesNotExistException("Användaren finns inte");
-
-            return Mapper.Map<AccountViewModel>(account);
-        }
-        */
-
+        /// <summary>
+        /// Return the role of a given username
+        /// </summary>
+        /// <param name="username"></param>
+        /// <returns></returns>
         public static int GetRoleId(string username)
         {
             UserRole role;
-            Account.GetUserRole(username, out role);
+            if (!Account.GetUserRole(username, out role))
+                throw new DataAccessException("Kunde inte hitta roll");
             return role.Id;
         }
 
+        /// <summary>
+        /// Return accouts that have a given role
+        /// </summary>
+        /// <param name="role"></param>
+        /// <returns></returns>
         public static List<AccountViewModel> GetAccounts(Role role)
         {
             List<Account> accounts;
@@ -72,19 +77,6 @@ namespace Services.Services
                 models.Add(Mapper.Map<AccountViewModel>(account));
 
             return models;
-        }
-
-        public List<RoleViewModel> GetUserRoles()
-        {
-            List<UserRole> roles;
-            UserRole.getUserRoles(out roles);
-            var models = new List<RoleViewModel>();
-            foreach(var role in roles)
-            {
-                models.Add(Mapper.Map<RoleViewModel>(role));
-            }
-            return models;
-
         }
         // Creates a new account
         public static void Upsert(AccountViewModel model)

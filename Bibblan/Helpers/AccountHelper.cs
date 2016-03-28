@@ -1,4 +1,5 @@
-﻿using Services.Services;
+﻿using Services.Exceptions;
+using Services.Services;
 using System;
 using System.Web;
 
@@ -10,7 +11,7 @@ namespace Bibblan.Helpers
     /// </summary>
     public class AccountHelper
     {
-        public enum Role { Admin, User };
+        public enum Role { Admin, User , Error = -666};
 
         private const int LOGIN_MAX_TRIES = 3;
         // delay in seconds until LOGIN_MAX_TRIES is reset
@@ -148,8 +149,16 @@ namespace Bibblan.Helpers
         /// <returns></returns>
         private static Role UpdateSessionRole(HttpSessionStateBase session)
         {
-            Role role = (Role)(AccountServices.GetRoleId(session[SESSION_USERNAME_KEY].ToString()));
-            session[SESSION_ROLE_KEY] = role;
+            Role role = Role.Error;
+            try
+            {
+                role = (Role)(AccountServices.GetRoleId(session[SESSION_USERNAME_KEY].ToString()));
+                session[SESSION_ROLE_KEY] = role;
+            }
+            catch(DataAccessException e)
+            {
+                ClearSession(session);
+            }
             return role;
         }
     }
