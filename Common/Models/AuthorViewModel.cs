@@ -11,6 +11,7 @@ namespace Common.Models
         [Display(Name = "Förnamn")]
         public string FirstName { get; set; }
         [Display(Name = "Efternamn")]
+        [Required(ErrorMessage ="Ett efternamn krävs.")]
         public string LastName { get; set; }
         [Display(Name = "Födelseår")]
         public string BirthYear { get; set; }

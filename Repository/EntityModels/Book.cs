@@ -222,7 +222,8 @@ namespace Repository.EntityModels
                                            "COALESCE(LastName, '') + COALESCE(FirstName, '') + Title LIKE @ModifiedSearch OR " +
                                            "COALESCE(FirstName, '') + COALESCE(LastName, '') + Title LIKE @ModifiedSearch OR " +
                                            "COALESCE(FirstName, '') + Title + COALESCE(LastName, '') LIKE @ModifiedSearch OR " +
-                                           "BOOK.ISBN = @Search";
+                                           "BOOK.ISBN = @Search " + 
+                                           "ORDER BY Title";
                     using (SqlCommand command = new SqlCommand(commandString, connection))
                     {
                         command.Parameters.AddWithValue("@Search", search);

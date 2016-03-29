@@ -28,7 +28,8 @@
 }
 @if (ViewBag.result != null)
 {
-    if(ViewBag.listCount > 0)
+    if (ViewBag.listCount > 0)
+    {
 <h2>Resultat</h2>
 <table class="table table-striped">
     <thead>
@@ -44,7 +45,7 @@
     <tbody>
          
         @foreach (var item in ViewBag.result)
-        { 
+        {
            <tr>
                <td>@item.FirstName</td>
                <td>@item.LastName</td>
@@ -57,8 +58,9 @@
         
     </tbody>
 </table>
+    }
     else
-{
+    {
     < p > Kunde inte hitta några låntagare.</ p >
 }
-        }
+}

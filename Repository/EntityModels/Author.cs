@@ -55,7 +55,7 @@ namespace Repository.EntityModels
         static public bool GetAuthors(out List<Author> authorList, string search)
         {
             search = HelperFunctions.SetupSearchString(search);
-            SqlCommand command = new SqlCommand("SELECT * from AUTHOR WHERE COALESCE(FirstName + LastName, FirstName, LastName) LIKE @Search");
+            SqlCommand command = new SqlCommand("SELECT * FROM AUTHOR WHERE COALESCE(FirstName + LastName, FirstName, LastName) LIKE @Search ORDER BY LastName");
             command.Parameters.AddWithValue("@Search", search);
             return GetAuthors(out authorList, command);
         }
