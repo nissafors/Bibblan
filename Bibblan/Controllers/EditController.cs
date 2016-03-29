@@ -73,7 +73,7 @@ namespace Bibblan.Controllers
                 catch (DataAccessException e) { ViewBag.error += e.Message; }
                 catch (Exception) { ViewBag.error += "Oväntat fel."; }
             }
-            if(upsertSuccess)
+            if(!upsertSuccess)
                 return View(bookInfo);
             else
                 return RedirectToAction("Book", "Search", new { search = bookInfo.ISBN});
@@ -221,6 +221,7 @@ namespace Bibblan.Controllers
                 try
                 {
                     BorrowerServices.Upsert(borrower);
+                    borrower = BorrowerServices.GetBorrower(borrower.PersonId);
                     borrower.New = false;
                     upsertSuccess = true;
                 }
@@ -237,7 +238,7 @@ namespace Bibblan.Controllers
                     errors.Add(e.Message);
                 }
             }
-
+            
             err = setBorrowerViewLists(borrower);
             if (err != null)
                 errors.Add(err);
@@ -245,7 +246,7 @@ namespace Bibblan.Controllers
             if (errors.Count > 0)
                 ViewBag.error = errors;
 
-            if (upsertSuccess)
+            if (!upsertSuccess)
                 return View(borrower);
             else
                 return RedirectToAction("Borrower", "Search", new { search = borrower.PersonId });
@@ -392,22 +393,30 @@ namespace Bibblan.Controllers
         [RequireLogin(RequiredRole = AccountHelper.Role.Admin, ForceCheck = true)]
         public ActionResult Author(AuthorViewModel authorViewModel)
         {
-            try
+            bool updateSuccess = false;
+            if (ModelState.IsValid)
             {
-                AuthorServices.Upsert(authorViewModel);
-            }
-            catch (DataAccessException e)
-            {
-                ViewBag.error = e.Message;
-                return View(authorViewModel);
-            }
-            catch (DoesNotExistException e)
-            {
-                ViewBag.error = e.Message;
-                return View(authorViewModel);
+                try
+                {
+                    AuthorServices.Upsert(authorViewModel);
+                    updateSuccess = true;
+                }
+                catch (DataAccessException e)
+                {
+                    ViewBag.error = e.Message;
+                    return View(authorViewModel);
+                }
+                catch (DoesNotExistException e)
+                {
+                    ViewBag.error = e.Message;
+                    return View(authorViewModel);
+                }
             }
 
-            return RedirectToAction("Author", "Search", new {search = authorViewModel.FirstName + " " + authorViewModel.LastName });
+            if (updateSuccess)
+                return RedirectToAction("Author", "Search", new { search = authorViewModel.FirstName + " " + authorViewModel.LastName });
+            else
+                return View(authorViewModel);
         }
 
         /// <summary>

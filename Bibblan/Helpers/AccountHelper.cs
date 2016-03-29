@@ -155,7 +155,7 @@ namespace Bibblan.Helpers
                 role = (Role)(AccountServices.GetRoleId(session[SESSION_USERNAME_KEY].ToString()));
                 session[SESSION_ROLE_KEY] = role;
             }
-            catch(DataAccessException e)
+            catch(DataAccessException)
             {
                 ClearSession(session);
             }
