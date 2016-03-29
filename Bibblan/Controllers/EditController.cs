@@ -513,7 +513,7 @@ namespace Bibblan.Controllers
             }
 
             if(succesfull)
-                return RedirectToAction("UserPage", "AccountController");
+                return RedirectToAction("UserPage", "Account");
             else
                 return View(viewModel);
         }
